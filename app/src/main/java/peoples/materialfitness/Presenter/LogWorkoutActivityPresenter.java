@@ -19,6 +19,10 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
         }
     }
 
+    /**
+     * Take all muscle groups and build up a list of the titles to then display to the user
+     * via an alert dialog.
+     */
     public void addWorkout()
     {
         Observable.from(MuscleGroup.class.getEnumConstants())
@@ -27,6 +31,10 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
                 .subscribe(activity::createMuscleGroupChoiceDialog);
     }
 
+    /**
+     * Initiate the exercise creation process now that we know the muscle group.
+     * @param muscleGroupTitle
+     */
     public void muscleGroupSelected(String muscleGroupTitle)
     {
         MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(muscleGroupTitle, activity);

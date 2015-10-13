@@ -38,11 +38,18 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
 
     @OnClick(R.id.fab)
     @SuppressWarnings("method unused")
+    /**
+     * Initiates the add a workout process.
+     */
     public void addWorkout(FloatingActionButton fab)
     {
         presenter.addWorkout();
     }
 
+    /**
+     * Create the muscle group choice alert dialog
+     * @param titles titles to display.
+     */
     public void createMuscleGroupChoiceDialog(List<String> titles)
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this)
