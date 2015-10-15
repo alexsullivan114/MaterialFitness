@@ -22,6 +22,14 @@ public class PresenterCache
         return instance;
     }
 
+    /**
+     * Get the presenter for the given activity. Creates a new presenter if none exists
+     * in the cache.
+     * @param id unique identifier for this presenter
+     * @param presenterFactory Factory to create the presenter if necessary
+     * @param <T>
+     * @return The presenter
+     */
     public final <T extends BaseActivityPresenter> T getActivityPresenter(
             String id, PresenterFactory<T> presenterFactory) {
 
@@ -42,6 +50,10 @@ public class PresenterCache
         return p;
     }
 
+    /**
+     * Removes the presenter with the provided id from the cache
+     * @param id id of the presenter to return.
+     */
     public final void removePresenter(String id) {
         if (presenterMap != null) {
             presenterMap.remove(id);
