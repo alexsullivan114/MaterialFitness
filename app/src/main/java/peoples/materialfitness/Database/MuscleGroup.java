@@ -32,6 +32,12 @@ public enum MuscleGroup
         return context.getString(this.titleId);
     }
 
+    /**
+     * Gets the given muscle group from the given string title.
+     * @param title Title of the muscle group to retrieve
+     * @param context Context used to get the title of the enum values of the muscle group
+     * @return The matching MuscleGroup.
+     */
     public static MuscleGroup muscleGroupFromTitle(String title, Context context)
     {
         for (MuscleGroup muscleGroup: MuscleGroup.class.getEnumConstants())

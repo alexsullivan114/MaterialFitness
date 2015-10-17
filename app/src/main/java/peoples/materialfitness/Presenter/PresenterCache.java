@@ -12,6 +12,10 @@ public class PresenterCache
 
     private SimpleArrayMap<String, BaseActivityPresenter> presenterMap = new SimpleArrayMap<>();
 
+    /**
+     * Singleton accessor for the presenter cache.
+     * @return Presenter cache.
+     */
     public static PresenterCache getInstance()
     {
         if (instance == null)

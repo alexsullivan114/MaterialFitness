@@ -71,6 +71,9 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
         TAG =  this.getClass().getSimpleName();
     }
 
+    /**
+     * Sets the toolbar for the given activity. Assumes a 'toolbar' ID.
+     */
     private void setToolbar()
     {
         toolbar = (Toolbar)findViewById(R.id.toolbar);
