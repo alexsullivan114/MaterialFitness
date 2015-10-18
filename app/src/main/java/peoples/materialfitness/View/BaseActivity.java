@@ -11,7 +11,7 @@ import peoples.materialfitness.Presenter.PresenterFactory;
 import peoples.materialfitness.R;
 
 /**
- * Created by alex on 10/4/2015.
+ * Created by Alex Sullivan on 10/4/2015.
  */
 public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppCompatActivity
 {

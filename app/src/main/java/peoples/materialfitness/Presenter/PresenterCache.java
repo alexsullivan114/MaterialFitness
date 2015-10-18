@@ -4,7 +4,7 @@ import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
 
 /**
- * Created by alex on 10/10/2015.
+ * Created by Alex Sullivan on 10/10/2015.
  */
 public class PresenterCache
 {

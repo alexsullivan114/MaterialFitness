@@ -3,7 +3,7 @@ package peoples.materialfitness.Presenter;
 import peoples.materialfitness.View.BaseActivity;
 
 /**
- * Created by alex on 10/9/2015.
+ * Created by Alex Sullivan on 10/9/2015.
  */
 public class BaseActivityPresenter<T extends BaseActivity>
 {

@@ -5,7 +5,7 @@ import android.content.Context;
 import peoples.materialfitness.R;
 
 /**
- * Created by alex on 10/4/2015.
+ * Created by Alex Sullivan on 10/4/2015.
  */
 public enum MuscleGroup
 {

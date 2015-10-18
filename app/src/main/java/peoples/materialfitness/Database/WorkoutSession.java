@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by alex on 10/4/2015.
+ * Created by Alex Sullivan on 10/4/2015.
  */
 public class WorkoutSession extends SugarRecord<WorkoutSession>
 {

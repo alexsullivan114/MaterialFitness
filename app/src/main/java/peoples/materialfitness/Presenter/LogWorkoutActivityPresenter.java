@@ -6,7 +6,7 @@ import peoples.materialfitness.View.LogWorkoutActivity;
 import rx.Observable;
 
 /**
- * Created by alex on 10/4/2015.
+ * Created by Alex Sullivan on 10/4/2015.
  */
 public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkoutActivity>
 {
@@ -38,6 +38,6 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
     public void muscleGroupSelected(String muscleGroupTitle)
     {
         MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(muscleGroupTitle, activity);
-
+        activity.updateExerciseDialogForMuscleGroup(muscleGroup);
     }
 }

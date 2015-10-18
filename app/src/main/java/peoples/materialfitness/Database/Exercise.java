@@ -5,7 +5,7 @@ import com.orm.SugarRecord;
 import java.util.UUID;
 
 /**
- * Created by alex on 10/4/2015.
+ * Created by Alex Sullivan on 10/4/2015.
  */
 public class Exercise extends SugarRecord<Exercise>
 {

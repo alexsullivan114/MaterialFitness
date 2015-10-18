@@ -42,13 +42,14 @@ buildscript {
 // Required because retrolambda is on maven central
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
     // Third party libraries
     // Rx java. For being awesome.
     compile 'io.reactivex:rxjava:1.0.10'
@@ -60,4 +61,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     // Android specific joda time to make dates a little less oh dear god why-ish.
     compile 'net.danlew:android.joda:2.8.2'
+    // Material dialogs.
+    compile('com.afollestad.material-dialogs:core:0.8.4.0@aar') {
+        transitive = true
+    }
 }
