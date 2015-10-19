@@ -47,15 +47,9 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
      */
     public void addWorkout(FloatingActionButton fab)
     {
-        loadFakeExerciseIntoDb();
         presenter.addWorkout();
     }
 
-    private void loadFakeExerciseIntoDb()
-    {
-        Exercise exercise = new Exercise("Foobar", MuscleGroup.CHEST);
-        exercise.save();
-    }
 
     /**
      * Create the muscle group choice alert dialog
@@ -72,20 +66,30 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
         .show();
     }
 
+    /**
+     * Create a dialog allowing for the creation of an exercise. Uses the provided muscle group
+     * as the default option.
+     * @param muscleGroup Default muscle group
+     */
     public void updateExerciseDialogForMuscleGroup(MuscleGroup muscleGroup)
     {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title(R.string.create_new_exercise)
                 .customView(R.layout.create_exercise_dialog, false)
                 .positiveText(R.string.ok)
-                .onPositive(this::onFinalCreationClicked)
+                .onPositive(this::addExercisePositiveButtonClicked)
                 .build();
 
-        setupAutocompleteTexts(dialog, muscleGroup);
+        setDialogAdapters(dialog, muscleGroup);
         dialog.show();
     }
 
-    private void setupAutocompleteTexts(MaterialDialog dialog, MuscleGroup muscleGroup)
+    /**
+     * Sets the relevant adapters on the necessary parts of the dialog
+     * @param dialog Dialog to search for relevant views on
+     * @param muscleGroup Default muscle group to use for the spinner.
+     */
+    private void setDialogAdapters(MaterialDialog dialog, MuscleGroup muscleGroup)
     {
         Spinner muscleGroupSpinner = (Spinner)dialog.findViewById(R.id.exercise_muscle_group);
         AutoCompleteTextView exerciseTitle = (AutoCompleteTextView)dialog.findViewById(R.id.exercise_name);
@@ -96,7 +100,12 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
         presenter.setExerciseTitleAdapter(exerciseTitle, muscleGroup, dialog);
     }
 
-    private void onFinalCreationClicked(MaterialDialog dialog, DialogAction action)
+    /**
+     * positive button click handler for our exercise creation dialog
+     * @param dialog Dialog calling through
+     * @param action Action taken
+     */
+    private void addExercisePositiveButtonClicked(MaterialDialog dialog, DialogAction action)
     {
         Spinner spinner = (Spinner) findViewById(R.id.exercise_muscle_group);
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.exercise_name);
