@@ -2,7 +2,11 @@ package peoples.materialfitness.Database;
 
 import android.content.Context;
 
+import java.util.List;
+
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.StringListLambda;
+import rx.Observable;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
@@ -49,5 +53,12 @@ public enum MuscleGroup
         }
 
         throw new RuntimeException("Tried to get MuscleGroup from unkown title: " + title);
+    }
+
+    public static Observable<List<String>> getMuscleGroupTitles(Context context)
+    {
+        return Observable.from(MuscleGroup.class.getEnumConstants())
+                .map(muscleGroup -> muscleGroup.getTitle(context))
+                .toList();
     }
 }

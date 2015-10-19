@@ -5,14 +5,16 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-
-    <string name="add_workout">Add Workout</string>
-
+    <!-- global strings -->
+    <string name="ok">Ok</string>
+    <!-- Text values for the muscle group enum -->
     <string name="shoulders">Shoulders</string>
     <string name="chest">Chest</string>
     <string name="legs">Legs</string>
     <string name="arms">Arms</string>
     <string name="back">Back</string>
-
-    <string name="choose_muscle_group">Choose your new exercises muscle group.</string>
+    <!-- Starting screen dialog -->
+    <string name="choose_muscle_group">Choose the muscle group for your new exercise</string>
+    <string name="create_new_exercise">Create new exercise</string>
+    <string name="add_workout">Add Workout</string>
 </resources>

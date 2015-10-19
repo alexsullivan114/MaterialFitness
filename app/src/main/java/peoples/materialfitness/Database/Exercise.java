@@ -1,5 +1,6 @@
 package peoples.materialfitness.Database;
 
+import com.orm.StringUtil;
 import com.orm.SugarRecord;
 
 import java.util.UUID;
@@ -11,7 +12,23 @@ public class Exercise extends SugarRecord<Exercise>
 {
     private String title;
     private MuscleGroup muscleGroup;
-    private UUID uuid;
+
+    public static final String TITLE_COLUMN = StringUtil.toSQLName("title");
+    public static final String MUSCLE_GROUP_COLUMN = StringUtil.toSQLName("muscleGroup");
+
+    /**
+     * Empty constructor required for sugar record OEM.
+     */
+    public Exercise()
+    {
+
+    }
+
+    public Exercise(String title, MuscleGroup muscleGroup)
+    {
+        this.title = title;
+        this.muscleGroup = muscleGroup;
+    }
 
     public String getTitle()
     {
@@ -31,15 +48,5 @@ public class Exercise extends SugarRecord<Exercise>
     public void setMuscleGroup(MuscleGroup muscleGroup)
     {
         this.muscleGroup = muscleGroup;
-    }
-
-    public UUID getUuid()
-    {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid)
-    {
-        this.uuid = uuid;
     }
 }

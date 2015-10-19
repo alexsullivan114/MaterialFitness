@@ -1,9 +1,16 @@
 package peoples.materialfitness.Presenter;
-import java.util.List;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import peoples.materialfitness.Database.Exercise;
+import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.View.LogWorkoutActivity;
-import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
@@ -25,10 +32,7 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
      */
     public void addWorkout()
     {
-        Observable.from(MuscleGroup.class.getEnumConstants())
-                .map(muscleGroup -> muscleGroup.getTitle(activity))
-                .toList()
-                .subscribe(activity::createMuscleGroupChoiceDialog);
+        MuscleGroup.getMuscleGroupTitles(activity).subscribe(activity::createMuscleGroupChoiceDialog);
     }
 
     /**
@@ -39,5 +43,59 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
     {
         MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(muscleGroupTitle, activity);
         activity.updateExerciseDialogForMuscleGroup(muscleGroup);
+    }
+
+    public void createNewExercise(MuscleGroup muscleGroup, CharSequence exerciseName)
+    {
+        Exercise exercise = new Exercise(String.valueOf(exerciseName), muscleGroup);
+        exercise.save();
+    }
+
+    public void setMuscleGroupAdapter(Spinner spinner, MuscleGroup muscleGroup)
+    {
+        ArrayAdapter<String> adapter = generateSimpleArrayAdapter();
+        MuscleGroup.getMuscleGroupTitles(activity).subscribe(values -> {
+            adapter.addAll(values);
+            spinner.setAdapter(adapter);
+            spinner.setSelection(values.indexOf(muscleGroup.getTitle(activity)));
+
+        });
+    }
+
+    public void setExerciseTitleAdapter(AutoCompleteTextView textView, MuscleGroup muscleGroup, MaterialDialog dialog)
+    {
+        ArrayAdapter<String> adapter = generateSimpleArrayAdapter();
+
+        String whereClause = Exercise.MUSCLE_GROUP_COLUMN + " = ?";
+        String[] arguments = new String[]{String.valueOf(muscleGroup)};
+
+        new ExerciseDatabaseInteractor().fetchWithClause(whereClause, arguments)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .cache()
+                .map(Exercise::getTitle)
+                .toList()
+                .distinct()
+                .subscribe(adapter::addAll);
+
+        textView.setAdapter(adapter);
+    }
+
+    public void handleFinalWorkoutCreation(Spinner muscleGroupSpinner, AutoCompleteTextView textView)
+    {
+        MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(
+                (String)muscleGroupSpinner.getSelectedItem(), activity);
+
+        String exerciseTitle = textView.getText().toString();
+
+        Exercise exercise = new Exercise(exerciseTitle, muscleGroup);
+        exercise.save();
+
+        activity.exerciseCreated(exercise);
+    }
+
+    private ArrayAdapter<String> generateSimpleArrayAdapter()
+    {
+        return new ArrayAdapter<>(activity, android.R.layout.simple_expandable_list_item_1);
     }
 }
