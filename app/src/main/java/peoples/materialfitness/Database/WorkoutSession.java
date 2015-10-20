@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class WorkoutSession extends SugarRecord<WorkoutSession>
 {
-    private List<Exercise> exercises = new ArrayList<>();
+    private List<ExerciseSession> exercises = new ArrayList<>();
     // millis since epoch
     private long workoutSessionDate;
 
@@ -22,25 +22,25 @@ public class WorkoutSession extends SugarRecord<WorkoutSession>
         this.workoutSessionDate = sessionDate;
     }
 
-    public List<Exercise> addExercise(Exercise exercise)
+    public List<ExerciseSession> addExercise(ExerciseSession session)
     {
-        exercises.add(exercise);
+        exercises.add(session);
         return exercises;
     }
 
-    public List<Exercise> addAllExercises(Collection<Exercise> exerciseCollection)
+    public List<ExerciseSession> addAllExercises(Collection<ExerciseSession> sessions)
     {
-        exercises.addAll(exerciseCollection);
+        exercises.addAll(sessions);
         return exercises;
     }
 
 
-    public List<Exercise> getExercises()
+    public List<ExerciseSession> getExercises()
     {
         return exercises;
     }
 
-    public void setExercises(List<Exercise> exercises)
+    public void setExercises(List<ExerciseSession> exercises)
     {
         this.exercises = exercises;
     }
@@ -56,23 +56,24 @@ public class WorkoutSession extends SugarRecord<WorkoutSession>
     }
 
     /**
-     * Generate a map of muscle group to exercises for this workout session.
-     * @return A simple array mapping of muscle groups to exercises.
+     * Generate a map of muscle group to exercise sessions for this workout session.
+     * @return A simple array mapping of muscle groups to exercise sessions.
      */
-    public SimpleArrayMap<MuscleGroup, ArrayList<Exercise>> getExerciseMap()
+    public SimpleArrayMap<MuscleGroup, ArrayList<ExerciseSession>> getExerciseMap()
     {
-        SimpleArrayMap<MuscleGroup, ArrayList<Exercise>> map = new SimpleArrayMap<>();
+        SimpleArrayMap<MuscleGroup, ArrayList<ExerciseSession>> map = new SimpleArrayMap<>();
 
-        for (Exercise exercise: exercises)
+        for (ExerciseSession session: exercises)
         {
-            ArrayList<Exercise> muscleGroupExercises = map.get(exercise.getMuscleGroup());
+            Exercise exercise = session.getExercise();
+            ArrayList<ExerciseSession> muscleGroupExercises = map.get(exercise.getMuscleGroup());
 
             if (muscleGroupExercises == null)
             {
-                muscleGroupExercises = new ArrayList<Exercise>();
+                muscleGroupExercises = new ArrayList<>();
             }
 
-            muscleGroupExercises.add(exercise);
+            muscleGroupExercises.add(session);
             map.put(exercise.getMuscleGroup(),muscleGroupExercises);
         }
 
