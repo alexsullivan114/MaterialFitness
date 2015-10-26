@@ -17,9 +17,10 @@ import butterknife.OnClick;
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter;
+import peoples.materialfitness.Presenter.LogWorkoutActivityPresenterInterface;
 import peoples.materialfitness.R;
 
-public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter>
+public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter> implements LogWorkoutActivityPresenterInterface
 {
 
     @Bind(R.id.fab)

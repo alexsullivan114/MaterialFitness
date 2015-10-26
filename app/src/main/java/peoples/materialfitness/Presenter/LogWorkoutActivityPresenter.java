@@ -15,7 +15,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Alex Sullivan on 10/4/2015.
  */
-public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkoutActivity>
+public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkoutActivityPresenterInterface>
 {
     public static class LogWorkoutActivityPresenterFactory implements PresenterFactory<LogWorkoutActivityPresenter>
     {
@@ -32,7 +32,7 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
      */
     public void addWorkout()
     {
-        MuscleGroup.getMuscleGroupTitles(activity).subscribe(activity::createMuscleGroupChoiceDialog);
+        MuscleGroup.getMuscleGroupTitles(getActivityContext()).subscribe(activity::createMuscleGroupChoiceDialog);
     }
 
     /**
@@ -41,7 +41,7 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
      */
     public void muscleGroupSelected(String muscleGroupTitle)
     {
-        MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(muscleGroupTitle, activity);
+        MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(muscleGroupTitle, getActivityContext());
         activity.updateExerciseDialogForMuscleGroup(muscleGroup);
     }
 
@@ -54,10 +54,10 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
     public void setMuscleGroupAdapter(Spinner spinner, MuscleGroup muscleGroup)
     {
         ArrayAdapter<String> adapter = generateSimpleArrayAdapter();
-        MuscleGroup.getMuscleGroupTitles(activity).subscribe(values -> {
+        MuscleGroup.getMuscleGroupTitles(getActivityContext()).subscribe(values -> {
             adapter.addAll(values);
             spinner.setAdapter(adapter);
-            spinner.setSelection(values.indexOf(muscleGroup.getTitle(activity)));
+            spinner.setSelection(values.indexOf(muscleGroup.getTitle(getActivityContext())));
 
         });
     }
@@ -84,7 +84,7 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
     public void handleFinalWorkoutCreation(Spinner muscleGroupSpinner, AutoCompleteTextView textView)
     {
         MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(
-                (String)muscleGroupSpinner.getSelectedItem(), activity);
+                (String)muscleGroupSpinner.getSelectedItem(), getActivityContext());
 
         String exerciseTitle = textView.getText().toString();
 
@@ -96,6 +96,6 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
 
     private ArrayAdapter<String> generateSimpleArrayAdapter()
     {
-        return new ArrayAdapter<>(activity, android.R.layout.simple_expandable_list_item_1);
+        return new ArrayAdapter<>(getActivityContext(), android.R.layout.simple_expandable_list_item_1);
     }
 }

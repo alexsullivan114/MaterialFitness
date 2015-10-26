@@ -24,8 +24,8 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        setTag();
         super.onCreate(savedInstanceState);
+        setTag();
         setPresenter(PresenterCache.getInstance().getActivityPresenter(TAG, getPresenterFactory()));
         // TODO: Make this not shitty.
         presenter.setActivity(this);
