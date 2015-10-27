@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import peoples.materialfitness.Presenter.BaseActivityPresenter;
+import peoples.materialfitness.Presenter.BaseActivityPresenterInterface;
 import peoples.materialfitness.Presenter.PresenterCache;
 import peoples.materialfitness.Presenter.PresenterFactory;
 import peoples.materialfitness.R;
@@ -13,7 +14,7 @@ import peoples.materialfitness.R;
 /**
  * Created by Alex Sullivan on 10/4/2015.
  */
-public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppCompatActivity
+public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppCompatActivity implements BaseActivityPresenterInterface
 {
     private static final String BASE_TAG = BaseActivity.class.getSimpleName();
     private boolean isDestroyedBySystem;

@@ -1,4 +1,4 @@
-package peoples.materialfitness.View;
+package peoples.materialfitness.View.LogWorkoutActivity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,9 +16,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.MuscleGroup;
-import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter;
-import peoples.materialfitness.Presenter.LogWorkoutActivityPresenterInterface;
+import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutActivityPresenter;
+import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutActivityPresenterInterface;
 import peoples.materialfitness.R;
+import peoples.materialfitness.View.BaseActivity;
 
 public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter> implements LogWorkoutActivityPresenterInterface
 {

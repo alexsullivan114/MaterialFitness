@@ -1,9 +1,10 @@
-package peoples.materialfitness.Presenter;
+package peoples.materialfitness.Presenter.LogWorkoutActivityPresenter;
 
 import java.util.List;
 
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.MuscleGroup;
+import peoples.materialfitness.Presenter.BaseActivityPresenterInterface;
 
 /**
  * Created by Alex Sullivan on 10/24/15.

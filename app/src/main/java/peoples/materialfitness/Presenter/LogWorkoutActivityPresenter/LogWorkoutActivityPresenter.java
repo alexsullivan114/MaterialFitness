@@ -1,4 +1,4 @@
-package peoples.materialfitness.Presenter;
+package peoples.materialfitness.Presenter.LogWorkoutActivityPresenter;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
@@ -8,7 +8,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.MuscleGroup;
-import peoples.materialfitness.View.LogWorkoutActivity;
+import peoples.materialfitness.Presenter.BaseActivityPresenter;
+import peoples.materialfitness.Presenter.PresenterFactory;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
