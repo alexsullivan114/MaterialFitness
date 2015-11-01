@@ -8,20 +8,22 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.MuscleGroup;
-import peoples.materialfitness.Presenter.BaseActivityPresenter;
-import peoples.materialfitness.Presenter.PresenterFactory;
+import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenter;
+import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
+import peoples.materialfitness.View.LogWorkoutActivity.LogWorkoutActivityInterface;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
  */
-public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkoutActivityPresenterInterface>
+public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkoutActivityInterface>
+        implements LogWorkoutActivityPresenterInterface<LogWorkoutActivityInterface>
 {
-    public static class LogWorkoutActivityPresenterFactory implements PresenterFactory<LogWorkoutActivityPresenter>
+    public static class LogWorkoutActivityPresenterFactory implements PresenterFactory<LogWorkoutActivityPresenterInterface>
     {
         @Override
-        public LogWorkoutActivityPresenter createPresenter()
+        public LogWorkoutActivityPresenterInterface createPresenter()
         {
             return new LogWorkoutActivityPresenter();
         }
@@ -33,7 +35,8 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
      */
     public void addWorkout()
     {
-        MuscleGroup.getMuscleGroupTitles(getActivityContext()).subscribe(activity::createMuscleGroupChoiceDialog);
+        MuscleGroup.getMuscleGroupTitles(getActivityContext()).
+                subscribe(activityInterface::createMuscleGroupChoiceDialog);
     }
 
     /**
@@ -43,7 +46,7 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
     public void muscleGroupSelected(String muscleGroupTitle)
     {
         MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(muscleGroupTitle, getActivityContext());
-        activity.updateExerciseDialogForMuscleGroup(muscleGroup);
+        activityInterface.updateExerciseDialogForMuscleGroup(muscleGroup);
     }
 
     public void createNewExercise(MuscleGroup muscleGroup, CharSequence exerciseName)
@@ -82,17 +85,14 @@ public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkou
         textView.setAdapter(adapter);
     }
 
-    public void handleFinalWorkoutCreation(Spinner muscleGroupSpinner, AutoCompleteTextView textView)
+    public void handleFinalWorkoutCreation(String muscleGroupString, String exerciseTitle)
     {
-        MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(
-                (String)muscleGroupSpinner.getSelectedItem(), getActivityContext());
-
-        String exerciseTitle = textView.getText().toString();
+        MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromTitle(muscleGroupString, getActivityContext());
 
         Exercise exercise = new Exercise(exerciseTitle, muscleGroup);
         exercise.save();
 
-        activity.exerciseCreated(exercise);
+        activityInterface.exerciseCreated(exercise);
     }
 
     private ArrayAdapter<String> generateSimpleArrayAdapter()

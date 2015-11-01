@@ -16,12 +16,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.MuscleGroup;
+import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenterInterface;
+import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutActivityPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutActivityPresenterInterface;
 import peoples.materialfitness.R;
-import peoples.materialfitness.View.BaseActivity;
+import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivity;
 
-public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter> implements LogWorkoutActivityPresenterInterface
+public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenterInterface> implements LogWorkoutActivityInterface
 {
 
     @Bind(R.id.fab)
@@ -37,7 +39,7 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
     }
 
     @Override
-    public LogWorkoutActivityPresenter.LogWorkoutActivityPresenterFactory getPresenterFactory()
+    public PresenterFactory<LogWorkoutActivityPresenterInterface> getPresenterFactory()
     {
         return new LogWorkoutActivityPresenter.LogWorkoutActivityPresenterFactory();
     }
@@ -49,7 +51,7 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
      */
     public void addWorkout(FloatingActionButton fab)
     {
-        presenter.addWorkout();
+        presenterInterface.addWorkout();
     }
 
 
@@ -63,7 +65,7 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
                 .title(R.string.choose_muscle_group)
                 .items(titles.toArray(new String[titles.size()]))
                 .itemsCallback((MaterialDialog dialog, View view, int which, CharSequence text) -> {
-                    presenter.muscleGroupSelected(String.valueOf(text));
+                    presenterInterface.muscleGroupSelected(String.valueOf(text));
                 })
         .show();
     }
@@ -98,8 +100,8 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
 
         exerciseTitle.setThreshold(0);
 
-        presenter.setMuscleGroupAdapter(muscleGroupSpinner, muscleGroup);
-        presenter.setExerciseTitleAdapter(exerciseTitle, muscleGroup, dialog);
+        presenterInterface.setMuscleGroupAdapter(muscleGroupSpinner, muscleGroup);
+        presenterInterface.setExerciseTitleAdapter(exerciseTitle, muscleGroup, dialog);
     }
 
     /**
@@ -112,9 +114,9 @@ public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenter
         Spinner spinner = (Spinner) findViewById(R.id.exercise_muscle_group);
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.exercise_name);
 
-        //TODO: Ahhh feel like the presenter shouldn't care about the spinner or the textview.
+        //TODO: Ahhh feel like the presenterInterface shouldn't care about the spinner or the textview.
         // But the view shouldn't care about the adapter or the business logic. Oh well.
-        presenter.handleFinalWorkoutCreation(spinner, textView);
+        presenterInterface.handleFinalWorkoutCreation((String)spinner.getSelectedItem(), textView.getText().toString());
     }
 
     public void exerciseCreated(Exercise exercise)

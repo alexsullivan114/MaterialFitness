@@ -1,4 +1,4 @@
-package peoples.materialfitness.Presenter;
+package peoples.materialfitness.Presenter.CorePresenter;
 
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
@@ -10,10 +10,10 @@ public class PresenterCache
 {
     private static PresenterCache instance;
 
-    private SimpleArrayMap<String, BaseActivityPresenter> presenterMap = new SimpleArrayMap<>();
+    private SimpleArrayMap<String, BasePresenterInterface> presenterMap = new SimpleArrayMap<>();
 
     /**
-     * Singleton accessor for the presenter cache.
+     * Singleton accessor for the presenterInterface cache.
      * @return Presenter cache.
      */
     public static PresenterCache getInstance()
@@ -27,14 +27,14 @@ public class PresenterCache
     }
 
     /**
-     * Get the presenter for the given activity. Creates a new presenter if none exists
+     * Get the presenterInterface for the given activity. Creates a new presenterInterface if none exists
      * in the cache.
-     * @param id unique identifier for this presenter
-     * @param presenterFactory Factory to create the presenter if necessary
+     * @param id unique identifier for this presenterInterface
+     * @param presenterFactory Factory to create the presenterInterface if necessary
      * @param <T>
-     * @return The presenter
+     * @return The presenterInterface
      */
-    public final <T extends BaseActivityPresenter> T getActivityPresenter(
+    public final <T extends BasePresenterInterface> T getPresenter(
             String id, PresenterFactory<T> presenterFactory) {
 
         T p = null;
@@ -55,8 +55,8 @@ public class PresenterCache
     }
 
     /**
-     * Removes the presenter with the provided id from the cache
-     * @param id id of the presenter to return.
+     * Removes the presenterInterface with the provided id from the cache
+     * @param id id of the presenterInterface to return.
      */
     public final void removePresenter(String id) {
         if (presenterMap != null) {

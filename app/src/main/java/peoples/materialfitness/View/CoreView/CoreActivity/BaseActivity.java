@@ -1,35 +1,35 @@
-package peoples.materialfitness.View;
+package peoples.materialfitness.View.CoreView.CoreActivity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import peoples.materialfitness.Presenter.BaseActivityPresenter;
-import peoples.materialfitness.Presenter.BaseActivityPresenterInterface;
-import peoples.materialfitness.Presenter.PresenterCache;
-import peoples.materialfitness.Presenter.PresenterFactory;
+import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenterInterface;
+import peoples.materialfitness.Presenter.CorePresenter.PresenterCache;
+import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.R;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
  */
-public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppCompatActivity implements BaseActivityPresenterInterface
+public abstract class BaseActivity<T extends BaseActivityPresenterInterface> extends AppCompatActivity implements BaseActivityInterface
 {
     private static final String BASE_TAG = BaseActivity.class.getSimpleName();
     private boolean isDestroyedBySystem;
     protected String TAG;
     protected Toolbar toolbar;
-    protected T presenter;
+    protected T presenterInterface;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setTag();
-        setPresenter(PresenterCache.getInstance().getActivityPresenter(TAG, getPresenterFactory()));
-        // TODO: Make this not shitty.
-        presenter.setActivity(this);
+        setPresenterInterface(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
+        presenterInterface.setActivity(this);
+        // TODO: Ok, make this less shitty at some point.
+        presenterInterface.setActivityInterface(this);
     }
 
     @Override
@@ -60,11 +60,11 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
         }
     }
 
-    abstract PresenterFactory<T> getPresenterFactory();
+    protected abstract PresenterFactory<T> getPresenterFactory();
 
-    private void setPresenter(T presenter)
+    private void setPresenterInterface(T presenterInterface)
     {
-        this.presenter = presenter;
+        this.presenterInterface = presenterInterface;
     }
 
     private void setTag()
