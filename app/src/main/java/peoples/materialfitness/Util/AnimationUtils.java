@@ -21,6 +21,7 @@ public class AnimationUtils
             public void onAnimationEnd(Animator animation)
             {
                 r.run();
+                animation.removeAllListeners();
             }
 
             @Override

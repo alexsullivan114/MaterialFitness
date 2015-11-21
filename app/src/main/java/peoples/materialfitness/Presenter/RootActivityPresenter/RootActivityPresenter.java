@@ -1,10 +1,8 @@
 package peoples.materialfitness.Presenter.RootActivityPresenter;
 
-import peoples.materialfitness.Presenter.CorePresenter.BasePresenter;
 import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutActivityPresenterInterface;
-import peoples.materialfitness.View.RootActivity.RootActivityInterface;
+import peoples.materialfitness.View.Activities.RootActivity.RootActivityInterface;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.

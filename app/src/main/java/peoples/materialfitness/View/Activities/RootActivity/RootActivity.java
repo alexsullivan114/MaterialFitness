@@ -1,8 +1,8 @@
-package peoples.materialfitness.View.RootActivity;
+package peoples.materialfitness.View.Activities.RootActivity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 
 import butterknife.Bind;
@@ -40,5 +40,18 @@ public class RootActivity extends BaseActivity
         ButterKnife.bind(this);
 
         mDrawerController = new RootDrawerController(this, drawer, toolbar);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerController.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerController.onConfigurationChanged(newConfig);
     }
 }

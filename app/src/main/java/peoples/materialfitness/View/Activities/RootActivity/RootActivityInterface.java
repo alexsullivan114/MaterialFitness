@@ -1,4 +1,4 @@
-package peoples.materialfitness.View.RootActivity;
+package peoples.materialfitness.View.Activities.RootActivity;
 
 import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivityInterface;
 

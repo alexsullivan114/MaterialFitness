@@ -10,7 +10,7 @@ import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.View.LogWorkoutActivity.LogWorkoutActivityInterface;
+import peoples.materialfitness.View.Activities.LogWorkoutActivity.LogWorkoutActivityInterface;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
