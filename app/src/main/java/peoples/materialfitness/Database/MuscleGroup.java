@@ -10,6 +10,14 @@ import rx.Observable;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
+ *
+ * {@link MuscleGroup}'s are whatever muscle group is targeted by a workout. Pretty self explanatory.
+ * Let's try to keep this enum reasonable, shall we? We all know Enums are "evil". Ergh.
+ *
+ *
+ *
+ *
+ * #REVOLUTIONARY.
  */
 public enum MuscleGroup
 {

@@ -11,6 +11,10 @@ import peoples.materialfitness.R;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.
+ *
+ * {@link RootDrawerController} is a simple controller class for the {@link ActionBarDrawerToggle}.
+ * Handles opening and closing the drawer, as well as swapping out the necessary fragments/views
+ * when a user clicks into the drawer menu.
  */
 public class RootDrawerController
 {

@@ -7,6 +7,9 @@ import java.util.UUID;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
+ *
+ * A simple exercise object. This object represents a singular description of an exercise - for
+ * example, Squats would be an exercise with obvious accompanying details.
  */
 public class Exercise extends SugarRecord<Exercise>
 {

@@ -8,6 +8,13 @@ import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivityInterface;
 
 /**
  * Created by Alex Sullivan on 10/9/2015.
+ *
+ * {@link BaseActivityPresenter}. Ahh Yes. The base activity presenter. Fairly simple (minus my
+ * atrocious generic use) base class to handle activity presenters. Mostly exists to avoid the
+ * pain of setting presenters in every activity. Let's try to describe the types and the reasons
+ * they exist, shall we?
+ *
+ * <T extends BaseActivityInterface>:
  */
 public abstract class BaseActivityPresenter<T extends BaseActivityInterface> extends BasePresenter
         implements BaseActivityPresenterInterface<T>

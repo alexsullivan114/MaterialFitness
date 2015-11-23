@@ -17,4 +17,7 @@
     <string name="choose_muscle_group">Choose the muscle group for your new exercise</string>
     <string name="create_new_exercise">Create new exercise</string>
     <string name="add_workout">Add Workout</string>
+
+    <!-- Drawer strings. -->
+    <string name="log_workout">Log workout</string>
 </resources>

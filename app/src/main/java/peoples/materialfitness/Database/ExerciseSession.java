@@ -13,6 +13,11 @@ import java.util.Set;
 
 /**
  * Created by Alex Sullivan on 10/20/2015.
+ *
+ * An exercise session. This represents a certain number of reps at a certain weight for a certain
+ * {@link peoples.materialfitness.Database.Exercise} object. For example, if I were to do
+ * 5 reps of squats at 10lbs, then 20lbs, then 30lbs, then 40lbs, then a giant
+ * PR at 320lbs, then this would be a {@link peoples.materialfitness.Database.ExerciseSession}
  */
 public class ExerciseSession extends SugarRecord<ExerciseSession>
 {

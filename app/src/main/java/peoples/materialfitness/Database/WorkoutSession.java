@@ -10,6 +10,12 @@ import java.util.List;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
+ *
+ * {@link WorkoutSession}'s represent a list of {@link ExerciseSession}'s. This is what really
+ * describes a days workout - sets of squats and deadlifts and bench presses and whatnot all come
+ * together to make up a {@link WorkoutSession}.
+ *
+ * Also I think I'm going a little crazy with the links...but I like them!
  */
 public class WorkoutSession extends SugarRecord<WorkoutSession>
 {

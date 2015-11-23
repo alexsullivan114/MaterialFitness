@@ -6,6 +6,9 @@ import rx.Observable;
 
 /**
  * Created by Alex Sullivan on 10/18/2015.
+ *
+ * Interactor for the {@link peoples.materialfitness.Database.Exercise} object.
+ * Handled CRUD operations for the exercise object.
  */
 public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exercise>
 {

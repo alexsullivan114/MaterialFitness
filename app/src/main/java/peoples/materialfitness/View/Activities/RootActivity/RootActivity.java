@@ -16,6 +16,9 @@ import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivity;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.
+ *
+ * This class represents the starting activity of the app. It contains the navigation Drawer.
+ *
  */
 public class RootActivity extends BaseActivity
 {
