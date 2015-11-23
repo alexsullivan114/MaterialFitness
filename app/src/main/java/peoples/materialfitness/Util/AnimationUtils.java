@@ -4,6 +4,8 @@ import android.animation.Animator;
 
 /**
  * Created by Alex Sullivan on 10/17/2015.
+ *
+ * Simple animation utility class.
  */
 public class AnimationUtils
 {

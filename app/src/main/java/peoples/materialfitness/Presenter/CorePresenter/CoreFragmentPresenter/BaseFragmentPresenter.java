@@ -8,6 +8,8 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragmentInterface;
 
 /**
  * Created by Alex Sullivan on 11/21/15.
+ *
+ * Copy of the base activity presenter but for fragments. The type system follows the same logic.
  */
 public abstract class BaseFragmentPresenter<T extends BaseFragmentInterface> extends BasePresenter
     implements BaseFragmentPresenterInterface<T>

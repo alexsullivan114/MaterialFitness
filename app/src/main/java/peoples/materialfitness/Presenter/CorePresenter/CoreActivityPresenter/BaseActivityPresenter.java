@@ -14,7 +14,13 @@ import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivityInterface;
  * pain of setting presenters in every activity. Let's try to describe the types and the reasons
  * they exist, shall we?
  *
- * <T extends BaseActivityInterface>:
+ * <T extends BaseActivityInterface>: This first parameter represents the attached Activity
+ * interface. This interface is how the presenter communicates with the activity. Each activity
+ * should implement an interface that extends this interface.
+ *
+ * BaseActivityPresenterInterface<T>: This second parameter is needed because we implement the
+ * base activity presenter interface, which is the interface surrounding attaching the actual
+ * activity interface to this presenter.
  */
 public abstract class BaseActivityPresenter<T extends BaseActivityInterface> extends BasePresenter
         implements BaseActivityPresenterInterface<T>

@@ -16,6 +16,8 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
+ *
+ * Presenter for the Log Workout Activity. This will be deleted.
  */
 public class LogWorkoutActivityPresenter extends BaseActivityPresenter<LogWorkoutActivityInterface>
         implements LogWorkoutActivityPresenterInterface<LogWorkoutActivityInterface>

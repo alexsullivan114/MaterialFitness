@@ -14,6 +14,8 @@ import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivityInterface;
 
 /**
  * Created by Alex Sullivan on 10/24/15.
+ *
+ * Presenter interface for the LogWorkoutActivity. This will be switched to the fragment.
  */
 public interface LogWorkoutActivityPresenterInterface<T extends BaseActivityInterface>
         extends BaseActivityPresenterInterface<T>
