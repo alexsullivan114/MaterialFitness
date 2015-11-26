@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import peoples.materialfitness.R;
 
@@ -24,6 +25,7 @@ public class RootDrawerController
     public RootDrawerController(Activity drawerActivity, DrawerLayout layout, Toolbar toolbar)
     {
         mDrawerToggle = new ActionBarDrawerToggle(drawerActivity, layout, toolbar, 0, 0);
+        layout.setDrawerListener(mDrawerToggle);
         mContext = drawerActivity.getApplicationContext();
     }
 
@@ -35,5 +37,10 @@ public class RootDrawerController
     public void onConfigurationChanged(Configuration newConfiguration)
     {
         mDrawerToggle.onConfigurationChanged(newConfiguration);
+    }
+
+    public void onOptionsItemSelected(MenuItem item)
+    {
+        mDrawerToggle.onOptionsItemSelected(item);
     }
 }

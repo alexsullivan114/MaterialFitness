@@ -3,6 +3,7 @@ package peoples.materialfitness.View.Activities.RootActivity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import butterknife.Bind;
@@ -56,5 +57,13 @@ public class RootActivity extends BaseActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerController.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        mDrawerController.onOptionsItemSelected(item);
+
+        return super.onOptionsItemSelected(item);
     }
 }
