@@ -3,7 +3,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/log_workout"
-            android:icon="@android:drawable/ic_menu_camera"
+            android:icon="@drawable/weightlifting"
             android:title="@string/log_workout" />
+
+        <item
+            android:id="@+id/workout_history"
+            android:icon="@drawable/barbell"
+            android:title="@string/workout_history" />
     </group>
 </menu>

@@ -20,4 +20,5 @@
 
     <!-- Drawer strings. -->
     <string name="log_workout">Log workout</string>
+    <string name="workout_history">History</string>
 </resources>
