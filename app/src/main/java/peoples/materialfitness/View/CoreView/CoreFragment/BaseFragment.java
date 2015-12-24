@@ -13,7 +13,7 @@ import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 public abstract class BaseFragment<T extends BaseFragmentPresenterInterface> extends Fragment implements BaseFragmentInterface
 {
     private static final String BASE_TAG = BaseFragment.class.getSimpleName();
-    protected String TAG;
+    public String TAG;
     protected T presenterInterface;
     private boolean isDestroyedBySystem;
 
