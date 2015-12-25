@@ -113,7 +113,7 @@ public class RootDrawerController implements
         }
 
         android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        fragmentTransaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
         fragmentTransaction.replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
 
     }

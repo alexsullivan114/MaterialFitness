@@ -7,6 +7,7 @@
     <string name="action_settings">Settings</string>
     <!-- global strings -->
     <string name="ok">Ok</string>
+    <string name="empty">Empty</string>
     <!-- Text values for the muscle group enum -->
     <string name="shoulders">Shoulders</string>
     <string name="chest">Chest</string>
@@ -18,6 +19,8 @@
     <string name="create_new_exercise">Create new exercise</string>
     <string name="add_workout">Add Workout</string>
 
+    <!-- Log workout fragment strings -->
+    <string name="todays_workout">Today\'s workout</string>
     <!-- Drawer strings. -->
     <string name="log_workout">Log workout</string>
     <string name="workout_history">History</string>
