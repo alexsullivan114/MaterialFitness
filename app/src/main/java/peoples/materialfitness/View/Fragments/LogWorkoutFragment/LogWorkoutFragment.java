@@ -2,12 +2,13 @@ package peoples.materialfitness.View.Fragments.LogWorkoutFragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutActivityPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterInterface;
 import peoples.materialfitness.R;
@@ -17,6 +18,7 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
  * Created by Alex Sullivan on 11/21/15.
  */
 public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenterInterface>
+    implements RootFabOnClick
 {
     @Override
     public PresenterFactory<LogWorkoutFragmentPresenterInterface> getPresenterFactory()
@@ -52,5 +54,11 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     public void onResume()
     {
         super.onResume();
+    }
+
+    @Override
+    public void onFabClicked(FloatingActionButton fab)
+    {
+
     }
 }

@@ -3,16 +3,14 @@ package peoples.materialfitness.Navigation;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.res.Configuration;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
@@ -26,13 +24,14 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
  */
 public class RootDrawerController implements
         NavigationView.OnNavigationItemSelectedListener,
-        DrawerLayout.DrawerListener
+        DrawerLayout.DrawerListener,
+        RootFabOnClick
 {
     private final ActionBarDrawerToggle mDrawerToggle;
     private final Activity mContainingActivity;
     private final DrawerLayout drawerLayout;
 
-    private NavigationItem navItemToShow;
+    private NavigationItem navItemToShow = NavigationItem.NAV_ITEM_LOG_WORKOUT;
 
     public RootDrawerController(Activity drawerActivity,
                                 DrawerLayout layout,
@@ -115,6 +114,17 @@ public class RootDrawerController implements
         android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
         fragmentTransaction.replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
+    }
 
+    /**
+     * Method to notify whatever fragment is currently being displayed that the fab has been clicked.
+     * @param fab Fab that's been clicked
+     */
+    @Override
+    public void onFabClicked(FloatingActionButton fab)
+    {
+        RootFabOnClick fabClickHandler = (RootFabOnClick)navItemToShow.getFragmentForNavItem();
+
+        fabClickHandler.onFabClicked(fab);
     }
 }
