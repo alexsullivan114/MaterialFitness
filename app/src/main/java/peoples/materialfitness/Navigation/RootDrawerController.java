@@ -31,7 +31,8 @@ public class RootDrawerController implements
     private final Activity mContainingActivity;
     private final DrawerLayout drawerLayout;
 
-    private NavigationItem navItemToShow = NavigationItem.NAV_ITEM_LOG_WORKOUT;
+    private NavigationItem navItemToShow = null;
+    public NavigationItem currentNavItem = NavigationItem.NAV_ITEM_LOG_WORKOUT;
 
     public RootDrawerController(Activity drawerActivity,
                                 DrawerLayout layout,
@@ -44,6 +45,8 @@ public class RootDrawerController implements
 
         layout.setDrawerListener(this);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setInitialFragmentSelected();
     }
 
     @Override
@@ -66,6 +69,7 @@ public class RootDrawerController implements
         if (navItemToShow != null)
         {
             showNavigationItem(navItemToShow);
+            navItemToShow = null;
         }
     }
 
@@ -84,6 +88,13 @@ public class RootDrawerController implements
         return true;
     }
 
+    public void setInitialFragmentSelected()
+    {
+        NavigationView navView = (NavigationView)drawerLayout.findViewById(R.id.nav_view);
+        navView.getMenu().getItem(0).setChecked(true);
+        showNavigationItem(currentNavItem);
+    }
+
     public void syncState()
     {
         mDrawerToggle.syncState();
@@ -99,7 +110,7 @@ public class RootDrawerController implements
         mDrawerToggle.onOptionsItemSelected(item);
     }
 
-    private void showNavigationItem(NavigationItem navItem)
+    public void showNavigationItem(NavigationItem navItem)
     {
         FragmentManager fragmentManager = mContainingActivity.getFragmentManager();
 
@@ -114,6 +125,8 @@ public class RootDrawerController implements
         android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
         fragmentTransaction.replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
+
+        currentNavItem = navItem;
     }
 
     /**
@@ -123,8 +136,16 @@ public class RootDrawerController implements
     @Override
     public void onFabClicked(FloatingActionButton fab)
     {
-        RootFabOnClick fabClickHandler = (RootFabOnClick)navItemToShow.getFragmentForNavItem();
+        BaseFragment currentFragment = currentNavItem.getFragmentForNavItem();
 
-        fabClickHandler.onFabClicked(fab);
+        if (currentFragment instanceof RootFabOnClick)
+        {
+            ((RootFabOnClick)currentFragment).onFabClicked(fab);
+        }
+        else
+        {
+            throw new RuntimeException("Fab clicked but currently displayed fragment " +
+                    currentFragment.getClass().getSimpleName() + "Doesn't implement RootFabOnClick!");
+        }
     }
 }

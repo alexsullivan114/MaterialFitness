@@ -39,6 +39,7 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         return new RootActivityPresenter.RootActivityPresenterFactory();
     }
 
+    // TODO: Need to save currentNavItem in onSavedInstanceState.
     @Override
     public void onCreate(Bundle instanceState)
     {

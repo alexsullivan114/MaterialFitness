@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
@@ -47,7 +48,20 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
+        v.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                onViewVisible();
+            }
+        });
         return v;
+    }
+
+    private void onViewVisible()
+    {
+        ((RootFabDisplay)getActivity()).showFab();
     }
 
     @Override

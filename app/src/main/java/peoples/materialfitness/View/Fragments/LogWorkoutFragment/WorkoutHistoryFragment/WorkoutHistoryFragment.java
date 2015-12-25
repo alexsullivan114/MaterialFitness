@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.WorkoutHistoryFragmentPresenter.WorkoutHistoryFragmentPresenter;
@@ -18,7 +19,6 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
  * Created by Alex Sullivan on 12/24/15.
  */
 public class WorkoutHistoryFragment extends BaseFragment<WorkoutHistoryFragmentPresenterInterface>
-    implements RootFabOnClick
 {
     public static WorkoutHistoryFragment newInstance()
     {
@@ -40,12 +40,21 @@ public class WorkoutHistoryFragment extends BaseFragment<WorkoutHistoryFragmentP
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_workout_history, container, false);
+        View v = inflater.inflate(R.layout.fragment_workout_history, container, false);
+        v.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                onViewVisible();
+            }
+        });
+
+        return v;
     }
 
-    @Override
-    public void onFabClicked(FloatingActionButton fab)
+    private void onViewVisible()
     {
-
+        ((RootFabDisplay)getActivity()).hideFab();
     }
 }
