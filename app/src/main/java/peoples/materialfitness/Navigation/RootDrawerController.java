@@ -27,10 +27,10 @@ public class RootDrawerController implements
         NavigationView.OnNavigationItemSelectedListener,
         DrawerLayout.DrawerListener
 {
-    private final NavigationView mNavigationView;
     private final ActionBarDrawerToggle mDrawerToggle;
     private final Activity mContainingActivity;
     private final DrawerLayout drawerLayout;
+
     private NavigationItem navItemToShow;
 
     public RootDrawerController(Activity drawerActivity,
@@ -39,11 +39,11 @@ public class RootDrawerController implements
     {
         mDrawerToggle = new ActionBarDrawerToggle(drawerActivity, layout, toolbar, 0, 0);
         mContainingActivity = drawerActivity;
-        mNavigationView = (NavigationView)layout.findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView)layout.findViewById(R.id.nav_view);
         drawerLayout = layout;
 
         layout.setDrawerListener(this);
-        mNavigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -62,7 +62,11 @@ public class RootDrawerController implements
     public void onDrawerClosed(View drawerView)
     {
         mDrawerToggle.onDrawerClosed(drawerView);
-        showNavigationItem(navItemToShow);
+
+        if (navItemToShow != null)
+        {
+            showNavigationItem(navItemToShow);
+        }
     }
 
     @Override
@@ -75,6 +79,7 @@ public class RootDrawerController implements
     public boolean onNavigationItemSelected(MenuItem item)
     {
         navItemToShow = NavigationItem.getNavItemFromMenuItem(item);
+
         drawerLayout.closeDrawers();
         return true;
     }
@@ -98,7 +103,7 @@ public class RootDrawerController implements
     {
         FragmentManager fragmentManager = mContainingActivity.getFragmentManager();
 
-        BaseFragment fragmentToShow = (BaseFragment)navItem.getFragmentForNavItem();
+        BaseFragment fragmentToShow = navItem.getFragmentForNavItem();
         Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentToShow.TAG);
 
         if (currentFragment != null)
@@ -106,7 +111,7 @@ public class RootDrawerController implements
             fragmentManager.beginTransaction().remove(currentFragment).commit();
         }
 
-        fragmentManager.beginTransaction().add(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
 
     }
 }

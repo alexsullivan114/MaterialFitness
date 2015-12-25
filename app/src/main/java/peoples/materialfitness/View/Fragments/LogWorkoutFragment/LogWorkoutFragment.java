@@ -10,6 +10,7 @@ import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutActivityPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterInterface;
+import peoples.materialfitness.R;
 import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
 
 /**
@@ -43,7 +44,8 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
+        return v;
     }
 
     @Override

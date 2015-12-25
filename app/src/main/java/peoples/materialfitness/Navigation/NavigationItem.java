@@ -4,7 +4,9 @@ import android.app.Fragment;
 import android.view.MenuItem;
 
 import peoples.materialfitness.R;
+import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
 import peoples.materialfitness.View.Fragments.LogWorkoutFragment.LogWorkoutFragment;
+import peoples.materialfitness.View.Fragments.LogWorkoutFragment.WorkoutHistoryFragment.WorkoutHistoryFragment;
 
 /**
  * Created by Alex Sullivan on 11/27/15.
@@ -24,12 +26,12 @@ public enum NavigationItem
         }
     }
 
-    public Fragment getFragmentForNavItem()
+    public BaseFragment getFragmentForNavItem()
     {
         switch (this)
         {
             case NAV_ITEM_LOG_WORKOUT: return LogWorkoutFragment.newInstance();
-            case NAV_ITEM_WORKOUT_HISTORY:
+            case NAV_ITEM_WORKOUT_HISTORY: return WorkoutHistoryFragment.newInstance();
             default: return LogWorkoutFragment.newInstance();
         }
     }
