@@ -21,6 +21,8 @@
 
     <!-- Log workout fragment strings -->
     <string name="todays_workout">Today\'s workout</string>
+    <string name="empty_workout">Empty workout</string>
+    <string name="log_a_workout">Log a workout</string>
     <!-- Drawer strings. -->
     <string name="log_workout">Log workout</string>
     <string name="workout_history">History</string>

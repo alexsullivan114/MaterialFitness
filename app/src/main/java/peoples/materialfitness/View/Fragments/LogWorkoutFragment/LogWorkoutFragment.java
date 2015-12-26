@@ -48,14 +48,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
-        v.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                onViewVisible();
-            }
-        });
+        v.post(this::onViewVisible);
         return v;
     }
 

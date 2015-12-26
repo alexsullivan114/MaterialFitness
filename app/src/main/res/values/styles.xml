@@ -38,4 +38,12 @@
         <item name="android:textSize">25sp</item>
     </style>
 
+    <style name="TextAppearance.Gray">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="TextAppearance.Gray.20">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>
