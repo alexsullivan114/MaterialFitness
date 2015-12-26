@@ -19,6 +19,7 @@ import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPrese
 import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPresenterInterface;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationUtils;
+import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivity;
 
 /**
@@ -83,12 +84,26 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     @Override
     public void hideFab()
     {
-        AnimationUtils.circularHideView(fab);
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            AnimationUtils.circularHideView(fab);
+        }
+        else
+        {
+            AnimationUtils.circularFadeOutView(fab);
+        }
     }
 
     @Override
     public void showFab()
     {
-        AnimationUtils.circularRevealView(fab);
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            AnimationUtils.circularRevealView(fab);
+        }
+        else
+        {
+            AnimationUtils.circularFadeInView(fab);
+        }
     }
 }

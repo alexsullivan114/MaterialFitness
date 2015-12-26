@@ -57,6 +57,16 @@ public class AnimationUtils
         anim.start();
     }
 
+    public static void circularFadeInView(View v)
+    {
+        v.animate().alpha(1).start();
+    }
+
+    public static void circularFadeOutView(View v)
+    {
+        v.animate().alpha(0).start();
+    }
+
     public static Animator.AnimatorListener endListener(Runnable r)
     {
         return new Animator.AnimatorListener()
