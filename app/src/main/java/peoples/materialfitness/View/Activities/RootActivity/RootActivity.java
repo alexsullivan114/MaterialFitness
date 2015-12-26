@@ -1,6 +1,7 @@
 package peoples.materialfitness.View.Activities.RootActivity;
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,7 @@ import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPresenter;
 import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPresenterInterface;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivity;
 
 /**
@@ -81,12 +83,12 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     @Override
     public void hideFab()
     {
-        fab.setVisibility(View.GONE);
+        AnimationUtils.circularHideView(fab);
     }
 
     @Override
     public void showFab()
     {
-        fab.setVisibility(View.VISIBLE);
+        AnimationUtils.circularRevealView(fab);
     }
 }
