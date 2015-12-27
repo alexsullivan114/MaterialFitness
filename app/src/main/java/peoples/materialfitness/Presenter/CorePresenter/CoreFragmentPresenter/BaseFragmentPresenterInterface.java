@@ -11,7 +11,8 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragmentInterface;
  *
  * Once again, basically the same thing as the BaseActivityPresenterInterface.
  */
-public interface BaseFragmentPresenterInterface<T extends BaseFragmentInterface> extends BasePresenterInterface
+public interface BaseFragmentPresenterInterface<T extends BaseFragmentInterface>
+        extends BasePresenterInterface
 {
     void setFragment(Fragment fragment);
     void setFragmentInterface(T fragmentInterface);

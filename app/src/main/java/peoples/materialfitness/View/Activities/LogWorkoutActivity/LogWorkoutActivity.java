@@ -22,7 +22,8 @@ import peoples.materialfitness.Presenter.LogWorkoutActivityPresenter.LogWorkoutA
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivity;
 
-public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenterInterface> implements LogWorkoutActivityInterface
+public class LogWorkoutActivity extends BaseActivity<LogWorkoutActivityPresenterInterface>
+        implements LogWorkoutActivityInterface
 {
 
     @Bind(R.id.fab)

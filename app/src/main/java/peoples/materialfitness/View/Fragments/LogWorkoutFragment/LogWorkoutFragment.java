@@ -7,10 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
@@ -23,7 +29,7 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
  * Created by Alex Sullivan on 11/21/15.
  */
 public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenterInterface>
-        implements RootFabOnClick
+        implements LogWorkoutFragmentInterface, RootFabOnClick
 {
     @Bind(R.id.recycler_empty_view)
     TextView recyclerEmptyView;
@@ -78,6 +84,45 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     public void onFabClicked(FloatingActionButton fab)
     {
         presenterInterface.onFabClicked();
+    }
+
+    @Override
+    public void showAddWorkoutDialog()
+    {
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.log_exercise)
+                .customView(R.layout.create_exercise_dialog, true).build();
+
+        setDialogAdapters(dialog);
+
+
+    }
+
+    /**
+     * Sets the relevant adapters on the necessary parts of the dialog
+     * @param dialog Dialog to search for relevant views on
+     */
+    private void setDialogAdapters(MaterialDialog dialog)
+    {
+        Spinner muscleGroupSpinner = (Spinner)dialog.findViewById(R.id.exercise_muscle_group);
+        AutoCompleteTextView exerciseTitle = (AutoCompleteTextView)dialog.findViewById(R.id.exercise_name);
+
+        setMuscleGroupSpinnerAdapter(muscleGroupSpinner);
+        setExerciseTitleAdapter(exerciseTitle);
+    }
+
+    private void setMuscleGroupSpinnerAdapter(final Spinner muscleGroupSpinnerAdapter)
+    {
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+        presenterInterface.getMuscleGroups().subscribe(values -> {
+            adapter.addAll(values);
+            muscleGroupSpinnerAdapter.setAdapter(adapter);
+        });
+    }
+
+    private void setExerciseTitleAdapter(AutoCompleteTextView exerciseTitle)
+    {
+
     }
 
     @Override

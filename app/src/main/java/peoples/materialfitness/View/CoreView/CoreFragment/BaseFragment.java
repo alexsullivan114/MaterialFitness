@@ -10,7 +10,8 @@ import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 /**
  * Created by Alex Sullivan on 11/21/15.
  */
-public abstract class BaseFragment<T extends BaseFragmentPresenterInterface> extends Fragment implements BaseFragmentInterface
+public abstract class BaseFragment<T extends BaseFragmentPresenterInterface> extends Fragment
+        implements BaseFragmentInterface
 {
     private static final String BASE_TAG = BaseFragment.class.getSimpleName();
     public String TAG;
@@ -23,7 +24,6 @@ public abstract class BaseFragment<T extends BaseFragmentPresenterInterface> ext
         setTag();
         setPresenterInterface(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
         presenterInterface.setFragment(this);
-        // TODO: Ok, make this less shitty at some point.
         presenterInterface.setFragmentInterface(this);
     }
 

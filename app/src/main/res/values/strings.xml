@@ -18,6 +18,7 @@
     <string name="choose_muscle_group">Choose the muscle group for your new exercise</string>
     <string name="create_new_exercise">Create new exercise</string>
     <string name="add_workout">Add Workout</string>
+    <string name="log_exercise">Log an exercise</string>
 
     <!-- Log workout fragment strings -->
     <string name="todays_workout">Today\'s workout</string>
