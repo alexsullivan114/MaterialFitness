@@ -7,8 +7,10 @@
     <string name="action_settings">Settings</string>
     <!-- global strings -->
     <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
     <string name="empty">Empty</string>
     <!-- Text values for the muscle group enum -->
+    <string name="muscle_group">Muscle group</string>
     <string name="shoulders">Shoulders</string>
     <string name="chest">Chest</string>
     <string name="legs">Legs</string>
@@ -19,6 +21,8 @@
     <string name="create_new_exercise">Create new exercise</string>
     <string name="add_workout">Add Workout</string>
     <string name="log_exercise">Log an exercise</string>
+    <string name="exercise_name">Exercise name</string>
+    <string name="add_sets_later">You\'ll be able to add sets and reps right after this!</string>
 
     <!-- Log workout fragment strings -->
     <string name="todays_workout">Today\'s workout</string>

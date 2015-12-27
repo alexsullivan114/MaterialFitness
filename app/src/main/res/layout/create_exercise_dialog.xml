@@ -5,18 +5,40 @@
     android:layout_height="match_parent"
     android:layout_marginTop="10dp">
 
-    <AutoCompleteTextView
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/create_exercise_vertical_margin"
-        android:layout_marginTop="@dimen/create_exercise_vertical_margin"
-        android:id="@+id/exercise_name"/>
+        android:layout_height="wrap_content">
 
-    <Spinner
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/create_exercise_vertical_margin"
+            android:layout_marginTop="@dimen/create_exercise_vertical_margin"
+            android:id="@+id/exercise_name"
+            android:hint="@string/exercise_name"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/create_exercise_vertical_margin"
+            android:layout_marginTop="@dimen/create_exercise_vertical_margin"
+            android:id="@+id/muscle_group"
+            android:hint="@string/muscle_group"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/create_exercise_vertical_margin"
-        android:layout_marginTop="@dimen/create_exercise_vertical_margin"
-        android:id="@+id/exercise_muscle_group"/>
+        android:gravity="center"
+        android:text="@string/add_sets_later"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textAppearance="@style/TextAppearance.DarkerGray.12"/>
 
 </LinearLayout>

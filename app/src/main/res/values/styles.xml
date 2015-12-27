@@ -38,12 +38,36 @@
         <item name="android:textSize">25sp</item>
     </style>
 
-    <style name="TextAppearance.Gray">
-        <item name="android:textColor">@android:color/darker_gray</item>
+    <style name="TextAppearance.DarkerGray">
+        <item name="android:textColor">@color/darker_gray</item>
     </style>
 
-    <style name="TextAppearance.Gray.20">
+    <style name="TextAppearance.DarkerGray.20">
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.DarkerGray.10">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.DarkerGray.12">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.DarkerGray.15">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.LighterGray">
+        <item name="android:textColor">@color/lighter_gray</item>
+    </style>
+
+    <style name="TextAppearance.LighterGray.20">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.LighterGray.10">
+        <item name="android:textSize">10sp</item>
     </style>
 
 </resources>

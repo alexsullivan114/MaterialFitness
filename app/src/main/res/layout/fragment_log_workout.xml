@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textAppearance="@style/TextAppearance.Gray.20"
+        android:textAppearance="@style/TextAppearance.DarkerGray.20"
         android:text="@string/log_a_workout"/>
 
     <android.support.v7.widget.RecyclerView

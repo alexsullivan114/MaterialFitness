@@ -91,9 +91,12 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     {
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.log_exercise)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
                 .customView(R.layout.create_exercise_dialog, true).build();
 
         setDialogAdapters(dialog);
+        dialog.show();
 
 
     }
@@ -104,16 +107,16 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
      */
     private void setDialogAdapters(MaterialDialog dialog)
     {
-        Spinner muscleGroupSpinner = (Spinner)dialog.findViewById(R.id.exercise_muscle_group);
-        AutoCompleteTextView exerciseTitle = (AutoCompleteTextView)dialog.findViewById(R.id.exercise_name);
+        AutoCompleteTextView muscleGroup = ButterKnife.findById(dialog, R.id.muscle_group);
+        AutoCompleteTextView exerciseTitle = ButterKnife.findById(dialog, R.id.exercise_name);
 
-        setMuscleGroupSpinnerAdapter(muscleGroupSpinner);
+        setMuscleGroupSpinnerAdapter(muscleGroup);
         setExerciseTitleAdapter(exerciseTitle);
     }
 
-    private void setMuscleGroupSpinnerAdapter(final Spinner muscleGroupSpinnerAdapter)
+    private void setMuscleGroupSpinnerAdapter(final AutoCompleteTextView muscleGroupSpinnerAdapter)
     {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
         presenterInterface.getMuscleGroups().subscribe(values -> {
             adapter.addAll(values);
             muscleGroupSpinnerAdapter.setAdapter(adapter);
