@@ -7,4 +7,5 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragmentInterface;
  */
 public interface LogWorkoutFragmentInterface extends BaseFragmentInterface
 {
+
 }

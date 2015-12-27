@@ -68,7 +68,10 @@ public class RootDrawerController implements
 
         if (navItemToShow != null)
         {
-            showNavigationItem(navItemToShow);
+            if (navItemToShow != currentNavItem)
+            {
+                showNavigationItem(navItemToShow);
+            }
             navItemToShow = null;
         }
     }

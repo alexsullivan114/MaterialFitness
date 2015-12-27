@@ -3,10 +3,14 @@ package peoples.materialfitness.View.Fragments.LogWorkoutFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
@@ -19,8 +23,13 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
  * Created by Alex Sullivan on 11/21/15.
  */
 public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenterInterface>
-    implements RootFabOnClick
+        implements RootFabOnClick
 {
+    @Bind(R.id.recycler_empty_view)
+    TextView recyclerEmptyView;
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     @Override
     public PresenterFactory<LogWorkoutFragmentPresenterInterface> getPresenterFactory()
     {
@@ -48,13 +57,15 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
+        ButterKnife.bind(this, v);
+
         v.post(this::onViewVisible);
         return v;
     }
 
     private void onViewVisible()
     {
-        ((RootFabDisplay)getActivity()).showFab();
+        ((RootFabDisplay) getActivity()).showFab();
     }
 
     @Override
@@ -66,6 +77,13 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     @Override
     public void onFabClicked(FloatingActionButton fab)
     {
+        presenterInterface.onFabClicked();
+    }
 
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

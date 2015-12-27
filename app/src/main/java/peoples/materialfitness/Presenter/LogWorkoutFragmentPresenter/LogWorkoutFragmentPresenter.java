@@ -18,4 +18,10 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
             return new LogWorkoutFragmentPresenter();
         }
     }
+
+    @Override
+    public void onFabClicked()
+    {
+
+    }
 }

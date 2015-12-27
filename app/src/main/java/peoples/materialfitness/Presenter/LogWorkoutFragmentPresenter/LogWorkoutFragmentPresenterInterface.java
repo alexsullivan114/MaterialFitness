@@ -9,4 +9,5 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragmentInterface;
 public interface LogWorkoutFragmentPresenterInterface<T extends BaseFragmentInterface>
         extends BaseFragmentPresenterInterface<T>
 {
+    void onFabClicked();
 }
