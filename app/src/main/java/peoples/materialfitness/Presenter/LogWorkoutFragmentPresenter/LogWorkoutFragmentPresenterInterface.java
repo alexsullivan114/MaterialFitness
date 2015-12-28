@@ -17,4 +17,5 @@ public interface LogWorkoutFragmentPresenterInterface
     Observable<List<String>> getMuscleGroups();
     Observable<List<String>> getExerciseTitles();
     void onPositiveDialogButtonClicked(String muscleGroupTitle, String exerciseTitle);
+    void onNegativeDialogButtonClicked();
 }

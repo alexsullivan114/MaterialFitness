@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,9 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     TextView recyclerEmptyView;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    private TextInputLayout muscleChoiceLayout;
+    private TextInputLayout exerciseTitleLayout;
     private AutoCompleteTextView muscleChoiceDialogText;
     private AutoCompleteTextView exerciseTitleDialogText;
 
@@ -98,13 +102,32 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
                 .title(R.string.log_exercise)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
-                .onPositive(this)
+                .onAny(this)
+                .autoDismiss(false)
                 .customView(R.layout.create_exercise_dialog, true).build();
 
+        assignDialogViews();
         setDialogAdapters();
+
         addExerciseDialog.show();
 
 
+    }
+
+    private void assignDialogViews()
+    {
+        exerciseTitleLayout = ButterKnife.findById(addExerciseDialog, R.id.exercise_layout);
+        muscleChoiceLayout = ButterKnife.findById(addExerciseDialog, R.id.muscle_group_layout);
+        muscleChoiceDialogText = ButterKnife.findById(addExerciseDialog, R.id.muscle_group);
+        exerciseTitleDialogText = ButterKnife.findById(addExerciseDialog, R.id.exercise_name);
+    }
+
+    private void unassignDialogViews()
+    {
+        exerciseTitleLayout = null;
+        muscleChoiceLayout = null;
+        muscleChoiceDialogText = null;
+        exerciseTitleDialogText = null;
     }
 
     /**
@@ -112,9 +135,6 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
      */
     private void setDialogAdapters()
     {
-        muscleChoiceDialogText = ButterKnife.findById(addExerciseDialog, R.id.muscle_group);
-        exerciseTitleDialogText = ButterKnife.findById(addExerciseDialog, R.id.exercise_name);
-
         setMuscleGroupSpinnerAdapter();
         setExerciseTitleAdapter();
     }
@@ -145,9 +165,47 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     }
 
     @Override
+    public void dismissAddWorkoutDialog()
+    {
+        if (addExerciseDialog != null)
+        {
+            addExerciseDialog.dismiss();
+        }
+    }
+
+    @Override
     public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction)
     {
-        presenterInterface.onPositiveDialogButtonClicked(muscleChoiceDialogText.getText().toString(),
-                exerciseTitleDialogText.getText().toString());
+        if (dialogAction == DialogAction.NEGATIVE)
+        {
+            presenterInterface.onNegativeDialogButtonClicked();
+        }
+        else if (dialogAction == DialogAction.POSITIVE)
+        {
+            presenterInterface.onPositiveDialogButtonClicked(
+                    muscleChoiceDialogText.getText().toString(),
+                    exerciseTitleDialogText.getText().toString());
+        }
+    }
+
+    @Override
+    public void errorExerciseTitleNull()
+    {
+        if (addExerciseDialog != null)
+        {
+            TextInputLayout inputLayout = ButterKnife.findById(addExerciseDialog, R.id.exercise_layout);
+            inputLayout.setError(getString(R.string.error_empty_exercise));
+
+        }
+    }
+
+    @Override
+    public void errorMuscleGroupTextNull()
+    {
+        if (addExerciseDialog != null)
+        {
+            TextInputLayout inputLayout = ButterKnife.findById(addExerciseDialog, R.id.muscle_group_layout);
+            inputLayout.setError(getString(R.string.error_empty_muscle_group));
+        }
     }
 }

@@ -46,9 +46,31 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
     }
 
     @Override
+    public void onNegativeDialogButtonClicked()
+    {
+        fragmentInterface.dismissAddWorkoutDialog();
+    }
+
+    @Override
     public void onPositiveDialogButtonClicked(final String muscleGroupText, final String exerciseTitle)
     {
-        saveExerciseIfNecessary(muscleGroupText, exerciseTitle);
+        if (!exerciseTitle.isEmpty() && !muscleGroupText.isEmpty())
+        {
+            saveExerciseIfNecessary(muscleGroupText, exerciseTitle);
+            fragmentInterface.dismissAddWorkoutDialog();
+        }
+        else
+        {
+            if (exerciseTitle.isEmpty())
+            {
+                fragmentInterface.errorExerciseTitleNull();
+            }
+
+            if (muscleGroupText.isEmpty())
+            {
+                fragmentInterface.errorMuscleGroupTextNull();
+            }
+        }
     }
 
     private void saveExerciseIfNecessary(final String muscleGroupText, final String exerciseTitle)
