@@ -15,4 +15,6 @@ public interface LogWorkoutFragmentPresenterInterface
 {
     void onFabClicked();
     Observable<List<String>> getMuscleGroups();
+    Observable<List<String>> getExerciseTitles();
+    void onPositiveDialogButtonClicked(String muscleGroupTitle, String exerciseTitle);
 }

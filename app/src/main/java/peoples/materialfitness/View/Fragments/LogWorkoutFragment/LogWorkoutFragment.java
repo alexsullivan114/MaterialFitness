@@ -1,6 +1,7 @@
 package peoples.materialfitness.View.Fragments.LogWorkoutFragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -9,14 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
@@ -29,12 +29,17 @@ import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
  * Created by Alex Sullivan on 11/21/15.
  */
 public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenterInterface>
-        implements LogWorkoutFragmentInterface, RootFabOnClick
+        implements LogWorkoutFragmentInterface, RootFabOnClick, MaterialDialog.SingleButtonCallback
 {
     @Bind(R.id.recycler_empty_view)
     TextView recyclerEmptyView;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
+    private AutoCompleteTextView muscleChoiceDialogText;
+    private AutoCompleteTextView exerciseTitleDialogText;
+
+    private MaterialDialog addExerciseDialog;
+
 
     @Override
     public PresenterFactory<LogWorkoutFragmentPresenterInterface> getPresenterFactory()
@@ -89,43 +94,47 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     @Override
     public void showAddWorkoutDialog()
     {
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+        addExerciseDialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.log_exercise)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
+                .onPositive(this)
                 .customView(R.layout.create_exercise_dialog, true).build();
 
-        setDialogAdapters(dialog);
-        dialog.show();
+        setDialogAdapters();
+        addExerciseDialog.show();
 
 
     }
 
     /**
      * Sets the relevant adapters on the necessary parts of the dialog
-     * @param dialog Dialog to search for relevant views on
      */
-    private void setDialogAdapters(MaterialDialog dialog)
+    private void setDialogAdapters()
     {
-        AutoCompleteTextView muscleGroup = ButterKnife.findById(dialog, R.id.muscle_group);
-        AutoCompleteTextView exerciseTitle = ButterKnife.findById(dialog, R.id.exercise_name);
+        muscleChoiceDialogText = ButterKnife.findById(addExerciseDialog, R.id.muscle_group);
+        exerciseTitleDialogText = ButterKnife.findById(addExerciseDialog, R.id.exercise_name);
 
-        setMuscleGroupSpinnerAdapter(muscleGroup);
-        setExerciseTitleAdapter(exerciseTitle);
+        setMuscleGroupSpinnerAdapter();
+        setExerciseTitleAdapter();
     }
 
-    private void setMuscleGroupSpinnerAdapter(final AutoCompleteTextView muscleGroupSpinnerAdapter)
+    private void setMuscleGroupSpinnerAdapter()
     {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
         presenterInterface.getMuscleGroups().subscribe(values -> {
             adapter.addAll(values);
-            muscleGroupSpinnerAdapter.setAdapter(adapter);
+            muscleChoiceDialogText.setAdapter(adapter);
         });
     }
 
-    private void setExerciseTitleAdapter(AutoCompleteTextView exerciseTitle)
+    private void setExerciseTitleAdapter()
     {
-
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        presenterInterface.getExerciseTitles().subscribe(values -> {
+            adapter.addAll(values);
+            exerciseTitleDialogText.setAdapter(adapter);
+        });
     }
 
     @Override
@@ -133,5 +142,12 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction)
+    {
+        presenterInterface.onPositiveDialogButtonClicked(muscleChoiceDialogText.getText().toString(),
+                exerciseTitleDialogText.getText().toString());
     }
 }
