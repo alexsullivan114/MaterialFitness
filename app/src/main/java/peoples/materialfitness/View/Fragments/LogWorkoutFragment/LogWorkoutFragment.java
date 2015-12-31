@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -24,6 +25,7 @@ import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterInterface;
 import peoples.materialfitness.R;
+import peoples.materialfitness.View.Components.ClickToSelectEditText;
 import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
 
 /**
@@ -39,7 +41,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
 
     private TextInputLayout muscleChoiceLayout;
     private TextInputLayout exerciseTitleLayout;
-    private AutoCompleteTextView muscleChoiceDialogText;
+    private Spinner muscleChoiceDialogText;
     private AutoCompleteTextView exerciseTitleDialogText;
 
     private MaterialDialog addExerciseDialog;
@@ -141,7 +143,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
 
     private void setMuscleGroupSpinnerAdapter()
     {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item);
         presenterInterface.getMuscleGroups().subscribe(values -> {
             adapter.addAll(values);
             muscleChoiceDialogText.setAdapter(adapter);
@@ -170,6 +172,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         if (addExerciseDialog != null)
         {
             addExerciseDialog.dismiss();
+            unassignDialogViews();
         }
     }
 
@@ -183,7 +186,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         else if (dialogAction == DialogAction.POSITIVE)
         {
             presenterInterface.onPositiveDialogButtonClicked(
-                    muscleChoiceDialogText.getText().toString(),
+                    (String)muscleChoiceDialogText.getSelectedItem(),
                     exerciseTitleDialogText.getText().toString());
         }
     }
