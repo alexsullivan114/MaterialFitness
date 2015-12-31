@@ -25,8 +25,7 @@ import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterInterface;
 import peoples.materialfitness.R;
-import peoples.materialfitness.View.Components.ClickToSelectEditText;
-import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragment;
+import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

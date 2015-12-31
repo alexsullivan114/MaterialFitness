@@ -4,7 +4,6 @@ import java.util.List;
 
 import peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter.BaseFragmentPresenterInterface;
 import peoples.materialfitness.View.Fragments.LogWorkoutFragment.LogWorkoutFragmentInterface;
-import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragmentInterface;
 import rx.Observable;
 
 /**

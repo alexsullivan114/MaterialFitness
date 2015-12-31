@@ -1,13 +1,10 @@
 package peoples.materialfitness.View.Activities.RootActivity;
 
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,7 +17,7 @@ import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPrese
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
-import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivity;
+import peoples.materialfitness.View.Activities.CoreActivity.BaseActivity;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.

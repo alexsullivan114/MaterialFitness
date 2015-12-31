@@ -3,8 +3,7 @@ package peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter;
 import android.app.Fragment;
 
 import peoples.materialfitness.Presenter.CorePresenter.BasePresenterInterface;
-import peoples.materialfitness.View.CoreView.BaseViewInterface;
-import peoples.materialfitness.View.CoreView.CoreFragment.BaseFragmentInterface;
+import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragmentInterface;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

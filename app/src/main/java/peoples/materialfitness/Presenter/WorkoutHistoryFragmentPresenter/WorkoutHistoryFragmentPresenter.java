@@ -2,8 +2,7 @@ package peoples.materialfitness.Presenter.WorkoutHistoryFragmentPresenter;
 
 import peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter.BaseFragmentPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.View.Fragments.LogWorkoutFragment.LogWorkoutFragmentInterface;
-import peoples.materialfitness.View.Fragments.LogWorkoutFragment.WorkoutHistoryFragment.WorkoutHistoryFragmentInterface;
+import peoples.materialfitness.View.Fragments.WorkoutHistoryFragment.WorkoutHistoryFragmentInterface;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

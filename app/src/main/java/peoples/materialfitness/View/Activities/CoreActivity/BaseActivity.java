@@ -1,4 +1,4 @@
-package peoples.materialfitness.View.CoreView.CoreActivity;
+package peoples.materialfitness.View.Activities.CoreActivity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import peoples.materialfitness.Presenter.CorePresenter.BasePresenter;
-import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivityInterface;
+import peoples.materialfitness.View.Activities.CoreActivity.BaseActivityInterface;
 
 /**
  * Created by Alex Sullivan on 10/9/2015.

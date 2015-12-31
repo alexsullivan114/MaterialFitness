@@ -3,7 +3,7 @@ package peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter;
 import android.app.Activity;
 
 import peoples.materialfitness.Presenter.CorePresenter.BasePresenterInterface;
-import peoples.materialfitness.View.CoreView.CoreActivity.BaseActivityInterface;
+import peoples.materialfitness.View.Activities.CoreActivity.BaseActivityInterface;
 
 /**
  * Created by Alex Sullivan on 10/24/15.

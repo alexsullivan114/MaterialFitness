@@ -1,4 +1,4 @@
-package peoples.materialfitness.View.CoreView.CoreFragment;
+package peoples.materialfitness.View.Fragments.CoreFragment;
 
 import peoples.materialfitness.View.CoreView.BaseViewInterface;
 
