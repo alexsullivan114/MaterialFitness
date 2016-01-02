@@ -93,7 +93,7 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
     private void setMuscleGroupSpinnerAdapter()
     {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item);
-        getMuscleGroups().subscribe(values -> {
+        MuscleGroup.getMuscleGroupTitles(mContext).subscribe(values -> {
             adapter.addAll(values);
             mMuscleChoiceDialogSpinner.setAdapter(adapter);
         });
@@ -102,21 +102,10 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
     private void setExerciseTitleAdapter()
     {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
-        getExerciseTitles().subscribe(values -> {
+        new ExerciseDatabaseInteractor().getExerciseTitles().subscribe(values -> {
             adapter.addAll(values);
             mExerciseTitleText.setAdapter(adapter);
         });
-    }
-
-    public Observable<List<String>> getExerciseTitles()
-    {
-        return new ExerciseDatabaseInteractor().fetchAll()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .cache()
-                .map(Exercise::getTitle)
-                .toList()
-                .distinct();
     }
 
     public void onNegativeDialogButtonClicked()
@@ -128,7 +117,10 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
     {
         if (!exerciseTitle.isEmpty() && !muscleGroupText.isEmpty())
         {
-            saveExerciseIfNecessary(muscleGroupText, exerciseTitle);
+            Exercise exercise = new Exercise();
+            exercise.setTitle(exerciseTitle);
+            exercise.setMuscleGroup(MuscleGroup.muscleGroupFromTitle(muscleGroupText, mContext));
+            new ExerciseDatabaseInteractor().uniqueSaveExercise(exercise);
             dismiss();
         }
         else
@@ -143,40 +135,6 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
                 errorMuscleGroupTextNull();
             }
         }
-    }
-
-    private void saveExerciseIfNecessary(final String muscleGroupText, final String exerciseTitle)
-    {
-
-        String whereClause = Exercise.TITLE_COLUMN + " = ?";
-        String[] arguments = new String[]{String.valueOf(exerciseTitle)};
-
-        new ExerciseDatabaseInteractor().fetchWithClause(whereClause, arguments)
-                .subscribeOn(Schedulers.newThread())
-                .map(Exercise::getTitle)
-                .toList()
-                .distinct()
-                .subscribe(values -> {
-                    if (!values.contains(exerciseTitle))
-                    {
-                        if (mContext != null)
-                        {
-                            createAndSaveExercise(exerciseTitle, muscleGroupText);
-                        }
-                    }
-                });
-    }
-
-    private void createAndSaveExercise(String exerciseTitle, String muscleGroupTitle)
-    {
-        Exercise newExercise = new Exercise(exerciseTitle,
-                MuscleGroup.muscleGroupFromTitle(muscleGroupTitle, mContext));
-        newExercise.save();
-    }
-
-    private Observable<List<String>> getMuscleGroups()
-    {
-        return MuscleGroup.getMuscleGroupTitles(mContext);
     }
 
     public void errorExerciseTitleNull()
