@@ -17,13 +17,10 @@ import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.R;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 1/1/16.
- *
+ * <p>
  * This class breaks our MVP pattern. Since we're extending MaterialDialog, I figured rather than
  * hooking everything back up we'd just keep the logic in here for now. If this starts to get
  * unwieldy in the future we can split everything back out.
@@ -48,8 +45,17 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
         mContext = context;
 
         assignDialogViews();
+        setupEditText();
         setDialogAdapters();
 
+    }
+
+    private void setupEditText()
+    {
+        mExerciseTitleText.postDelayed(() -> {
+            mExerciseTitleText.setFocusableInTouchMode(true);
+            mExerciseTitleText.requestFocus();
+        }, 100);
     }
 
     private void assignDialogViews()
@@ -57,13 +63,6 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
         mExerciseTitleLayout = ButterKnife.findById(this, R.id.exercise_layout);
         mMuscleChoiceDialogSpinner = ButterKnife.findById(this, R.id.muscle_group);
         mExerciseTitleText = ButterKnife.findById(this, R.id.exercise_name);
-    }
-
-    private void unassignDialogViews()
-    {
-        mExerciseTitleLayout = null;
-        mMuscleChoiceDialogSpinner = null;
-        mExerciseTitleText = null;
     }
 
     @Override
@@ -76,7 +75,7 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
         else if (dialogAction == DialogAction.POSITIVE)
         {
             onPositiveDialogButtonClicked(
-                    (String)mMuscleChoiceDialogSpinner.getSelectedItem(),
+                    (String) mMuscleChoiceDialogSpinner.getSelectedItem(),
                     mExerciseTitleText.getText().toString());
         }
     }
@@ -139,7 +138,7 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
 
     public void errorExerciseTitleNull()
     {
-            mExerciseTitleLayout.setError(mContext.getResources().getString(R.string.error_empty_exercise));
+        mExerciseTitleLayout.setError(mContext.getResources().getString(R.string.error_empty_exercise));
     }
 
     // TODO: Handle this situation.

@@ -26,6 +26,10 @@ public class AnimationUtils
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(v, cx, cy, 0, finalRadius);
 
+        int animDuration = v.getResources().getInteger(
+                android.R.integer.config_shortAnimTime);
+        anim.setDuration(animDuration);
+
         // make the view visible and start the animation
         v.setVisibility(View.VISIBLE);
         anim.start();
@@ -43,6 +47,11 @@ public class AnimationUtils
         // create the animation (the final radius is zero)
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(v, cx, cy, initialRadius, 0);
+
+        int animDuration = v.getResources().getInteger(
+                android.R.integer.config_shortAnimTime);
+
+        anim.setDuration(animDuration);
 
         // make the view invisible when the animation is done
         anim.addListener(new AnimatorListenerAdapter() {
