@@ -8,7 +8,4 @@ import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragmentInterface
 public interface LogWorkoutFragmentInterface extends BaseFragmentInterface
 {
     void showAddWorkoutDialog();
-    void errorExerciseTitleNull();
-    void errorMuscleGroupTextNull();
-    void dismissAddWorkoutDialog();
 }

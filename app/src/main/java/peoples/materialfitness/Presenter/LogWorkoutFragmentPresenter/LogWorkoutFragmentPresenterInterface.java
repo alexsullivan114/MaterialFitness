@@ -13,8 +13,4 @@ public interface LogWorkoutFragmentPresenterInterface
         extends BaseFragmentPresenterInterface<LogWorkoutFragmentInterface>
 {
     void onFabClicked();
-    Observable<List<String>> getMuscleGroups();
-    Observable<List<String>> getExerciseTitles();
-    void onPositiveDialogButtonClicked(String muscleGroupTitle, String exerciseTitle);
-    void onNegativeDialogButtonClicked();
 }
