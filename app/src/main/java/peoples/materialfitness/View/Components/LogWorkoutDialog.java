@@ -50,6 +50,10 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
 
     }
 
+    /**
+     * The textInputLayout has a somewhat jarring affect the when it receives focus on start.
+     * To combat this re remove focus in the XML and re-focus it after a small delay.
+     */
     private void setupEditText()
     {
         mExerciseTitleText.postDelayed(() -> {

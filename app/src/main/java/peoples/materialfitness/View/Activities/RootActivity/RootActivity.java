@@ -83,11 +83,11 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     {
         if (VersionUtils.isLollipopOrGreater())
         {
-            AnimationUtils.circularHideView(fab);
+            AnimationUtils.circularHideFadeOutView(fab);
         }
         else
         {
-            AnimationUtils.circularFadeOutView(fab);
+            AnimationUtils.fadeOutView(fab);
         }
     }
 
@@ -96,11 +96,11 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     {
         if (VersionUtils.isLollipopOrGreater())
         {
-            AnimationUtils.circularRevealView(fab);
+            AnimationUtils.circularRevealFadeInView(fab);
         }
         else
         {
-            AnimationUtils.circularFadeInView(fab);
+            AnimationUtils.fadeInView(fab);
         }
     }
 }

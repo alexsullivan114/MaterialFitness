@@ -2,6 +2,8 @@ package peoples.materialfitness.Util;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 
@@ -12,30 +14,49 @@ import android.view.ViewAnimationUtils;
  */
 public class AnimationUtils
 {
-    public static void circularRevealView(View v)
+    public static void circularRevealFadeInView(View v)
     {
+        AnimatorSet animatorSet = new AnimatorSet();
 
-        // get the center for the clipping circle
-        int cx = v.getWidth() / 2;
-        int cy = v.getHeight() / 2;
-
-        // get the final radius for the clipping circle
-        int finalRadius = Math.max(v.getWidth(), v.getHeight());
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(v, cx, cy, 0, finalRadius);
-
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(v, View.ALPHA, 0,1);
+        
         int animDuration = v.getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
-        anim.setDuration(animDuration);
+        alphaAnimator.setDuration(animDuration);
 
-        // make the view visible and start the animation
-        v.setVisibility(View.VISIBLE);
-        anim.start();
+        Animator circularHideAnimator = getCircularRevealAnimator(v);
+
+        animatorSet.playTogether(alphaAnimator, circularHideAnimator);
+        animatorSet.start();
+    }
+
+    public static void circularHideFadeOutView(View v)
+    {
+        AnimatorSet animatorSet = new AnimatorSet();
+
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(v, View.ALPHA, 1,0);
+        int animDuration = v.getResources().getInteger(
+                android.R.integer.config_shortAnimTime);
+        alphaAnimator.setDuration(animDuration);
+
+        Animator circularHideAnimator = getCircularHideAnimator(v);
+
+        animatorSet.playTogether(alphaAnimator, circularHideAnimator);
+        animatorSet.start();
+    }
+
+    public static void circularRevealView(final View v)
+    {
+
+        getCircularRevealAnimator(v).start();
     }
 
     public static void circularHideView(View v)
+    {
+        getCircularHideAnimator(v).start();
+    }
+
+    public static Animator getCircularHideAnimator(View v)
     {
         // get the center for the clipping circle
         int cx = v.getWidth() / 2;
@@ -62,16 +83,43 @@ public class AnimationUtils
             }
         });
 
-        // start the animation
-        anim.start();
+        return anim;
     }
 
-    public static void circularFadeInView(View v)
+    public static Animator getCircularRevealAnimator(View v)
+    {
+        // get the center for the clipping circle
+        int cx = v.getWidth() / 2;
+        int cy = v.getHeight() / 2;
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(v.getWidth(), v.getHeight());
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(v, cx, cy, 0, finalRadius);
+
+        int animDuration = v.getResources().getInteger(
+                android.R.integer.config_shortAnimTime);
+        anim.setDuration(animDuration);
+        anim.addListener(new AnimatorListenerAdapter()
+        {
+            @Override
+            public void onAnimationStart(Animator animation)
+            {
+                v.setVisibility(View.VISIBLE);
+            }
+        });
+
+        return anim;
+    }
+
+    public static void fadeInView(View v)
     {
         v.animate().alpha(1).start();
     }
 
-    public static void circularFadeOutView(View v)
+    public static void fadeOutView(View v)
     {
         v.animate().alpha(0).start();
     }
