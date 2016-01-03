@@ -1,7 +1,6 @@
 package peoples.materialfitness.View.Fragments.LogWorkoutFragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -9,12 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
@@ -25,7 +22,7 @@ import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterInterface;
 import peoples.materialfitness.R;
-import peoples.materialfitness.View.Components.LogWorkoutDialog;
+import peoples.materialfitness.View.Fragments.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
 
 /**

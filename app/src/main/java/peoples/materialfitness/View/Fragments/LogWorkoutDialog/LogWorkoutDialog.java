@@ -1,15 +1,23 @@
-package peoples.materialfitness.View.Components;
+package peoples.materialfitness.View.Fragments.LogWorkoutDialog;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -17,6 +25,7 @@ import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.R;
+import peoples.materialfitness.View.Components.Adapters.ExerciseTitleAutoCompleteAdapter;
 
 /**
  * Created by Alex Sullivan on 1/1/16.
@@ -25,7 +34,8 @@ import peoples.materialfitness.R;
  * hooking everything back up we'd just keep the logic in here for now. If this starts to get
  * unwieldy in the future we can split everything back out.
  */
-public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.SingleButtonCallback
+public class LogWorkoutDialog extends MaterialDialog implements
+        MaterialDialog.SingleButtonCallback, AdapterView.OnItemClickListener
 {
     private TextInputLayout mExerciseTitleLayout;
     private Spinner mMuscleChoiceDialogSpinner;
@@ -67,6 +77,18 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
         mExerciseTitleLayout = ButterKnife.findById(this, R.id.exercise_layout);
         mMuscleChoiceDialogSpinner = ButterKnife.findById(this, R.id.muscle_group);
         mExerciseTitleText = ButterKnife.findById(this, R.id.exercise_name);
+        mExerciseTitleText.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        Exercise exercise = (Exercise)mExerciseTitleText.getAdapter().getItem(position);
+
+        int muscleChoicePosition =
+                ((ArrayAdapter<String>)mMuscleChoiceDialogSpinner.getAdapter())
+                        .getPosition(exercise.getMuscleGroup().getTitle(mContext));
+        mMuscleChoiceDialogSpinner.setSelection(muscleChoicePosition);
     }
 
     @Override
@@ -104,9 +126,9 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
 
     private void setExerciseTitleAdapter()
     {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
-        new ExerciseDatabaseInteractor().getExerciseTitles().subscribe(values -> {
-            adapter.addAll(values);
+        new ExerciseDatabaseInteractor().fetchAll().toList().subscribe(values -> {
+            ExerciseTitleAutoCompleteAdapter adapter =
+                    new ExerciseTitleAutoCompleteAdapter(mContext, values);
             mExerciseTitleText.setAdapter(adapter);
         });
     }
@@ -132,23 +154,11 @@ public class LogWorkoutDialog extends MaterialDialog implements MaterialDialog.S
             {
                 errorExerciseTitleNull();
             }
-
-            if (muscleGroupText.isEmpty())
-            {
-                errorMuscleGroupTextNull();
-            }
         }
     }
 
     public void errorExerciseTitleNull()
     {
         mExerciseTitleLayout.setError(mContext.getResources().getString(R.string.error_empty_exercise));
-    }
-
-    // TODO: Handle this situation.
-    public void errorMuscleGroupTextNull()
-    {
-//            TextInputLayout inputLayout = ButterKnife.findById(addExerciseDialog, R.id.muscle_group_layout);
-//            inputLayout.setError(mContext.getResources().getString(R.string.error_empty_muscle_group));
     }
 }

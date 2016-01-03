@@ -27,6 +27,12 @@ public class Exercise extends SugarRecord<Exercise>
 
     }
 
+    @Override
+    public String toString()
+    {
+        return title;
+    }
+
     public Exercise(String title, MuscleGroup muscleGroup)
     {
         this.title = title;

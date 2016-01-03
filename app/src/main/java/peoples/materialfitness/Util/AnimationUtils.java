@@ -19,7 +19,7 @@ public class AnimationUtils
         AnimatorSet animatorSet = new AnimatorSet();
 
         ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(v, View.ALPHA, 0,1);
-        
+
         int animDuration = v.getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
         alphaAnimator.setDuration(animDuration);
@@ -122,36 +122,5 @@ public class AnimationUtils
     public static void fadeOutView(View v)
     {
         v.animate().alpha(0).start();
-    }
-
-    public static Animator.AnimatorListener endListener(Runnable r)
-    {
-        return new Animator.AnimatorListener()
-        {
-            @Override
-            public void onAnimationStart(Animator animation)
-            {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                r.run();
-                animation.removeAllListeners();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
-            {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation)
-            {
-
-            }
-        };
     }
 }
