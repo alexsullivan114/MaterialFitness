@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenterInterface;
+import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterCache;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.R;
@@ -13,23 +13,24 @@ import peoples.materialfitness.R;
 /**
  * Created by Alex Sullivan on 10/4/2015.
  */
-public abstract class BaseActivity<T extends BaseActivityPresenterInterface> extends AppCompatActivity implements BaseActivityInterface
+public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppCompatActivity
+        implements BaseActivityInterface
 {
     private static final String BASE_TAG = BaseActivity.class.getSimpleName();
     private boolean isDestroyedBySystem;
     protected String TAG;
     protected Toolbar toolbar;
-    protected T presenterInterface;
+    protected T presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setTag();
-        setPresenterInterface(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
-        presenterInterface.setActivity(this);
+        setPresenter(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
+        presenter.setActivity(this);
         // TODO: Ok, make this less shitty at some point.
-        presenterInterface.setActivityInterface(this);
+        presenter.setActivityInterface(this);
     }
 
     @Override
@@ -62,9 +63,9 @@ public abstract class BaseActivity<T extends BaseActivityPresenterInterface> ext
 
     protected abstract PresenterFactory<T> getPresenterFactory();
 
-    private void setPresenterInterface(T presenterInterface)
+    private void setPresenter(T presenter)
     {
-        this.presenterInterface = presenterInterface;
+        this.presenter = presenter;
     }
 
     private void setTag()

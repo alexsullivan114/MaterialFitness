@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.WorkoutHistoryFragmentPresenter.WorkoutHistoryFragmentPresenter;
-import peoples.materialfitness.Presenter.WorkoutHistoryFragmentPresenter.WorkoutHistoryFragmentPresenterInterface;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
 
 /**
  * Created by Alex Sullivan on 12/24/15.
  */
-public class WorkoutHistoryFragment extends BaseFragment<WorkoutHistoryFragmentPresenterInterface>
+public class WorkoutHistoryFragment extends BaseFragment<WorkoutHistoryFragmentPresenter>
 {
     public static WorkoutHistoryFragment newInstance()
     {
@@ -29,7 +28,7 @@ public class WorkoutHistoryFragment extends BaseFragment<WorkoutHistoryFragmentP
     }
 
     @Override
-    protected PresenterFactory<WorkoutHistoryFragmentPresenterInterface> getPresenterFactory()
+    protected PresenterFactory<WorkoutHistoryFragmentPresenter> getPresenterFactory()
     {
         return new WorkoutHistoryFragmentPresenter.WorkoutHistoryFragmentPresenterFactory();
     }

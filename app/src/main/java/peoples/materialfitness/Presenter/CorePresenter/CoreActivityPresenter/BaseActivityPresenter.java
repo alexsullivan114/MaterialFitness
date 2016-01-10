@@ -23,18 +23,15 @@ import peoples.materialfitness.View.Activities.CoreActivity.BaseActivityInterfac
  * activity interface to this presenter.
  */
 public abstract class BaseActivityPresenter<T extends BaseActivityInterface> extends BasePresenter
-        implements BaseActivityPresenterInterface<T>
 {
     protected T activityInterface;
     protected Activity attachedActivity;
 
-    @Override
     public void setActivity(Activity attachedActivity)
     {
         this.attachedActivity = attachedActivity;
     }
 
-    @Override
     public void setActivityInterface(T activityInterface)
     {
         this.activityInterface = activityInterface;

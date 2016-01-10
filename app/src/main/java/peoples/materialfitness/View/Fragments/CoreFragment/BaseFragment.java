@@ -3,28 +3,28 @@ package peoples.materialfitness.View.Fragments.CoreFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 
-import peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter.BaseFragmentPresenterInterface;
+import peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter.BaseFragmentPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterCache;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 
 /**
  * Created by Alex Sullivan on 11/21/15.
  */
-public abstract class BaseFragment<T extends BaseFragmentPresenterInterface> extends Fragment
+public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Fragment
         implements BaseFragmentInterface
 {
     private static final String BASE_TAG = BaseFragment.class.getSimpleName();
     public String TAG;
-    protected T presenterInterface;
+    protected T presenter;
     private boolean isDestroyedBySystem;
 
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setTag();
-        setPresenterInterface(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
-        presenterInterface.setFragment(this);
-        presenterInterface.setFragmentInterface(this);
+        setPresenter(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
+        presenter.setFragment(this);
+        presenter.setFragmentInterface(this);
     }
 
     @Override
@@ -50,9 +50,9 @@ public abstract class BaseFragment<T extends BaseFragmentPresenterInterface> ext
         }
     }
 
-    private void setPresenterInterface(T presenterInterface)
+    private void setPresenter(T presenter)
     {
-        this.presenterInterface = presenterInterface;
+        this.presenter = presenter;
     }
 
     protected abstract PresenterFactory<T> getPresenterFactory();

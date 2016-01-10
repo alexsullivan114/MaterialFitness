@@ -11,18 +11,15 @@ import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragmentInterface
  * Copy of the base activity presenter but for fragments. The type system follows the same logic.
  */
 public abstract class BaseFragmentPresenter<T extends BaseFragmentInterface> extends BasePresenter
-    implements BaseFragmentPresenterInterface<T>
 {
     protected T fragmentInterface;
     protected Fragment attachedFragment;
 
-    @Override
     public void setFragment(Fragment fragment)
     {
         this.attachedFragment = fragment;
     }
 
-    @Override
     public void setFragmentInterface(T fragmentInterface)
     {
         this.fragmentInterface = fragmentInterface;

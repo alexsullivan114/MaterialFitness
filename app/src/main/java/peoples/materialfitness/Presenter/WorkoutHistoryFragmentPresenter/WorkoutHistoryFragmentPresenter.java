@@ -8,12 +8,11 @@ import peoples.materialfitness.View.Fragments.WorkoutHistoryFragment.WorkoutHist
  * Created by Alex Sullivan on 11/21/15.
  */
 public class WorkoutHistoryFragmentPresenter extends BaseFragmentPresenter<WorkoutHistoryFragmentInterface>
-        implements WorkoutHistoryFragmentPresenterInterface
 {
-    public static class WorkoutHistoryFragmentPresenterFactory implements PresenterFactory<WorkoutHistoryFragmentPresenterInterface>
+    public static class WorkoutHistoryFragmentPresenterFactory implements PresenterFactory<WorkoutHistoryFragmentPresenter>
     {
         @Override
-        public WorkoutHistoryFragmentPresenterInterface createPresenter()
+        public WorkoutHistoryFragmentPresenter createPresenter()
         {
             return new WorkoutHistoryFragmentPresenter();
         }

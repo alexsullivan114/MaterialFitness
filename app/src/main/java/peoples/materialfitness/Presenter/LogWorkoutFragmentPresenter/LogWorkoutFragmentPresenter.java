@@ -16,18 +16,16 @@ import rx.schedulers.Schedulers;
  * Created by Alex Sullivan on 11/21/15.
  */
 public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkoutFragmentInterface>
-    implements LogWorkoutFragmentPresenterInterface
 {
-    public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenterInterface>
+    public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
     {
         @Override
-        public LogWorkoutFragmentPresenterInterface createPresenter()
+        public LogWorkoutFragmentPresenter createPresenter()
         {
             return new LogWorkoutFragmentPresenter();
         }
     }
 
-    @Override
     public void onFabClicked()
     {
         fragmentInterface.showAddWorkoutDialog();

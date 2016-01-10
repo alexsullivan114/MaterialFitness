@@ -13,7 +13,6 @@ import peoples.materialfitness.Navigation.RootDrawerController;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPresenter;
-import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPresenterInterface;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
@@ -34,7 +33,7 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
 
     private RootDrawerController mDrawerController;
 
-    public PresenterFactory<RootActivityPresenterInterface> getPresenterFactory()
+    public PresenterFactory<RootActivityPresenter> getPresenterFactory()
     {
         return new RootActivityPresenter.RootActivityPresenterFactory();
     }

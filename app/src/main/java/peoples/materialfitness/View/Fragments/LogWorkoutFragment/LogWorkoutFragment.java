@@ -20,7 +20,6 @@ import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
-import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterInterface;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.Fragments.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
@@ -28,7 +27,7 @@ import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
 /**
  * Created by Alex Sullivan on 11/21/15.
  */
-public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenterInterface>
+public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter>
         implements LogWorkoutFragmentInterface, RootFabOnClick
 {
     @Bind(R.id.recycler_empty_view)
@@ -45,7 +44,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
 
 
     @Override
-    public PresenterFactory<LogWorkoutFragmentPresenterInterface> getPresenterFactory()
+    public PresenterFactory<LogWorkoutFragmentPresenter> getPresenterFactory()
     {
         return new LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterFactory();
     }
@@ -91,7 +90,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     @Override
     public void onFabClicked(FloatingActionButton fab)
     {
-        presenterInterface.onFabClicked();
+        presenter.onFabClicked();
     }
 
     @Override

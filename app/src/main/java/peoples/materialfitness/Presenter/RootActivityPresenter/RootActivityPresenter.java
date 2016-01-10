@@ -11,12 +11,11 @@ import peoples.materialfitness.View.Activities.RootActivity.RootActivityInterfac
  * the app as well as handling navigation changes when a user selects something from the nav drawer.
  */
 public class RootActivityPresenter extends BaseActivityPresenter<RootActivityInterface>
-        implements RootActivityPresenterInterface<RootActivityInterface>
 {
-    public static class RootActivityPresenterFactory implements PresenterFactory<RootActivityPresenterInterface>
+    public static class RootActivityPresenterFactory implements PresenterFactory<RootActivityPresenter>
     {
         @Override
-        public RootActivityPresenterInterface createPresenter()
+        public RootActivityPresenter createPresenter()
         {
             return new RootActivityPresenter();
         }

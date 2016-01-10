@@ -9,6 +9,6 @@ package peoples.materialfitness.Presenter.CorePresenter;
  * of functionality that's common to all presenters. Maybe detachedFromView logic, or something
  * along those lines.
  */
-public class BasePresenter implements BasePresenterInterface
+public class BasePresenter
 {
 }

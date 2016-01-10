@@ -7,7 +7,7 @@ package peoples.materialfitness.Presenter.CorePresenter;
  * interface. The base class will then use that to create that views presenter and bind everything
  * up.
  */
-public interface PresenterFactory<T extends BasePresenterInterface>
+public interface PresenterFactory<T extends BasePresenter>
 {
     T createPresenter();
 }
