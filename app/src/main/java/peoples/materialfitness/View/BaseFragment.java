@@ -1,9 +1,9 @@
-package peoples.materialfitness.View.Fragments.CoreFragment;
+package peoples.materialfitness.View;
 
 import android.app.Fragment;
 import android.os.Bundle;
 
-import peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter.BaseFragmentPresenter;
+import peoples.materialfitness.Presenter.CorePresenter.BaseFragmentPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterCache;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 

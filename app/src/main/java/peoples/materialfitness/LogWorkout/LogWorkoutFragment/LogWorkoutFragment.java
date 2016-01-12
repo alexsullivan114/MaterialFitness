@@ -1,4 +1,4 @@
-package peoples.materialfitness.View.Fragments.LogWorkoutFragment;
+package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,10 +19,9 @@ import butterknife.ButterKnife;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenter;
 import peoples.materialfitness.R;
-import peoples.materialfitness.View.Fragments.LogWorkoutDialog.LogWorkoutDialog;
-import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
+import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
+import peoples.materialfitness.View.BaseFragment;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

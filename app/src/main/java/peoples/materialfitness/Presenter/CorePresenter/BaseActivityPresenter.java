@@ -1,10 +1,9 @@
-package peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter;
+package peoples.materialfitness.Presenter.CorePresenter;
 
 import android.app.Activity;
 import android.content.Context;
 
-import peoples.materialfitness.Presenter.CorePresenter.BasePresenter;
-import peoples.materialfitness.View.Activities.CoreActivity.BaseActivityInterface;
+import peoples.materialfitness.View.BaseActivityInterface;
 
 /**
  * Created by Alex Sullivan on 10/9/2015.

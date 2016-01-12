@@ -1,8 +1,7 @@
-package peoples.materialfitness.Presenter.RootActivityPresenter;
+package peoples.materialfitness.RootScreen;
 
-import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenter;
+import peoples.materialfitness.Presenter.CorePresenter.BaseActivityPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.View.Activities.RootActivity.RootActivityInterface;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.

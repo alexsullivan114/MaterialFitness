@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import peoples.materialfitness.R;
-import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
+import peoples.materialfitness.View.BaseFragment;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.

@@ -1,9 +1,8 @@
-package peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter;
+package peoples.materialfitness.Presenter.CorePresenter;
 
 import android.app.Fragment;
 
-import peoples.materialfitness.Presenter.CorePresenter.BasePresenter;
-import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragmentInterface;
+import peoples.materialfitness.View.BaseFragmentInterface;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

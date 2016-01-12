@@ -1,6 +1,6 @@
-package peoples.materialfitness.View.Fragments.LogWorkoutFragment;
+package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragmentInterface;
+import peoples.materialfitness.View.BaseFragmentInterface;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

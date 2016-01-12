@@ -1,11 +1,11 @@
-package peoples.materialfitness.View.Activities.CoreActivity;
+package peoples.materialfitness.View;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import peoples.materialfitness.Presenter.CorePresenter.CoreActivityPresenter.BaseActivityPresenter;
+import peoples.materialfitness.Presenter.CorePresenter.BaseActivityPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterCache;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
 import peoples.materialfitness.R;

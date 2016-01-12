@@ -1,4 +1,4 @@
-package peoples.materialfitness.View.CoreView;
+package peoples.materialfitness.View;
 
 /**
  * Created by Alex Sullivan on 11/1/2015.

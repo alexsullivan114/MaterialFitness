@@ -1,16 +1,7 @@
-package peoples.materialfitness.Presenter.LogWorkoutFragmentPresenter;
+package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import java.util.List;
-
-import peoples.materialfitness.Database.Exercise;
-import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
-import peoples.materialfitness.Database.MuscleGroup;
-import peoples.materialfitness.Presenter.CorePresenter.CoreFragmentPresenter.BaseFragmentPresenter;
+import peoples.materialfitness.Presenter.CorePresenter.BaseFragmentPresenter;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.View.Fragments.LogWorkoutFragment.LogWorkoutFragmentInterface;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

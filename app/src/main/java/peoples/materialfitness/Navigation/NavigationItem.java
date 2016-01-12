@@ -3,9 +3,9 @@ package peoples.materialfitness.Navigation;
 import android.view.MenuItem;
 
 import peoples.materialfitness.R;
-import peoples.materialfitness.View.Fragments.CoreFragment.BaseFragment;
-import peoples.materialfitness.View.Fragments.LogWorkoutFragment.LogWorkoutFragment;
-import peoples.materialfitness.View.Fragments.WorkoutHistoryFragment.WorkoutHistoryFragment;
+import peoples.materialfitness.View.BaseFragment;
+import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragment;
+import peoples.materialfitness.LogWorkout.WorkoutHistoryFragment.WorkoutHistoryFragment;
 
 /**
  * Created by Alex Sullivan on 11/27/15.

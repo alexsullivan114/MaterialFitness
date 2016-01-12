@@ -1,4 +1,4 @@
-package peoples.materialfitness.View.Activities.RootActivity;
+package peoples.materialfitness.RootScreen;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -12,11 +12,10 @@ import butterknife.OnClick;
 import peoples.materialfitness.Navigation.RootDrawerController;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
-import peoples.materialfitness.Presenter.RootActivityPresenter.RootActivityPresenter;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
-import peoples.materialfitness.View.Activities.CoreActivity.BaseActivity;
+import peoples.materialfitness.View.BaseActivity;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.
