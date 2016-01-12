@@ -5,7 +5,7 @@ import android.view.MenuItem;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseFragment;
 import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragment;
-import peoples.materialfitness.LogWorkout.WorkoutHistoryFragment.WorkoutHistoryFragment;
+import peoples.materialfitness.WorkoutHistoryFragment.WorkoutHistoryFragment;
 
 /**
  * Created by Alex Sullivan on 11/27/15.

@@ -1,4 +1,4 @@
-package peoples.materialfitness.LogWorkout.WorkoutHistoryFragment;
+package peoples.materialfitness.WorkoutHistoryFragment;
 
 import peoples.materialfitness.View.BaseFragmentInterface;
 
