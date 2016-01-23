@@ -1,4 +1,4 @@
-package peoples.materialfitness.Presenter.CorePresenter;
+package peoples.materialfitness.Core;
 
 import android.app.Activity;
 import android.content.Context;

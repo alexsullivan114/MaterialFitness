@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import peoples.materialfitness.Navigation.RootFabDisplay;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
+import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseFragment;
 

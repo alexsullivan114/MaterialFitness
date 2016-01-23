@@ -18,7 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
+import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.View.BaseFragment;

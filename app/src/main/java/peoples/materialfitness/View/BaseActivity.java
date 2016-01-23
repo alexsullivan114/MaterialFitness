@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import peoples.materialfitness.Presenter.CorePresenter.BaseActivityPresenter;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterCache;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
+import peoples.materialfitness.Core.BaseActivityPresenter;
+import peoples.materialfitness.Core.PresenterCache;
+import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
 
 /**

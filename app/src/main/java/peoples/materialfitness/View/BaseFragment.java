@@ -3,9 +3,9 @@ package peoples.materialfitness.View;
 import android.app.Fragment;
 import android.os.Bundle;
 
-import peoples.materialfitness.Presenter.CorePresenter.BaseFragmentPresenter;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterCache;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
+import peoples.materialfitness.Core.BaseFragmentPresenter;
+import peoples.materialfitness.Core.PresenterCache;
+import peoples.materialfitness.Core.PresenterFactory;
 
 /**
  * Created by Alex Sullivan on 11/21/15.

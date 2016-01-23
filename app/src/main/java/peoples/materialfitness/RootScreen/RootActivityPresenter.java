@@ -1,7 +1,7 @@
 package peoples.materialfitness.RootScreen;
 
-import peoples.materialfitness.Presenter.CorePresenter.BaseActivityPresenter;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
+import peoples.materialfitness.Core.BaseActivityPresenter;
+import peoples.materialfitness.Core.PresenterFactory;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.

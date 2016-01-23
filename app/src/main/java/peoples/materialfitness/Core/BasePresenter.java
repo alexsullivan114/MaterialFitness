@@ -1,4 +1,4 @@
-package peoples.materialfitness.Presenter.CorePresenter;
+package peoples.materialfitness.Core;
 
 /**
  * Created by Alex Sullivan on 11/1/2015.

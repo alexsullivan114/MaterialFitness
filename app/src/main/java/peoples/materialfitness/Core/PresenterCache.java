@@ -1,4 +1,4 @@
-package peoples.materialfitness.Presenter.CorePresenter;
+package peoples.materialfitness.Core;
 
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;

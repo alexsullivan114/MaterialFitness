@@ -1,7 +1,7 @@
 package peoples.materialfitness.WorkoutHistoryFragment;
 
-import peoples.materialfitness.Presenter.CorePresenter.BaseFragmentPresenter;
-import peoples.materialfitness.Presenter.CorePresenter.PresenterFactory;
+import peoples.materialfitness.Core.BaseFragmentPresenter;
+import peoples.materialfitness.Core.PresenterFactory;
 
 /**
  * Created by Alex Sullivan on 11/21/15.
