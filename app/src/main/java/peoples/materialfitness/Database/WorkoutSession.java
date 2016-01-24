@@ -75,6 +75,27 @@ public class WorkoutSession extends SugarRecord<WorkoutSession>
         return false;
     }
 
+    /**
+     * Adds the exercise session, overwriting the current one if it exists.
+     * @param exerciseSession Exercise session to replace the potentially existing one.
+     */
+    public void setExerciseSession(ExerciseSession exerciseSession)
+    {
+        for (int i = 0; i < exercises.size(); i++)
+        {
+            ExerciseSession existingSession = exercises.get(i);
+
+            if (existingSession.getExercise().getTitle().equalsIgnoreCase(exerciseSession.getExercise().getTitle()))
+            {
+                exercises.set(i, exerciseSession);
+                return;
+            }
+        }
+
+        // If we got this far we didn't replace anything. Add it normally.
+        addExerciseSession(exerciseSession);
+    }
+
     public List<ExerciseSession> getExercises()
     {
         return exercises;

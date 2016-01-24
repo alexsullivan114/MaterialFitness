@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import peoples.materialfitness.Database.ExerciseSession;
 import peoples.materialfitness.Database.WorkoutSession;
 import peoples.materialfitness.R;
@@ -39,7 +40,9 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     @Override
     public void onBindViewHolder(ExerciseCardViewHolder holder, int position)
     {
+        ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(position);
 
+        holder.mTextView.setText(exerciseSession.getExercise().getTitle());
     }
 
     @Override
@@ -50,16 +53,21 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
-
+        mWorkoutSession.setExerciseSession(exerciseSession);
+        notifyDataSetChanged();
     }
 
     public static class ExerciseCardViewHolder extends RecyclerView.ViewHolder
     {
         CardView mCardView;
+        TextView mTextView;
+
         public ExerciseCardViewHolder(CardView cardView)
         {
             super(cardView);
+
             mCardView = cardView;
+            mTextView = ButterKnife.findById(cardView, R.id.exercise_title);
         }
     }
 }

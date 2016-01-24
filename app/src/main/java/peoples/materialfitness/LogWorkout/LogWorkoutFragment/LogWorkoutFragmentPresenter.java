@@ -16,7 +16,13 @@ import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkoutFragmentInterface>
     implements LogWorkoutDialog.OnExerciseLoggedCallback
 {
-    private WorkoutSession mWorkoutSession;
+    public WorkoutSession mWorkoutSession;
+
+    public LogWorkoutFragmentPresenter()
+    {
+        // TODO: Load this from the database to see if we have one for today.
+        mWorkoutSession = new WorkoutSession();
+    }
 
     public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
     {

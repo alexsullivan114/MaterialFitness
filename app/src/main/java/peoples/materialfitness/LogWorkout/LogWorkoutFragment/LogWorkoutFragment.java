@@ -76,8 +76,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
         ButterKnife.bind(this, v);
 
-        // TODO Should be a real WorkoutSession.
-        recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(new WorkoutSession()));
+        recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // If we have our activity then onAttach has already been called. So we should run this code
@@ -122,7 +121,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     @Override
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
-
+        ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
     }
 
     @Override
