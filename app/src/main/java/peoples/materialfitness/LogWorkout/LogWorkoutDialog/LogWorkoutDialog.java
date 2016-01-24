@@ -19,7 +19,6 @@ import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.MuscleGroup;
 import peoples.materialfitness.R;
-import peoples.materialfitness.View.Components.Adapters.ExerciseTitleAutoCompleteAdapter;
 
 /**
  * Created by Alex Sullivan on 1/1/16.
@@ -35,8 +34,9 @@ public class LogWorkoutDialog extends MaterialDialog implements
     private Spinner mMuscleChoiceDialogSpinner;
     private AutoCompleteTextView mExerciseTitleText;
     private Context mContext;
+    private OnExerciseLoggedCallback mCallback;
 
-    public LogWorkoutDialog(Context context)
+    public LogWorkoutDialog(Context context, OnExerciseLoggedCallback callback)
     {
         super(new MaterialDialog.Builder(context)
                 .title(R.string.log_exercise)
@@ -47,6 +47,7 @@ public class LogWorkoutDialog extends MaterialDialog implements
 
         mBuilder.onAny(this);
         mContext = context;
+        mCallback = callback;
 
         assignDialogViews();
         setupEditText();
@@ -160,7 +161,7 @@ public class LogWorkoutDialog extends MaterialDialog implements
             Exercise exercise = new Exercise();
             exercise.setTitle(exerciseTitle);
             exercise.setMuscleGroup(MuscleGroup.muscleGroupFromTitle(muscleGroupText, mContext));
-            new ExerciseDatabaseInteractor().uniqueSaveExercise(exercise);
+            mCallback.onExerciseLogged(exercise);
             dismiss();
         }
         else
@@ -175,5 +176,10 @@ public class LogWorkoutDialog extends MaterialDialog implements
     public void errorExerciseTitleNull()
     {
         mExerciseTitleLayout.setError(mContext.getResources().getString(R.string.error_empty_exercise));
+    }
+
+    public interface OnExerciseLoggedCallback
+    {
+        void onExerciseLogged(Exercise exercise);
     }
 }

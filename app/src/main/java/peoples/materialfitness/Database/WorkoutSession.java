@@ -4,6 +4,8 @@ import android.support.v4.util.SimpleArrayMap;
 
 import com.orm.SugarRecord;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,29 +19,61 @@ import java.util.List;
  *
  * Also I think I'm going a little crazy with the links...but I like them!
  */
+@Parcel
 public class WorkoutSession extends SugarRecord<WorkoutSession>
 {
-    private List<ExerciseSession> exercises = new ArrayList<>();
+    List<ExerciseSession> exercises = new ArrayList<>();
     // millis since epoch
-    private long workoutSessionDate;
+    long workoutSessionDate;
 
-    WorkoutSession(long sessionDate)
+    public WorkoutSession()
+    {
+        // required empty constructor
+    }
+
+    public WorkoutSession(long sessionDate)
     {
         this.workoutSessionDate = sessionDate;
     }
 
-    public List<ExerciseSession> addExercise(ExerciseSession session)
+    public void addExerciseSession(ExerciseSession session)
     {
         exercises.add(session);
-        return exercises;
     }
 
-    public List<ExerciseSession> addAllExercises(Collection<ExerciseSession> sessions)
+    public void addAllExerciseSessions(Collection<ExerciseSession> sessions)
     {
         exercises.addAll(sessions);
-        return exercises;
     }
 
+    public boolean containsExercise(Exercise exercise)
+    {
+        for (ExerciseSession session: exercises)
+        {
+            if (session.getExercise().getTitle().equalsIgnoreCase(exercise.getTitle()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Adds an exercise session to this workout iff it does not already contain that exercise.
+     * @param exercise
+     * @return True if the exercise was added, false otherwise.
+     */
+    public boolean uniqueAddExerciseSession(ExerciseSession exercise)
+    {
+        if (!containsExercise(exercise.getExercise()))
+        {
+            addExerciseSession(exercise);
+            return true;
+        }
+
+        return false;
+    }
 
     public List<ExerciseSession> getExercises()
     {

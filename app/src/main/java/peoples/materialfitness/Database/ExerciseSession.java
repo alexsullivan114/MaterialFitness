@@ -5,6 +5,8 @@ import android.util.ArrayMap;
 
 import com.orm.SugarRecord;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,12 +21,13 @@ import java.util.Set;
  * 5 reps of squats at 10lbs, then 20lbs, then 30lbs, then 40lbs, then a giant
  * PR at 320lbs, then this would be a {@link peoples.materialfitness.Database.ExerciseSession}
  */
+@Parcel
 public class ExerciseSession extends SugarRecord<ExerciseSession>
 {
     // The exercise associated with this session
-    private Exercise exercise;
+    Exercise exercise;
     // A mapping of reps to weights
-    private HashMap<Integer, Integer> repWeightMap = new HashMap<>();
+    HashMap<Integer, Integer> repWeightMap = new HashMap<>();
     // Required empty constructor for Sugar Record.
     public ExerciseSession(){}
 

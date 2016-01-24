@@ -1,4 +1,4 @@
-package peoples.materialfitness.View.Components.Adapters;
+package peoples.materialfitness.LogWorkout.LogWorkoutDialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -84,9 +84,6 @@ public class ExerciseTitleAutoCompleteAdapter extends ArrayAdapter<Exercise>
             if (results != null && results.count > 0) {
                 // we have filtered results
                 addAll((ArrayList<Exercise>) results.values);
-            } else {
-                // no filter, add entire original list back in
-                addAll(mExercises);
             }
             notifyDataSetChanged();
         }

@@ -1,5 +1,7 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
+import peoples.materialfitness.Database.Exercise;
+import peoples.materialfitness.Database.ExerciseSession;
 import peoples.materialfitness.View.BaseFragmentInterface;
 
 /**
@@ -8,4 +10,5 @@ import peoples.materialfitness.View.BaseFragmentInterface;
 public interface LogWorkoutFragmentInterface extends BaseFragmentInterface
 {
     void showAddWorkoutDialog();
+    void updateExerciseCard(ExerciseSession exerciseSession);
 }

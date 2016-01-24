@@ -1,9 +1,11 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import peoples.materialfitness.Database.Exercise;
+import peoples.materialfitness.Database.ExerciseSession;
+import peoples.materialfitness.Database.WorkoutSession;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Core.PresenterFactory;
@@ -71,8 +76,30 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
         ButterKnife.bind(this, v);
 
-        v.post(this::onViewVisible);
+        // TODO Should be a real WorkoutSession.
+        recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(new WorkoutSession()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // If we have our activity then onAttach has already been called. So we should run this code
+        // here instead.
+        if (getActivity() != null)
+        {
+            v.post(this::onViewVisible);
+        }
+
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+
+        // If getView is not null then onCreateView has already been called.
+        if (getView() != null)
+        {
+            getView().post(this::onViewVisible);
+        }
     }
 
     private void onViewVisible()
@@ -93,10 +120,15 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     }
 
     @Override
+    public void updateExerciseCard(ExerciseSession exerciseSession)
+    {
+
+    }
+
+    @Override
     public void showAddWorkoutDialog()
     {
-        LogWorkoutDialog dialog = new LogWorkoutDialog(getActivity());
+        LogWorkoutDialog dialog = new LogWorkoutDialog(getActivity(), presenter);
         dialog.show();
-
     }
 }
