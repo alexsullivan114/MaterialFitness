@@ -53,8 +53,12 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
-        mWorkoutSession.setExerciseSession(exerciseSession);
-        notifyDataSetChanged();
+        if (!mWorkoutSession.containsExercise(exerciseSession.getExercise()))
+        {
+            mWorkoutSession.addExerciseSession(exerciseSession);
+        }
+
+        notifyItemInserted(mWorkoutSession.getExercises().size() - 1);
     }
 
     public static class ExerciseCardViewHolder extends RecyclerView.ViewHolder

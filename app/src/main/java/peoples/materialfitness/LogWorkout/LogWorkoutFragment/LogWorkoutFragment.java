@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
+import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.View.BaseFragment;
 
 /**
@@ -121,6 +123,8 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     @Override
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
+        AnimationUtils.fadeOutView(recyclerEmptyView);
+
         ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
     }
 
