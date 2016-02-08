@@ -20,10 +20,13 @@ import peoples.materialfitness.R;
 public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCardRecyclerAdapter.ExerciseCardViewHolder>
 {
     private WorkoutSession mWorkoutSession;
+    private ExerciseCardAdapterInterface mCallback;
 
-    public ExerciseCardRecyclerAdapter(WorkoutSession workoutSession)
+    public ExerciseCardRecyclerAdapter(WorkoutSession workoutSession,
+                                       ExerciseCardAdapterInterface callback)
     {
         mWorkoutSession = workoutSession;
+        mCallback = callback;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         notifyItemInserted(mWorkoutSession.getExercises().size() - 1);
     }
 
-    public static class ExerciseCardViewHolder extends RecyclerView.ViewHolder
+    public class ExerciseCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         CardView mCardView;
         TextView mTextView;
@@ -72,6 +75,19 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
             mCardView = cardView;
             mTextView = ButterKnife.findById(cardView, R.id.exercise_title);
+
+            cardView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v)
+        {
+            mCallback.onExerciseClicked(mWorkoutSession.getExercises().get(this.getLayoutPosition()));
+        }
+    }
+
+    public interface ExerciseCardAdapterInterface
+    {
+        void onExerciseClicked(ExerciseSession session);
     }
 }

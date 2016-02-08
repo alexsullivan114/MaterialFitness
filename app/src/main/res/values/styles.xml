@@ -70,4 +70,12 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="TextAppearance.White">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="TextAppearance.White.20">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

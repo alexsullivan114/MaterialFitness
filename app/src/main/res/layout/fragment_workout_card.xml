@@ -6,15 +6,36 @@
     android:layout_height="300dp"
     android:id="@+id/card_view"
     android:layout_gravity="center"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="4dp"
-    card_view:cardBackgroundColor="@color/lighter_gray"
+    card_view:cardBackgroundColor="@color/darker_gray"
     card_view:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/exercise_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/exercise_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.White.20"
+            android:text="Foo"/>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/exercise_title"
+            android:layout_marginTop="3dp"
+            android:background="@android:color/white"/>
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

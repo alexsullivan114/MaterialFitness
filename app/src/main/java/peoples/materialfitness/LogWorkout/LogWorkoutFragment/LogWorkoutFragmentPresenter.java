@@ -38,6 +38,11 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
         fragmentInterface.showAddWorkoutDialog();
     }
 
+    public void onExerciseClicked(ExerciseSession session)
+    {
+        // todo: Do it.
+    }
+
     @Override
     public void onExerciseLogged(Exercise exercise)
     {

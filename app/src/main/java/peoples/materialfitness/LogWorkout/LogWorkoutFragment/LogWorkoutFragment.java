@@ -34,19 +34,14 @@ import peoples.materialfitness.View.BaseFragment;
  * Created by Alex Sullivan on 11/21/15.
  */
 public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter>
-        implements LogWorkoutFragmentInterface, RootFabOnClick
+        implements LogWorkoutFragmentInterface,
+        RootFabOnClick,
+        ExerciseCardRecyclerAdapter.ExerciseCardAdapterInterface
 {
     @Bind(R.id.recycler_empty_view)
     TextView recyclerEmptyView;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-
-    private TextInputLayout muscleChoiceLayout;
-    private TextInputLayout exerciseTitleLayout;
-    private Spinner muscleChoiceDialogText;
-    private AutoCompleteTextView exerciseTitleDialogText;
-
-    private MaterialDialog addExerciseDialog;
 
 
     @Override
@@ -78,7 +73,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
         ButterKnife.bind(this, v);
 
-        recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession));
+        recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession, this));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // If we have our activity then onAttach has already been called. So we should run this code
@@ -133,5 +128,11 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     {
         LogWorkoutDialog dialog = new LogWorkoutDialog(getActivity(), presenter);
         dialog.show();
+    }
+
+    @Override
+    public void onExerciseClicked(ExerciseSession session)
+    {
+        presenter.onExerciseClicked(session);
     }
 }
