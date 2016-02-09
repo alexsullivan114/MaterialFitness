@@ -2,6 +2,7 @@ package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -100,7 +101,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
 
     private void onViewVisible()
     {
-        ((RootFabDisplay) getActivity()).showFab();
+        new Handler().postDelayed(((RootFabDisplay)getActivity())::showFab, 500);
     }
 
     @Override
