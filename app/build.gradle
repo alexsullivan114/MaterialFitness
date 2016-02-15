@@ -58,6 +58,8 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.10'
     // Rx android. For android specific schedulers.
     compile 'io.reactivex:rxandroid:1.0.1'
+    // Sugar orm. For avoiding things that aren't awesome.
+    compile 'com.github.satyan:sugar:1.3'
     // Butterknife for view injection
     compile 'com.jakewharton:butterknife:7.0.1'
     // Android specific joda time to make dates a little less oh dear god why-ish.

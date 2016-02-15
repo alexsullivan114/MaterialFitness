@@ -3,8 +3,9 @@ package peoples.materialfitness.Database;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.ArrayMap;
 
+import com.orm.SugarRecord;
+
 import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,8 +21,8 @@ import java.util.Set;
  * 5 reps of squats at 10lbs, then 20lbs, then 30lbs, then 40lbs, then a giant
  * PR at 320lbs, then this would be a {@link peoples.materialfitness.Database.ExerciseSession}
  */
-@Parcel(Parcel.Serialization.BEAN)
-public class ExerciseSession
+@Parcel(analyze = ExerciseSession.class)
+public class ExerciseSession extends SugarRecord<ExerciseSession>
 {
     // The exercise associated with this session
     Exercise exercise;
@@ -30,7 +31,6 @@ public class ExerciseSession
     // Required empty constructor for Sugar Record.
     public ExerciseSession(){}
 
-    @ParcelConstructor
     public ExerciseSession(Exercise exercise)
     {
         this.exercise = exercise;
