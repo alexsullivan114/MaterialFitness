@@ -75,7 +75,9 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
                 finish();
             }
             default:
+            {
                 return super.onOptionsItemSelected(item);
+            }
         }
     }
 
