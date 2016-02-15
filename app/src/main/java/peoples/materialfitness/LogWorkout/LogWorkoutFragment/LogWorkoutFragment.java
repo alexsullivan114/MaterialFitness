@@ -101,7 +101,10 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
 
     private void onViewVisible()
     {
-        new Handler().postDelayed(((RootFabDisplay)getActivity())::showFab, 500);
+        if (getActivity() != null)
+        {
+            new Handler().postDelayed(((RootFabDisplay)getActivity())::showFab, 500);
+        }
     }
 
     @Override

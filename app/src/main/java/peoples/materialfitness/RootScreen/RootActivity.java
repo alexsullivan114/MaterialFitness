@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
+import android.view.View;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -79,26 +80,32 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     @Override
     public void hideFab()
     {
-        if (VersionUtils.isLollipopOrGreater())
+        if (fab.getVisibility() == View.VISIBLE)
         {
-            AnimationUtils.circularHideFadeOutView(fab);
-        }
-        else
-        {
-            AnimationUtils.fadeOutView(fab);
+            if (VersionUtils.isLollipopOrGreater())
+            {
+                AnimationUtils.circularHideFadeOutView(fab);
+            }
+            else
+            {
+                AnimationUtils.fadeOutView(fab);
+            }
         }
     }
 
     @Override
     public void showFab()
     {
-        if (VersionUtils.isLollipopOrGreater())
+        if (fab.getVisibility() != View.VISIBLE)
         {
-            AnimationUtils.circularRevealFadeInView(fab);
-        }
-        else
-        {
-            AnimationUtils.fadeInView(fab);
+            if (VersionUtils.isLollipopOrGreater())
+            {
+                AnimationUtils.circularRevealFadeInView(fab);
+            }
+            else
+            {
+                AnimationUtils.fadeInView(fab);
+            }
         }
     }
 }

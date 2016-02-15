@@ -1,5 +1,7 @@
 package peoples.materialfitness.Core;
 
+import android.os.Bundle;
+
 /**
  * Created by Alex Sullivan on 11/1/2015.
  *
@@ -11,4 +13,8 @@ package peoples.materialfitness.Core;
  */
 public class BasePresenter
 {
+    public void setBundle(Bundle bundle)
+    {
+
+    }
 }

@@ -1,6 +1,8 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import java.util.List;
+import android.content.Intent;
+
+import org.parceler.Parcels;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
@@ -9,6 +11,8 @@ import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.ExerciseSession;
 import peoples.materialfitness.Database.WorkoutSession;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
 
 /**
  * Created by Alex Sullivan on 11/21/15.
@@ -40,7 +44,9 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
 
     public void onExerciseClicked(ExerciseSession session)
     {
-        // todo: Do it.
+        Intent intent = new Intent(attachedFragment.getActivity(), WorkoutDetailsActivity.class);
+        intent.putExtra(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(session));
+        attachedFragment.startActivity(intent);
     }
 
     @Override

@@ -1,8 +1,5 @@
 package peoples.materialfitness.Database;
 
-import com.orm.StringUtil;
-import com.orm.SugarRecord;
-
 import org.parceler.Parcel;
 
 import java.util.UUID;
@@ -14,13 +11,13 @@ import java.util.UUID;
  * example, Squats would be an exercise with obvious accompanying details.
  */
 @Parcel
-public class Exercise extends SugarRecord<Exercise>
+public class Exercise
 {
     String title;
     MuscleGroup muscleGroup;
 
-    public static final String TITLE_COLUMN = StringUtil.toSQLName("title");
-    public static final String MUSCLE_GROUP_COLUMN = StringUtil.toSQLName("muscleGroup");
+    public static final String TITLE_COLUMN = "title";
+    public static final String MUSCLE_GROUP_COLUMN = "muscleGroup";
 
     /**
      * Empty constructor required for sugar record OEM.

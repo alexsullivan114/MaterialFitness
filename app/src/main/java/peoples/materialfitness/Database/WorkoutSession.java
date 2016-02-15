@@ -2,8 +2,6 @@ package peoples.materialfitness.Database;
 
 import android.support.v4.util.SimpleArrayMap;
 
-import com.orm.SugarRecord;
-
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.List;
  * Also I think I'm going a little crazy with the links...but I like them!
  */
 @Parcel
-public class WorkoutSession extends SugarRecord<WorkoutSession>
+public class WorkoutSession
 {
     List<ExerciseSession> exercises = new ArrayList<>();
     // millis since epoch
