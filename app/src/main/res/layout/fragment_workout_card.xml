@@ -27,7 +27,7 @@
             android:layout_alignParentLeft="true"
             android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.White.20"
-            android:text="Foo"/>
+            android:text=""/>
         
         <View
             android:layout_width="match_parent"

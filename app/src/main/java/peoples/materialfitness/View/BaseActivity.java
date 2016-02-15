@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Core.PresenterCache;
@@ -54,11 +55,33 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
         isDestroyedBySystem = true;
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy()
+    {
         super.onDestroy();
-        if (!isDestroyedBySystem) {
+        if (!isDestroyedBySystem)
+        {
             PresenterCache.getInstance().removePresenter(TAG);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+            {
+                finish();
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected boolean showBackInToolbar()
+    {
+        return true;
     }
 
     protected abstract PresenterFactory<T> getPresenterFactory();
@@ -83,6 +106,8 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
         if (toolbar != null)
         {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(showBackInToolbar());
+            getSupportActionBar().setDisplayShowHomeEnabled(showBackInToolbar());
         } else
         {
             Log.w(BASE_TAG, "Could not find toolbar view. Providing class was " +

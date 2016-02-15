@@ -94,6 +94,12 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     }
 
     @Override
+    protected boolean showBackInToolbar()
+    {
+        return false;
+    }
+
+    @Override
     public void showFab()
     {
         if (fab.getVisibility() != View.VISIBLE)

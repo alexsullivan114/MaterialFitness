@@ -77,6 +77,11 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession, this));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        if (presenter.mWorkoutSession.getExercises().size() > 0)
+        {
+            recyclerEmptyView.setVisibility(View.GONE);
+        }
+
         // If we have our activity then onAttach has already been called. So we should run this code
         // here instead.
         if (getActivity() != null)
@@ -122,7 +127,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     @Override
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
-        AnimationUtils.fadeOutView(recyclerEmptyView);
+        recyclerEmptyView.setVisibility(View.GONE);
 
         ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
     }
