@@ -42,6 +42,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
 
         setContentView(R.layout.activity_workout_details);
         ButterKnife.bind(this);
+
         presenter.setBundle(getIntent().getExtras());
     }
 

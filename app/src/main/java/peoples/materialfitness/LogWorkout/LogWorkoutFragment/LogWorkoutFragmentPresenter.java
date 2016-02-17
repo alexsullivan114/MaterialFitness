@@ -4,15 +4,22 @@ import android.content.Intent;
 
 import org.parceler.Parcels;
 
+import java.util.Date;
+
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Database.ExerciseSession;
 import peoples.materialfitness.Database.WorkoutSession;
+import peoples.materialfitness.Database.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
+import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 11/21/15.
@@ -20,12 +27,24 @@ import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
 public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkoutFragmentInterface>
     implements LogWorkoutDialog.OnExerciseLoggedCallback
 {
-    public WorkoutSession mWorkoutSession;
+    public WorkoutSession mWorkoutSession = null;
 
     public LogWorkoutFragmentPresenter()
     {
-        // TODO: Load this from the database to see if we have one for today.
-        mWorkoutSession = new WorkoutSession();
+        new WorkoutSessionDatabaseInteractor()
+                .getTodaysWorkoutSession()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnCompleted(() -> {
+                    if (mWorkoutSession == null)
+                    {
+                        mWorkoutSession = new WorkoutSession(DateUtils.getTodaysDate().getTime());
+                    }
+                    fragmentInterface.updateWorkoutList(mWorkoutSession);
+                })
+                .subscribe(session -> {
+                    mWorkoutSession = session;
+                });
     }
 
     public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
@@ -59,9 +78,12 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
         if (!mWorkoutSession.containsExercise(exercise))
         {
             // If not add the exercise.
-            ExerciseSession exerciseSession = new ExerciseSession(exercise);
+            ExerciseSession exerciseSession = new ExerciseSession(exercise, new Date().getTime());
             mWorkoutSession.addExerciseSession(exerciseSession);
+            // Update our UI
             fragmentInterface.updateExerciseCard(exerciseSession);
+            // And save off the updated workout session.
+            new WorkoutSessionDatabaseInteractor().save(mWorkoutSession);
         }
     }
 }

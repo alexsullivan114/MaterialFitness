@@ -60,7 +60,7 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
         String[] arguments = new String[]{String.valueOf(exercise.getTitle())};
 
         new ExerciseDatabaseInteractor().fetchWithClause(whereClause, arguments)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .map(Exercise::getTitle)
                 .toList()
                 .distinct()

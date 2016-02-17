@@ -2,6 +2,10 @@ package peoples.materialfitness.Database;
 
 import android.support.v4.util.SimpleArrayMap;
 
+import com.orm.StringUtil;
+import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -18,12 +22,15 @@ import java.util.List;
  * Also I think I'm going a little crazy with the links...but I like them!
  */
 @Parcel
-public class WorkoutSession
+public class WorkoutSession extends SugarRecord<WorkoutSession>
 {
+    public static final String EXERCISES_COLUMN = StringUtil.toSQLName("exercises");
+    public static final String DATE_COLUMN = StringUtil.toSQLName("workoutSessionDate");
+
+    @Ignore
     List<ExerciseSession> exercises = new ArrayList<>();
     // millis since epoch
     long workoutSessionDate;
-
     public WorkoutSession()
     {
         // required empty constructor

@@ -92,4 +92,10 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     {
         void onExerciseClicked(ExerciseSession session);
     }
+
+    public void setWorkoutSession(WorkoutSession workoutSession)
+    {
+        mWorkoutSession = workoutSession;
+        notifyDataSetChanged();
+    }
 }

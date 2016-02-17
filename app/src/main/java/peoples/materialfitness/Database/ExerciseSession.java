@@ -1,17 +1,13 @@
 package peoples.materialfitness.Database;
 
-import android.support.v4.util.SimpleArrayMap;
-import android.util.ArrayMap;
-
+import com.orm.StringUtil;
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Alex Sullivan on 10/20/2015.
@@ -24,16 +20,23 @@ import java.util.Set;
 @Parcel(analyze = ExerciseSession.class)
 public class ExerciseSession extends SugarRecord<ExerciseSession>
 {
+    public static final String EXERCISE_COLUMN = StringUtil.toSQLName("exercise");
+    public static final String WORKOUT_SESSION_ID_COLUMN = StringUtil.toSQLName("workoutSessionId");
+
     // The exercise associated with this session
     Exercise exercise;
-    // A mapping of reps to weights
-    HashMap<Integer, Integer> repWeightMap = new HashMap<>();
+    // A mapping of reps to weights. We'll populate this ourselves.
+    @Ignore
+    List<RepWeightMapping> reps = new ArrayList<>();
+    // the ID of the parent workout session
+    long workoutSessionId;
     // Required empty constructor for Sugar Record.
     public ExerciseSession(){}
 
-    public ExerciseSession(Exercise exercise)
+    public ExerciseSession(Exercise exercise, long workoutSessionId)
     {
         this.exercise = exercise;
+        this.workoutSessionId = workoutSessionId;
     }
 
     public Exercise getExercise()
@@ -46,25 +49,29 @@ public class ExerciseSession extends SugarRecord<ExerciseSession>
         this.exercise = exercise;
     }
 
-    public HashMap<Integer, Integer> getRepWeightMap()
+    public List<RepWeightMapping> getReps()
     {
-        return repWeightMap;
+        return reps;
     }
 
-    public void setRepWeightMap(HashMap<Integer, Integer> repWeightMap)
+    public void setReps(List<RepWeightMapping> reps)
     {
-        this.repWeightMap = repWeightMap;
+        this.reps = reps;
     }
 
-    public HashMap<Integer, Integer> addRep(int weight)
+    public long getWorkoutSessionId()
     {
-        Set<Integer> keys = repWeightMap.keySet();
-        List<Integer> keyList = new ArrayList<>(keys);
-        Collections.sort(keyList);
+        return workoutSessionId;
+    }
 
-        int lastRep = keyList.get(keyList.size());
+    public void setWorkoutSessionId(long workoutSessionId)
+    {
+        this.workoutSessionId = workoutSessionId;
+    }
 
-        repWeightMap.put(lastRep, weight);
-        return repWeightMap;
+    @Override
+    public String toString()
+    {
+        return exercise.getTitle() + " Session";
     }
 }

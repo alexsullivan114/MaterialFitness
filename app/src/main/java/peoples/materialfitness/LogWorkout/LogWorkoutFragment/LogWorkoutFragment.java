@@ -74,11 +74,12 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
         ButterKnife.bind(this, v);
 
-        recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession, this));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        if (presenter.mWorkoutSession.getExercises().size() > 0)
+        if (presenter.mWorkoutSession != null &&
+                presenter.mWorkoutSession.getExercises().size() > 0)
         {
+            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession, this));
             recyclerEmptyView.setVisibility(View.GONE);
         }
 
@@ -137,6 +138,20 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     {
         LogWorkoutDialog dialog = new LogWorkoutDialog(getActivity(), presenter);
         dialog.show();
+    }
+
+    @Override
+    public void updateWorkoutList(WorkoutSession workoutSession)
+    {
+        if (recyclerView.getAdapter() != null)
+        {
+            ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).setWorkoutSession(workoutSession);
+        }
+        else
+        {
+            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession, this));
+            recyclerEmptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
