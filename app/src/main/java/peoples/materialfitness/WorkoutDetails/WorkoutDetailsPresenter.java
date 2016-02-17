@@ -36,4 +36,9 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
             activityInterface.setTitle(mExerciseSession.getExercise().getTitle());
         }
     }
+
+    public void fabClicked()
+    {
+        activityInterface.showAddRepDialog();
+    }
 }
