@@ -26,10 +26,11 @@ public class ExerciseSession extends SugarRecord<ExerciseSession>
     // The exercise associated with this session
     Exercise exercise;
     // A mapping of reps to weights. We'll populate this ourselves.
-    @Ignore
-    List<RepWeightMapping> reps = new ArrayList<>();
     // the ID of the parent workout session
     long workoutSessionId;
+
+    @Ignore
+    List<RepWeightMapping> reps = new ArrayList<>();
     // Required empty constructor for Sugar Record.
     public ExerciseSession(){}
 
