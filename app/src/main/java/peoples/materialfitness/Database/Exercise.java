@@ -13,7 +13,7 @@ import java.util.UUID;
  * A simple exercise object. This object represents a singular description of an exercise - for
  * example, Squats would be an exercise with obvious accompanying details.
  */
-@Parcel(analyze = Exercise.class)
+@Parcel(value = Parcel.Serialization.BEAN, analyze = Exercise.class)
 public class Exercise extends SugarRecord<Exercise>
 {
     String title;
@@ -60,5 +60,17 @@ public class Exercise extends SugarRecord<Exercise>
     public void setMuscleGroup(MuscleGroup muscleGroup)
     {
         this.muscleGroup = muscleGroup;
+    }
+
+    @Override
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public Long getId()
+    {
+        return this.id;
     }
 }

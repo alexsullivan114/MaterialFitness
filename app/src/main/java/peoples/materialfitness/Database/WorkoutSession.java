@@ -20,8 +20,11 @@ import java.util.List;
  * together to make up a {@link WorkoutSession}.
  *
  * Also I think I'm going a little crazy with the links...but I like them!
+ *
+ *  * Note: We use Serialization.BEAN because we want the ID of the sugar record object, but we
+ * only want to analyze this class for parceling since there's other stuff we dont want.
  */
-@Parcel
+@Parcel(value = Parcel.Serialization.BEAN, analyze = WorkoutSession.class)
 public class WorkoutSession extends SugarRecord<WorkoutSession>
 {
     public static final String EXERCISES_COLUMN = StringUtil.toSQLName("exercises");
@@ -119,6 +122,18 @@ public class WorkoutSession extends SugarRecord<WorkoutSession>
     public void setWorkoutSessionDate(long workoutSessionDate)
     {
         this.workoutSessionDate = workoutSessionDate;
+    }
+
+    @Override
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public Long getId()
+    {
+        return this.id;
     }
 
     /**

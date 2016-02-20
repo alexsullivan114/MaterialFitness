@@ -16,8 +16,11 @@ import java.util.List;
  * {@link peoples.materialfitness.Database.Exercise} object. For example, if I were to do
  * 5 sets of squats at 10lbs, then 20lbs, then 30lbs, then 40lbs, then a giant
  * PR at 320lbs, then this would be a {@link peoples.materialfitness.Database.ExerciseSession}
+ *
+ * Note: We use Serialization.BEAN because we want the ID of the sugar record object, but we
+ * only want to analyze this class for parceling since there's other stuff we dont want.
  */
-@Parcel(analyze = ExerciseSession.class)
+@Parcel(value = Parcel.Serialization.BEAN, analyze = ExerciseSession.class)
 public class ExerciseSession extends SugarRecord<ExerciseSession>
 {
     public static final String EXERCISE_COLUMN = StringUtil.toSQLName("exercise");
@@ -74,6 +77,20 @@ public class ExerciseSession extends SugarRecord<ExerciseSession>
     public void setWorkoutSessionId(long workoutSessionId)
     {
         this.workoutSessionId = workoutSessionId;
+    }
+
+    // NOTE: The only reason we're making these getters/setters is so we can use the
+    // Serialization.BEAN style of serialization for the parceler library.
+    @Override
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public Long getId()
+    {
+        return this.id;
     }
 
     @Override

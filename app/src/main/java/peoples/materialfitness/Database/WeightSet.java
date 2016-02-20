@@ -8,7 +8,7 @@ import org.parceler.Parcel;
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
-@Parcel(analyze = WeightSet.class)
+@Parcel(value = Parcel.Serialization.BEAN, analyze = WeightSet.class)
 public class WeightSet extends SugarRecord<WeightSet>
 {
     public static final String EXERCISE_SESSION_ID_COLUMN = StringUtil.toSQLName("exerciseSessionId");
@@ -35,5 +35,17 @@ public class WeightSet extends SugarRecord<WeightSet>
     public void setExerciseSessionId(long exerciseSessionId)
     {
         this.exerciseSessionId = exerciseSessionId;
+    }
+
+    @Override
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public Long getId()
+    {
+        return this.id;
     }
 }
