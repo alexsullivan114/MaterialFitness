@@ -28,7 +28,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public int getItemCount()
     {
-        return mExerciseSession.getReps().size();
+        return mExerciseSession.getSets().size();
     }
 
     private static class RepViewHolder extends RecyclerView.ViewHolder

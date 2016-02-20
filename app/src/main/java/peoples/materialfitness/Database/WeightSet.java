@@ -8,8 +8,8 @@ import org.parceler.Parcel;
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
-@Parcel(analyze = RepWeightMapping.class)
-public class RepWeightMapping extends SugarRecord<RepWeightMapping>
+@Parcel(analyze = WeightSet.class)
+public class WeightSet extends SugarRecord<WeightSet>
 {
     public static final String EXERCISE_SESSION_ID_COLUMN = StringUtil.toSQLName("exerciseSessionId");
 
@@ -17,15 +17,14 @@ public class RepWeightMapping extends SugarRecord<RepWeightMapping>
     int numReps;
     long exerciseSessionId;
 
-    public RepWeightMapping()
+    public WeightSet()
     {
     }
 
-    public RepWeightMapping(int weight, int numReps, long exerciseSessionId)
+    public WeightSet(int weight, int numReps)
     {
         this.weight = weight;
         this.numReps = numReps;
-        this.exerciseSessionId = exerciseSessionId;
     }
 
     public long getExerciseSessionId()

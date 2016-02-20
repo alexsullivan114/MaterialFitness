@@ -6,8 +6,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
@@ -23,7 +26,8 @@ import peoples.materialfitness.View.BaseActivity;
 
 
 public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter>
-        implements WorkoutDetailsActivityInterface
+        implements WorkoutDetailsActivityInterface,
+        MaterialDialog.SingleButtonCallback
 {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -64,15 +68,29 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     }
 
     @Override
-    public void showAddRepDialog()
+    public void showAddSetDialog()
     {
         new MaterialDialog.Builder(this)
                 .title(R.string.add_set)
-                .inputType(InputType.TYPE_CLASS_NUMBER)
-                .input(R.string.num_reps_hint, 0,
-                        (MaterialDialog dialog, CharSequence string) -> {
+                .customView(R.layout.add_rep_dialog, false)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .onPositive(this)
+                .build()
+                .show();
+    }
 
-                        })
-                .build().show();
+    @Override
+    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction)
+    {
+        if (dialogAction.equals(DialogAction.POSITIVE))
+        {
+            View customView = materialDialog.getCustomView();
+            EditText reps = (EditText)customView.findViewById(R.id.reps);
+            EditText weight = (EditText)customView.findViewById(R.id.weight);
+            int repsInt = Integer.parseInt(reps.getText().toString());
+            int weightInt = Integer.parseInt(weight.getText().toString());
+            presenter.addSet(repsInt,weightInt);
+        }
     }
 }

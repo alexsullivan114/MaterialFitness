@@ -7,6 +7,7 @@ import org.parceler.Parcels;
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Database.ExerciseSession;
+import peoples.materialfitness.Database.WeightSet;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -14,6 +15,7 @@ import peoples.materialfitness.Database.ExerciseSession;
 public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetailsActivityInterface>
 {
     private ExerciseSession mExerciseSession;
+
     public static final String EXTRA_EXERCISE_SESSION = "extraExercise";
 
     public static class WorkoutDetailsPresenterFactory implements PresenterFactory<WorkoutDetailsPresenter>
@@ -39,6 +41,12 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
 
     public void fabClicked()
     {
-        activityInterface.showAddRepDialog();
+        activityInterface.showAddSetDialog();
+    }
+
+    public void addSet(int reps, int weight)
+    {
+        WeightSet set = new WeightSet(weight, reps);
+        mExerciseSession.addSet(set);
     }
 }

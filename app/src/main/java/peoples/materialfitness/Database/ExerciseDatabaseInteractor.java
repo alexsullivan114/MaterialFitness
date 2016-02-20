@@ -67,7 +67,7 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
                 .subscribe(values -> {
                     if (!values.contains(exercise.getTitle()))
                     {
-                        exercise.save();
+                        this.save(exercise);
                     }
                 });
     }

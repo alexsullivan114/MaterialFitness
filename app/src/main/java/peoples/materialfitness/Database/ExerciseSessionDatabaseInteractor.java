@@ -17,21 +17,19 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     @Override
     public Observable<ExerciseSession> fetchWithClause(String whereClause, String[] arguments)
     {
-        Observable<ExerciseSession> sessionsObservable =
-                Observable.from(ExerciseSession.find(ExerciseSession.class, whereClause, arguments));
-
-        return sessionsObservable.flatMap(this::associateExerciseSession);
+        return Observable.from(ExerciseSession.find(ExerciseSession.class, whereClause, arguments))
+                .flatMap(this::associateExerciseSessionSets);
 
     }
 
-    public Observable<ExerciseSession> associateExerciseSession(ExerciseSession session)
+    public Observable<ExerciseSession> associateExerciseSessionSets(ExerciseSession session)
     {
-        final String WHERE_CLAUSE = RepWeightMapping.EXERCISE_SESSION_ID_COLUMN + " = ?";
+        final String WHERE_CLAUSE = WeightSet.EXERCISE_SESSION_ID_COLUMN + " = ?";
         final String[] ARGS = new String[]{String.valueOf(session.getId())};
-        return new RepWeightMappingDatabaseInteractor().fetchWithClause(WHERE_CLAUSE, ARGS)
+        return new WeightSetDatabaseInteractor().fetchWithClause(WHERE_CLAUSE, ARGS)
                 .toList()
                 .flatMap(reps -> {
-                    session.setReps(reps);
+                    session.setSets(reps);
                     return Observable.just(session);
                 });
 
@@ -48,8 +46,8 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
                     // Save the exercise session.
                     entity.save();
                     // Save each rep associated with this workout session.
-                    RepWeightMappingDatabaseInteractor interactor = new RepWeightMappingDatabaseInteractor();
-                    for (RepWeightMapping mapping : entity.getReps())
+                    WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
+                    for (WeightSet mapping : entity.getSets())
                     {
                         mapping.setExerciseSessionId(entity.getId());
                         interactor.save(mapping);

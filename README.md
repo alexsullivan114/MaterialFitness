@@ -5,7 +5,7 @@ TODO:
     - Done
 - Make exercise dialog not re-create already know exercises
     - Done
-- Add a mapper object between WorkoutSession and Exercise - Contains exercise, num of reps, weight at each rep etc
+- Add a mapper object between WorkoutSession and Exercise - Contains exercise, num of sets, weight at each rep etc
     - Done
 - Add drawer back in
     - Done

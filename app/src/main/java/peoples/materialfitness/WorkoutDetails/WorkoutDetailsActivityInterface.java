@@ -8,5 +8,5 @@ import peoples.materialfitness.View.BaseActivityInterface;
 public interface WorkoutDetailsActivityInterface extends BaseActivityInterface
 {
     void setTitle(String title);
-    void showAddRepDialog();
+    void showAddSetDialog();
 }

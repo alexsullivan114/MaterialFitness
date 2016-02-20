@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by Alex Sullivan on 10/20/2015.
  *
- * An exercise session. This represents a certain number of reps at a certain weight for a certain
+ * An exercise session. This represents a certain number of sets at a certain weight for a certain
  * {@link peoples.materialfitness.Database.Exercise} object. For example, if I were to do
- * 5 reps of squats at 10lbs, then 20lbs, then 30lbs, then 40lbs, then a giant
+ * 5 sets of squats at 10lbs, then 20lbs, then 30lbs, then 40lbs, then a giant
  * PR at 320lbs, then this would be a {@link peoples.materialfitness.Database.ExerciseSession}
  */
 @Parcel(analyze = ExerciseSession.class)
@@ -25,12 +25,12 @@ public class ExerciseSession extends SugarRecord<ExerciseSession>
 
     // The exercise associated with this session
     Exercise exercise;
-    // A mapping of reps to weights. We'll populate this ourselves.
+    // A mapping of sets to weights. We'll populate this ourselves.
     // the ID of the parent workout session
     long workoutSessionId;
 
     @Ignore
-    List<RepWeightMapping> reps = new ArrayList<>();
+    List<WeightSet> sets = new ArrayList<>();
     // Required empty constructor for Sugar Record.
     public ExerciseSession(){}
 
@@ -50,14 +50,20 @@ public class ExerciseSession extends SugarRecord<ExerciseSession>
         this.exercise = exercise;
     }
 
-    public List<RepWeightMapping> getReps()
+    public List<WeightSet> getSets()
     {
-        return reps;
+        return sets;
     }
 
-    public void setReps(List<RepWeightMapping> reps)
+    public void setSets(List<WeightSet> sets)
     {
-        this.reps = reps;
+        this.sets = sets;
+    }
+
+    public void addSet(WeightSet set)
+    {
+        this.sets.add(set);
+        set.setExerciseSessionId(this.getId());
     }
 
     public long getWorkoutSessionId()
