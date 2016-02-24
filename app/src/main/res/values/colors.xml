@@ -7,5 +7,5 @@
     <color name="transluscent_light_gray">#DDD</color>
     <color name="lighter_gray">#ddd</color>
     <color name="darker_gray">#aaa</color>
-
+    <color name="black">@android:color/black</color>
 </resources>

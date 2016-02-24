@@ -33,7 +33,6 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<Recycler
 
     private static class RepViewHolder extends RecyclerView.ViewHolder
     {
-
         public RepViewHolder(View itemView)
         {
             super(itemView);

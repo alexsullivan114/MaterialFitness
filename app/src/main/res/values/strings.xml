@@ -38,4 +38,6 @@
     <string name="add_set">Add Set</string>
     <string name="num_reps_hint">Num. Reps</string>
     <string name="weight_hint">Weight</string>
+    <string name="weight_set_label">Weight: </string>
+    <string name="reps_set_label">Reps: </string>
 </resources>
