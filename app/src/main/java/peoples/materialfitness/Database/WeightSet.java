@@ -1,18 +1,15 @@
 package peoples.materialfitness.Database;
 
-import com.orm.StringUtil;
-import com.orm.SugarRecord;
 
 import org.parceler.Parcel;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
-@Parcel(value = Parcel.Serialization.BEAN, analyze = WeightSet.class)
-public class WeightSet extends SugarRecord<WeightSet>
+@Parcel(value = Parcel.Serialization.BEAN)
+public class WeightSet
 {
-    public static final String EXERCISE_SESSION_ID_COLUMN = StringUtil.toSQLName("exerciseSessionId");
-
+    long id;
     int weight;
     int numReps;
     long exerciseSessionId;
@@ -37,13 +34,11 @@ public class WeightSet extends SugarRecord<WeightSet>
         this.exerciseSessionId = exerciseSessionId;
     }
 
-    @Override
     public void setId(Long id)
     {
         this.id = id;
     }
 
-    @Override
     public Long getId()
     {
         return this.id;

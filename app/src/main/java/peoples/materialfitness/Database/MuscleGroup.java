@@ -5,7 +5,6 @@ import android.content.Context;
 import java.util.List;
 
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.StringListLambda;
 import rx.Observable;
 
 /**
@@ -21,27 +20,34 @@ import rx.Observable;
  */
 public enum MuscleGroup
 {
-    SHOULDERS(R.string.shoulders),
-    CHEST(R.string.chest),
-    LEGS(R.string.legs),
-    ARMS(R.string.arms),
-    BACK(R.string.back);
+    SHOULDERS(R.string.shoulders, 0),
+    CHEST(R.string.chest, 1),
+    LEGS(R.string.legs, 2),
+    ARMS(R.string.arms, 3),
+    BACK(R.string.back, 4);
 
-    private int titleId;
+    private int mTitleId;
+    private int mValue;
 
-    MuscleGroup(int titleId)
+    MuscleGroup(int titleId, int value)
     {
-        this.titleId = titleId;
+        this.mTitleId = titleId;
+        this.mValue = value;
     }
 
     public int getTitleId()
     {
-        return this.titleId;
+        return this.mTitleId;
+    }
+
+    public int getValue()
+    {
+        return mValue;
     }
 
     public String getTitle(Context context)
     {
-        return context.getString(this.titleId);
+        return context.getString(this.mTitleId);
     }
 
     /**
@@ -68,5 +74,19 @@ public enum MuscleGroup
         return Observable.from(MuscleGroup.class.getEnumConstants())
                 .map(muscleGroup -> muscleGroup.getTitle(context))
                 .toList();
+    }
+
+    public static MuscleGroup muscleGroupFromValue(int value)
+    {
+        switch (value)
+        {
+            case 0: return MuscleGroup.SHOULDERS;
+            case 1: return MuscleGroup.CHEST;
+            case 2: return MuscleGroup.LEGS;
+            case 3: return MuscleGroup.ARMS;
+            case 4: return MuscleGroup.BACK;
+            // everyones always doin' arms.
+            default: return MuscleGroup.ARMS;
+        }
     }
 }

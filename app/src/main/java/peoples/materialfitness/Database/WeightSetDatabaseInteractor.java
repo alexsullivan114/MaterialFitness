@@ -1,5 +1,7 @@
 package peoples.materialfitness.Database;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -10,24 +12,38 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     @Override
     public Observable<WeightSet> fetchAll()
     {
-        return Observable.from(WeightSet.listAll(WeightSet.class));
+        return Observable.empty();
+//        return Observable.from(WeightSet.listAll(WeightSet.class));
     }
 
     @Override
     public Observable<WeightSet> fetchWithClause(String whereClause, String[] arguments)
     {
-        return Observable.from(WeightSet.find(WeightSet.class, whereClause, arguments));
+        return Observable.empty();
+//        return Observable.from(WeightSet.find(WeightSet.class, whereClause, arguments));
     }
 
     @Override
     public void save(WeightSet entity)
     {
-        entity.save();
+//        entity.save();
     }
 
     @Override
     public void delete(WeightSet entity)
     {
-        entity.delete();
+//        entity.delete();
+    }
+
+    @Override
+    public void cascadeSave(WeightSet entity)
+    {
+
+    }
+
+    @Override
+    public void cascadeDelete(WeightSet entity)
+    {
+
     }
 }

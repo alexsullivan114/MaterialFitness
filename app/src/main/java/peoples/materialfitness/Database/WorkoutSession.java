@@ -2,9 +2,6 @@ package peoples.materialfitness.Database;
 
 import android.support.v4.util.SimpleArrayMap;
 
-import com.orm.StringUtil;
-import com.orm.SugarRecord;
-import com.orm.dsl.Ignore;
 
 import org.parceler.Parcel;
 
@@ -24,16 +21,15 @@ import java.util.List;
  *  * Note: We use Serialization.BEAN because we want the ID of the sugar record object, but we
  * only want to analyze this class for parceling since there's other stuff we dont want.
  */
-@Parcel(value = Parcel.Serialization.BEAN, analyze = WorkoutSession.class)
-public class WorkoutSession extends SugarRecord<WorkoutSession>
+@Parcel(value = Parcel.Serialization.BEAN)
+public class WorkoutSession
 {
-    public static final String EXERCISES_COLUMN = StringUtil.toSQLName("exercises");
-    public static final String DATE_COLUMN = StringUtil.toSQLName("workoutSessionDate");
+    private long id;
 
-    @Ignore
-    List<ExerciseSession> exercises = new ArrayList<>();
+    private List<ExerciseSession> exercises = new ArrayList<>();
     // millis since epoch
-    long workoutSessionDate;
+    private long workoutSessionDate;
+
     public WorkoutSession()
     {
         // required empty constructor
@@ -124,13 +120,11 @@ public class WorkoutSession extends SugarRecord<WorkoutSession>
         this.workoutSessionDate = workoutSessionDate;
     }
 
-    @Override
     public void setId(Long id)
     {
         this.id = id;
     }
 
-    @Override
     public Long getId()
     {
         return this.id;

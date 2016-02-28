@@ -1,7 +1,6 @@
 package peoples.materialfitness.Database;
 
-import com.orm.StringUtil;
-import com.orm.SugarRecord;
+import android.content.ContentValues;
 
 import org.parceler.Parcel;
 
@@ -14,13 +13,11 @@ import java.util.UUID;
  * example, Squats would be an exercise with obvious accompanying details.
  */
 @Parcel(value = Parcel.Serialization.BEAN, analyze = Exercise.class)
-public class Exercise extends SugarRecord<Exercise>
+public class Exercise
 {
+    long id;
     String title;
     MuscleGroup muscleGroup;
-
-    public static final String TITLE_COLUMN = StringUtil.toSQLName("title");
-    public static final String MUSCLE_GROUP_COLUMN = StringUtil.toSQLName("muscleGroup");
 
     /**
      * Empty constructor required for sugar record OEM.
@@ -62,15 +59,34 @@ public class Exercise extends SugarRecord<Exercise>
         this.muscleGroup = muscleGroup;
     }
 
-    @Override
-    public void setId(Long id)
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long id)
     {
         this.id = id;
     }
 
-    @Override
-    public Long getId()
+    public ContentValues getContentValues()
     {
-        return this.id;
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ExerciseContract.COLUMN_NAME_TITLE, title);
+        contentValues.put(ExerciseContract.COLUMN_NAME_MUSCLE_GROUP, muscleGroup.getValue());
+
+        return contentValues;
+    }
+
+    public static Exercise getExercise(ContentValues contentValues)
+    {
+        String title = contentValues.getAsString(ExerciseContract.COLUMN_NAME_TITLE);
+        MuscleGroup muscleGroup = MuscleGroup.muscleGroupFromValue(
+                contentValues.getAsInteger(ExerciseContract.COLUMN_NAME_MUSCLE_GROUP));
+
+        Exercise exercise = new Exercise(title, muscleGroup);
+
+        return exercise;
     }
 }

@@ -72,7 +72,7 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
     public void onExerciseLogged(Exercise exercise)
     {
         // Fire off a save of the exercise. It won't do anything if we already have it.
-        new ExerciseDatabaseInteractor().uniqueSaveExercise(exercise);
+        new ExerciseDatabaseInteractor(attachedFragment.getActivity()).uniqueSaveExercise(exercise);
 
         // Check to see if this workout session already contains the exercise...
         if (!mWorkoutSession.containsExercise(exercise))

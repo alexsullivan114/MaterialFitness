@@ -1,7 +1,5 @@
 package peoples.materialfitness.Database;
 
-import com.orm.StringUtil;
-
 import java.util.List;
 
 import rx.Observable;
@@ -19,10 +17,11 @@ import rx.Observable;
 public interface ModelDatabaseInteractor<T>
 {
     public static final int INVALID_ID = -1;
-    public static final String ID_COLUMN_NAME = StringUtil.toSQLName("id");
 
     Observable<T> fetchAll();
     Observable<T> fetchWithClause(String whereClause, String[] arguments);
     void save(T entity);
+    void cascadeSave(T entity);
     void delete(T entity);
+    void cascadeDelete(T entity);
 }
