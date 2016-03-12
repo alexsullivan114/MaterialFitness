@@ -8,10 +8,17 @@ import android.app.Application;
 public class MaterialFitnessApplication extends Application
 {
 
+    private static MaterialFitnessApplication application;
+
     @Override
     public void onCreate()
     {
         super.onCreate();
+        application = this;
+    }
 
+    public static MaterialFitnessApplication getApplication()
+    {
+        return application;
     }
 }

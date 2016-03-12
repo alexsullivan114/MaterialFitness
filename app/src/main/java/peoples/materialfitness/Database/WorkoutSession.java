@@ -1,5 +1,6 @@
 package peoples.materialfitness.Database;
 
+import android.content.ContentValues;
 import android.support.v4.util.SimpleArrayMap;
 
 
@@ -153,5 +154,27 @@ public class WorkoutSession
         }
 
         return map;
+    }
+
+    public ContentValues getContentValues()
+    {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(WorkoutSessionContract._ID, id);
+        contentValues.put(WorkoutSessionContract.COLUMN_NAME_DATE, workoutSessionDate);
+
+        return contentValues;
+    }
+
+    public static WorkoutSession getWorkoutSession(ContentValues contentValues,
+                                                   List<ExerciseSession> exercises)
+    {
+        WorkoutSession workoutSession = new WorkoutSession();
+
+        workoutSession.setId(contentValues.getAsLong(WorkoutSessionContract._ID));
+        workoutSession.setWorkoutSessionDate(contentValues.getAsLong(WorkoutSessionContract.COLUMN_NAME_DATE));
+        workoutSession.setExercises(exercises);
+
+        return workoutSession;
     }
 }

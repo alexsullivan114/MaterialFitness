@@ -100,13 +100,13 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
     @Override
     public void cascadeSave(Exercise entity)
     {
-
+        // no-op
     }
 
     @Override
     public void cascadeDelete(Exercise entity)
     {
-
+        // no-op
     }
 
     private List<Exercise> getExercisesFromCursor(Cursor cursor)

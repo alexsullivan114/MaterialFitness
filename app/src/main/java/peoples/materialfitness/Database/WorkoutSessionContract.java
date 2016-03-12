@@ -8,5 +8,5 @@ import android.provider.BaseColumns;
 public class WorkoutSessionContract implements BaseColumns
 {
     public static final String TABLE_NAME = "WorkoutSession";
-    public static final String COLUMN_NAME_ = "workoutSessionDate";
+    public static final String COLUMN_NAME_DATE = "workoutSessionDate";
 }

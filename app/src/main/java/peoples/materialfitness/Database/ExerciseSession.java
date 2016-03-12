@@ -1,6 +1,8 @@
 package peoples.materialfitness.Database;
 
 
+import android.content.ContentValues;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -84,5 +86,28 @@ public class ExerciseSession
     public String toString()
     {
         return exercise.getTitle() + " Session";
+    }
+
+    public ContentValues getContentValues()
+    {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ExerciseSessionContract._ID, id);
+        contentValues.put(ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID, exercise.getId());
+        contentValues.put(ExerciseSessionContract.COLUMN_NAME_WORKOUT_SESSION_ID, workoutSessionId);
+
+        return contentValues;
+    }
+
+    public static ExerciseSession getExerciseSession(ContentValues contentValues,
+                                                     Exercise exercise,
+                                                     List<WeightSet> weightSetList)
+    {
+        ExerciseSession exerciseSession = new ExerciseSession();
+        exerciseSession.setExercise(exercise);
+        exerciseSession.setWorkoutSessionId(contentValues.getAsLong(ExerciseSessionContract.COLUMN_NAME_WORKOUT_SESSION_ID));
+        exerciseSession.setSets(weightSetList);
+
+        return exerciseSession;
     }
 }

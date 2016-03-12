@@ -16,8 +16,6 @@ import rx.Observable;
  */
 public interface ModelDatabaseInteractor<T>
 {
-    public static final int INVALID_ID = -1;
-
     Observable<T> fetchAll();
     Observable<T> fetchWithClause(String whereClause, String[] arguments);
     void save(T entity);

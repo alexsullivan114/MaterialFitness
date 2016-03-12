@@ -50,6 +50,14 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
         }
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        presenter.onContextAvailable(getActivity());
+    }
+
     private void setPresenter(T presenter)
     {
         this.presenter = presenter;

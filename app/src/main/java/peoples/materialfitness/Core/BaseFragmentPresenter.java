@@ -1,6 +1,7 @@
 package peoples.materialfitness.Core;
 
 import android.app.Fragment;
+import android.content.Context;
 
 import peoples.materialfitness.View.BaseFragmentInterface;
 
@@ -13,6 +14,7 @@ public abstract class BaseFragmentPresenter<T extends BaseFragmentInterface> ext
 {
     protected T fragmentInterface;
     protected Fragment attachedFragment;
+    protected Context context;
 
     public void setFragment(Fragment fragment)
     {
@@ -22,5 +24,10 @@ public abstract class BaseFragmentPresenter<T extends BaseFragmentInterface> ext
     public void setFragmentInterface(T fragmentInterface)
     {
         this.fragmentInterface = fragmentInterface;
+    }
+
+    public void onContextAvailable(Context context)
+    {
+        this.context = context;
     }
 }

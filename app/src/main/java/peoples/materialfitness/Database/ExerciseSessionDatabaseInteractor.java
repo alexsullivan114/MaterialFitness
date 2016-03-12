@@ -1,8 +1,18 @@
 package peoples.materialfitness.Database;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
@@ -10,6 +20,15 @@ import rx.schedulers.Schedulers;
  */
 public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteractor<ExerciseSession>
 {
+    private final Context mContext;
+    private final FitnessDatabaseHelper mHelper;
+
+    public ExerciseSessionDatabaseInteractor(Context context)
+    {
+        mContext = context.getApplicationContext();
+        mHelper = new FitnessDatabaseHelper(mContext);
+    }
+
     @Override
     public Observable<ExerciseSession> fetchAll()
     {
@@ -19,47 +38,76 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     @Override
     public Observable<ExerciseSession> fetchWithClause(String whereClause, String[] arguments)
     {
-        return Observable.empty();
-//        return Observable.from(ExerciseSession.find(ExerciseSession.class, whereClause, arguments))
-//                .flatMap(this::associateExerciseSessionSets);
 
+        return FitnessDatabaseUtils.getCursorObservable(ExerciseSessionContract.TABLE_NAME,
+                whereClause, arguments, mContext)
+                .flatMap(this::getExerciseSessionFromCursor);
     }
 
     @Override
     public void cascadeSave(ExerciseSession entity)
     {
-
+        // First save ourselves.
+        save(entity);
+        // Now save all of our sets.
+        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
+        for (WeightSet set : entity.getSets())
+        {
+            interactor.save(set);
+        }
     }
 
     @Override
     public void cascadeDelete(ExerciseSession entity)
     {
-
+        // First delete ourselves
+        delete(entity);
+        // Now delete all of our sets.
+        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
+        for (WeightSet set : entity.getSets())
+        {
+            interactor.delete(set);
+        }
     }
 
     @Override
     public void save(ExerciseSession entity)
     {
-//        // Rxjava just makes threading so fun.
-//        Observable.just(entity)
-//                .observeOn(Schedulers.io())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(workoutSession -> {
-//                    // Save the exercise session.
-//                    entity.save();
-//                    // Save each rep associated with this workout session.
-//                    WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
-//                    for (WeightSet mapping : entity.getSets())
-//                    {
-//                        mapping.setExerciseSessionId(entity.getId());
-//                        interactor.save(mapping);
-//                    }
-//                });
+        Observable.create(subscriber -> {
+            mHelper.getReadableDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
+                    null, entity.getContentValues(), SQLiteDatabase.CONFLICT_REPLACE);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe();
     }
-
     @Override
     public void delete(ExerciseSession entity)
     {
-//        entity.delete();
+        String WHERE_CLAUSE = ExerciseSessionContract._ID + " = ?";
+        String[] ARGS = new String[]{String.valueOf(entity.getId())};
+        mHelper.getReadableDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+                WHERE_CLAUSE, ARGS);
+    }
+
+    private Observable<ExerciseSession> getExerciseSessionFromCursor(Cursor cursor)
+    {
+        ContentValues contentValues = new ContentValues();
+        DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
+
+        // Build up our weight sets for this exercise session
+        String setWhereClause = WeightSetContract.COLUMN_NAME_EXERCISE_SESSION_ID + " = ?";
+        String[] setArguments = new String[]{contentValues.getAsString(ExerciseSessionContract._ID)};
+        Observable<List<WeightSet>> setsObservable = new WeightSetDatabaseInteractor(mContext)
+                .fetchWithClause(setWhereClause, setArguments)
+                .toList();
+
+        // Build up our Exercise for this exercise session
+        String exerciseWhereClause = ExerciseContract._ID + " = ?";
+        String[] exerciseArguments = new String[]{contentValues.getAsString(ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID)};
+        Observable<Exercise> exerciseObservable = new ExerciseDatabaseInteractor(mContext)
+                .fetchWithClause(exerciseWhereClause, exerciseArguments);
+
+        return Observable.zip(setsObservable, exerciseObservable,
+                (weightSetList, exercise) -> ExerciseSession.getExerciseSession(contentValues, exercise, weightSetList));
     }
 }

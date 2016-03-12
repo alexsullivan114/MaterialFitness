@@ -114,9 +114,9 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     }
 
     @Override
-    public void onResume()
+    public void onSaveInstanceState(Bundle outState)
     {
-        super.onResume();
+        super.onSaveInstanceState(outState);
     }
 
     @Override

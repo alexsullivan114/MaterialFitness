@@ -1,12 +1,15 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import org.parceler.Parcels;
 
 import java.util.Date;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Database.Exercise;
 import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
@@ -29,9 +32,18 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
 {
     public WorkoutSession mWorkoutSession = null;
 
+    public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
+    {
+        @Override
+        public LogWorkoutFragmentPresenter createPresenter()
+        {
+            return new LogWorkoutFragmentPresenter();
+        }
+    }
+
     public LogWorkoutFragmentPresenter()
     {
-        new WorkoutSessionDatabaseInteractor()
+        new WorkoutSessionDatabaseInteractor(MaterialFitnessApplication.getApplication())
                 .getTodaysWorkoutSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,18 +54,12 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
                     }
                     fragmentInterface.updateWorkoutList(mWorkoutSession);
                 })
+                .doOnError(error -> {
+                    Log.d(TAG, error.toString());
+                })
                 .subscribe(session -> {
                     mWorkoutSession = session;
                 });
-    }
-
-    public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
-    {
-        @Override
-        public LogWorkoutFragmentPresenter createPresenter()
-        {
-            return new LogWorkoutFragmentPresenter();
-        }
     }
 
     public void onFabClicked()
@@ -72,7 +78,7 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
     public void onExerciseLogged(Exercise exercise)
     {
         // Fire off a save of the exercise. It won't do anything if we already have it.
-        new ExerciseDatabaseInteractor(attachedFragment.getActivity()).uniqueSaveExercise(exercise);
+        new ExerciseDatabaseInteractor(MaterialFitnessApplication.getApplication()).uniqueSaveExercise(exercise);
 
         // Check to see if this workout session already contains the exercise...
         if (!mWorkoutSession.containsExercise(exercise))
@@ -83,7 +89,7 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
             // Update our UI
             fragmentInterface.updateExerciseCard(exerciseSession);
             // And save off the updated workout session.
-            new WorkoutSessionDatabaseInteractor().save(mWorkoutSession);
+            new WorkoutSessionDatabaseInteractor(MaterialFitnessApplication.getApplication()).cascadeSave(mWorkoutSession);
         }
     }
 }
