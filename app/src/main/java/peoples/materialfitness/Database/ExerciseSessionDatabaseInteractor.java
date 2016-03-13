@@ -46,17 +46,22 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     }
 
     @Override
-    public void cascadeSave(ExerciseSession entity)
+    public Observable<Long> cascadeSave(ExerciseSession entity)
     {
         // First save ourselves.
-        save(entity);
-        // Now save all of our sets.
-        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
-        for (WeightSet set : entity.getSets())
-        {
-            set.setExerciseSessionId(entity.getId());
-            interactor.save(set);
-        }
+        return save(entity)
+                .subscribeOn(Schedulers.io())
+                .flatMap(id -> {
+                    // Now save all of our sets.
+                    WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
+                    for (WeightSet set : entity.getSets())
+                    {
+                        set.setExerciseSessionId(entity.getId());
+                        interactor.save(set).subscribe();
+                    }
+
+                    return Observable.just(id);
+                });
     }
 
     @Override
@@ -73,9 +78,9 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     }
 
     @Override
-    public void save(ExerciseSession entity)
+    public Observable<Long> save(ExerciseSession entity)
     {
-        Observable.create(subscriber -> {
+        return Observable.create(subscriber -> {
             ContentValues contentValues = entity.getContentValues();
 
             if (entity.getId() == INVALID_ID)
@@ -85,9 +90,10 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
 
             entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-        }).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe();
+
+            subscriber.onNext(entity.getId());
+            subscriber.onCompleted();
+        });
     }
     @Override
     public void delete(ExerciseSession entity)

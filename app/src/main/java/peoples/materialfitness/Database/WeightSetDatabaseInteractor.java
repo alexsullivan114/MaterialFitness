@@ -49,9 +49,9 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     }
 
     @Override
-    public void save(WeightSet entity)
+    public Observable<Long> save(WeightSet entity)
     {
-        Observable.create(subscriber -> {
+        return Observable.create(subscriber -> {
 
             ContentValues contentValues = entity.getContentValues();
 
@@ -62,9 +62,9 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
 
             entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-        }).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe();
+            subscriber.onNext(entity.getId());
+            subscriber.onCompleted();
+        });
     }
 
     @Override
@@ -77,9 +77,9 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     }
 
     @Override
-    public void cascadeSave(WeightSet entity)
+    public Observable<Long> cascadeSave(WeightSet entity)
     {
-        // no-op
+        return this.save(entity);
     }
 
     @Override

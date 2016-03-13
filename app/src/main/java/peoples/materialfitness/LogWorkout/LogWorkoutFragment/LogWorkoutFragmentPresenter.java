@@ -77,19 +77,28 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
     @Override
     public void onExerciseLogged(Exercise exercise)
     {
-        // Fire off a save of the exercise. It won't do anything if we already have it.
-        new ExerciseDatabaseInteractor(MaterialFitnessApplication.getApplication()).uniqueSaveExercise(exercise);
-
         // Check to see if this workout session already contains the exercise...
         if (!mWorkoutSession.containsExercise(exercise))
         {
             // If not add the exercise.
-            ExerciseSession exerciseSession = new ExerciseSession(exercise, new Date().getTime());
+            final ExerciseSession exerciseSession = new ExerciseSession(exercise, new Date().getTime());
             mWorkoutSession.addExerciseSession(exerciseSession);
             // Update our UI
             fragmentInterface.updateExerciseCard(exerciseSession);
-            // And save off the updated workout session.
-            new WorkoutSessionDatabaseInteractor(MaterialFitnessApplication.getApplication()).cascadeSave(mWorkoutSession);
+            // Fire off a save of the exercise. It won't do anything if we already have it.
+            new ExerciseDatabaseInteractor(MaterialFitnessApplication.getApplication()).uniqueSaveExercise(exercise)
+                    .observeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(id -> {
+                        // Make sure our local exercise copy has the right ID.
+                        exercise.setId(id);
+                        new WorkoutSessionDatabaseInteractor(MaterialFitnessApplication.getApplication())
+                                .cascadeSave(mWorkoutSession)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(Schedulers.io())
+                                .subscribe();
+
+                    });
         }
     }
 }

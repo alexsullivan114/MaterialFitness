@@ -45,9 +45,9 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
     }
 
     @Override
-    public void save(final WorkoutSession entity)
+    public Observable<Long> save(final WorkoutSession entity)
     {
-        Observable.create(subscriber -> {
+        return Observable.create(subscriber -> {
             ContentValues contentValues = entity.getContentValues();
 
             if (entity.getId() == INVALID_ID)
@@ -57,9 +57,9 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
 
             entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-        }).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe();
+            subscriber.onNext(entity.getId());
+            subscriber.onCompleted();
+        });
     }
 
     @Override
@@ -85,17 +85,21 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
     }
 
     @Override
-    public void cascadeSave(WorkoutSession entity)
+    public Observable<Long> cascadeSave(WorkoutSession entity)
     {
         // First save ourselves.
-        save(entity);
-        // Now save all of our exercise sessions.
-        ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor(mContext);
-        for (ExerciseSession session : entity.getExercises())
-        {
-            session.setWorkoutSessionId(entity.getId());
-            interactor.save(session);
-        }
+        return save(entity)
+                .flatMap(id -> {
+                    // Now save all of our exercise sessions.
+                    ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor(mContext);
+                    for (ExerciseSession session : entity.getExercises())
+                    {
+                        session.setWorkoutSessionId(entity.getId());
+                        interactor.cascadeSave(session).subscribe();
+                    }
+
+                    return Observable.just(id);
+                });
     }
 
     @Override

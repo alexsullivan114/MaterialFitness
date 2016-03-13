@@ -20,8 +20,8 @@ public interface ModelDatabaseInteractor<T>
 
     Observable<T> fetchAll();
     Observable<T> fetchWithClause(String whereClause, String[] arguments);
-    void save(T entity);
-    void cascadeSave(T entity);
+    Observable<Long> save(T entity);
+    Observable<Long> cascadeSave(T entity);
     void delete(T entity);
     void cascadeDelete(T entity);
 }

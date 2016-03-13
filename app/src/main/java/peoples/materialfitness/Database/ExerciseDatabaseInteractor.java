@@ -58,18 +58,24 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
     }
 
     @Override
-    public void save(Exercise exercise)
+    public Observable<Long> save(Exercise exercise)
     {
-        ContentValues contentValues = exercise.getContentValues();
+        return Observable.create(subscriber -> {
 
-        if (exercise.getId() == INVALID_ID)
-        {
-            contentValues.remove(BaseColumns._ID);
-        }
+            ContentValues contentValues = exercise.getContentValues();
 
-        long updatedId = mHelper.getReadableDatabase().insert(ExerciseContract.TABLE_NAME,
-                null, contentValues);
-        exercise.setId(updatedId);
+            if (exercise.getId() == INVALID_ID)
+            {
+                contentValues.remove(BaseColumns._ID);
+            }
+
+            long updatedId = mHelper.getReadableDatabase().insert(ExerciseContract.TABLE_NAME,
+                    null, contentValues);
+            exercise.setId(updatedId);
+            subscriber.onNext(updatedId);
+            subscriber.onCompleted();
+
+        });
     }
 
     @Override
@@ -86,29 +92,32 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
      * Perform a unique save of this exercise. Current ORM doesn't support unique columns.
      * @param exercise
      */
-    public void uniqueSaveExercise(Exercise exercise)
+    public Observable<Long> uniqueSaveExercise(Exercise exercise)
     {
 
         String whereClause = ExerciseContract.COLUMN_NAME_TITLE + " = ?";
         String[] arguments = new String[]{String.valueOf(exercise.getTitle())};
 
-        fetchWithClause(whereClause, arguments)
+        return fetchWithClause(whereClause, arguments)
                 .subscribeOn(Schedulers.io())
-                .map(Exercise::getTitle)
                 .toList()
                 .distinct()
-                .subscribe(values -> {
-                    if (!values.contains(exercise.getTitle()))
+                .flatMap(exercises -> {
+                    if (exercises.size() > 0)
                     {
-                        this.save(exercise);
+                        return Observable.just(exercises.get(0).getId());
+                    }
+                    else
+                    {
+                        return save(exercise);
                     }
                 });
     }
 
     @Override
-    public void cascadeSave(Exercise entity)
+    public Observable<Long> cascadeSave(Exercise entity)
     {
-        // no-op
+        return this.save(entity);
     }
 
     @Override
