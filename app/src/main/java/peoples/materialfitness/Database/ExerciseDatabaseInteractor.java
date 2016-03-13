@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.provider.BaseColumns;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +60,15 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
     @Override
     public void save(Exercise exercise)
     {
+        ContentValues contentValues = exercise.getContentValues();
+
+        if (exercise.getId() == INVALID_ID)
+        {
+            contentValues.remove(BaseColumns._ID);
+        }
+
         long updatedId = mHelper.getReadableDatabase().insert(ExerciseContract.TABLE_NAME,
-                null, exercise.getContentValues());
+                null, contentValues);
         exercise.setId(updatedId);
     }
 

@@ -25,7 +25,7 @@ import java.util.List;
 @Parcel(value = Parcel.Serialization.BEAN)
 public class WorkoutSession
 {
-    private long id;
+    private long id = -1;
 
     private List<ExerciseSession> exercises = new ArrayList<>();
     // millis since epoch

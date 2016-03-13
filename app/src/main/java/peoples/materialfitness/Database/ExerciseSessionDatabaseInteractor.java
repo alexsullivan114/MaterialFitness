@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
         WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
         for (WeightSet set : entity.getSets())
         {
+            set.setExerciseSessionId(entity.getId());
             interactor.save(set);
         }
     }
@@ -74,8 +76,15 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     public void save(ExerciseSession entity)
     {
         Observable.create(subscriber -> {
-            mHelper.getReadableDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
-                    null, entity.getContentValues(), SQLiteDatabase.CONFLICT_REPLACE);
+            ContentValues contentValues = entity.getContentValues();
+
+            if (entity.getId() == INVALID_ID)
+            {
+                contentValues.remove(BaseColumns._ID);
+            }
+
+            entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
+                    null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
         }).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe();

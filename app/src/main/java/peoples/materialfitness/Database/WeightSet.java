@@ -11,7 +11,7 @@ import org.parceler.Parcel;
 @Parcel(value = Parcel.Serialization.BEAN)
 public class WeightSet
 {
-    long id;
+    long id = -1;
     int weight;
     int numReps;
     long exerciseSessionId;

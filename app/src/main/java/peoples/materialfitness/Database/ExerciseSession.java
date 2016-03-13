@@ -19,7 +19,7 @@ import java.util.List;
 @Parcel(value = Parcel.Serialization.BEAN, analyze = ExerciseSession.class)
 public class ExerciseSession
 {
-    long id;
+    long id = -1;
     // The exercise associated with this session
     Exercise exercise;
     // A mapping of sets to weights. We'll populate this ourselves.

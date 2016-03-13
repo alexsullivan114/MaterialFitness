@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 
 import java.util.Date;
 import java.util.List;
@@ -47,8 +48,15 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
     public void save(final WorkoutSession entity)
     {
         Observable.create(subscriber -> {
-            mHelper.getReadableDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
-                    null, entity.getContentValues(), SQLiteDatabase.CONFLICT_REPLACE);
+            ContentValues contentValues = entity.getContentValues();
+
+            if (entity.getId() == INVALID_ID)
+            {
+                contentValues.remove(BaseColumns._ID);
+            }
+
+            entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
+                    null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
         }).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe();

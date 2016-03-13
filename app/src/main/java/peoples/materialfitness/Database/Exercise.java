@@ -15,7 +15,7 @@ import java.util.UUID;
 @Parcel(value = Parcel.Serialization.BEAN, analyze = Exercise.class)
 public class Exercise
 {
-    long id;
+    long id = -1;
     String title;
     MuscleGroup muscleGroup;
 
