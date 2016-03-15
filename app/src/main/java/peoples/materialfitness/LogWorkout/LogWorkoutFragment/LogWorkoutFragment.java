@@ -1,6 +1,7 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -138,6 +139,13 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     {
         LogWorkoutDialog dialog = new LogWorkoutDialog(getActivity(), presenter);
         dialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        presenter.handleWorkoutDetailsResults(requestCode, resultCode, data);
     }
 
     @Override

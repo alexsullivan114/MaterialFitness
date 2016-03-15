@@ -90,6 +90,7 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
 
             entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+            mHelper.getReadableDatabase().close();
 
             subscriber.onNext(entity.getId());
             subscriber.onCompleted();
@@ -102,6 +103,7 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
         String[] ARGS = new String[]{String.valueOf(entity.getId())};
         mHelper.getReadableDatabase().delete(ExerciseSessionContract.TABLE_NAME,
                 WHERE_CLAUSE, ARGS);
+        mHelper.getReadableDatabase().close();
     }
 
     private Observable<ExerciseSession> getExerciseSessionFromCursor(Cursor cursor)

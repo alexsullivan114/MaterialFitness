@@ -3,6 +3,7 @@ package peoples.materialfitness.WorkoutDetails;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -19,6 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Database.FitnessDatabaseHelper;
+import peoples.materialfitness.Database.WeightSet;
+import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragmentPresenter;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
 
@@ -55,6 +58,8 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
         ButterKnife.bind(this);
 
         presenter.setBundle(getIntent().getExtras());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.mExerciseSession));
     }
 
     @OnClick(R.id.fab)
@@ -80,6 +85,18 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
                 .onPositive(this)
                 .build()
                 .show();
+    }
+
+    @Override
+    public void addSet(WeightSet set)
+    {
+        recyclerView.getAdapter().notifyItemInserted(presenter.mExerciseSession.getSets().size() - 1);
+    }
+
+    @Override
+    public void contentUpdated(boolean didUpdate)
+    {
+        setResult(LogWorkoutFragmentPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
     }
 
     @Override

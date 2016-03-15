@@ -28,6 +28,7 @@ public final class FitnessDatabaseUtils
                 {
                     subscriber.onNext(cursor);
                 }
+                cursor.close();
                 subscriber.onCompleted();
             }
         });

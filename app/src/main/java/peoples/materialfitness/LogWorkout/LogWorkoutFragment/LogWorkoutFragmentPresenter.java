@@ -32,6 +32,9 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
 {
     public WorkoutSession mWorkoutSession = null;
 
+    public static final int WORKOUT_DETAILS_REQUEST_CODE = 12312;
+    public static final int WORKOUT_DETAILS_CONTENT_UPDATED = 124412;
+
     public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
     {
         @Override
@@ -42,6 +45,23 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
     }
 
     public LogWorkoutFragmentPresenter()
+    {
+        fetchPopulatedWorkoutSession();
+    }
+
+    public void onFabClicked()
+    {
+        fragmentInterface.showAddWorkoutDialog();
+    }
+
+    public void onExerciseClicked(ExerciseSession session)
+    {
+        Intent intent = new Intent(attachedFragment.getActivity(), WorkoutDetailsActivity.class);
+        intent.putExtra(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(session));
+        attachedFragment.startActivityForResult(intent, WORKOUT_DETAILS_REQUEST_CODE);
+    }
+
+    private void fetchPopulatedWorkoutSession()
     {
         new WorkoutSessionDatabaseInteractor(MaterialFitnessApplication.getApplication())
                 .getTodaysWorkoutSession()
@@ -62,16 +82,19 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
                 });
     }
 
-    public void onFabClicked()
+    /**
+     * Refresh our workout session if our data has been updated.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void handleWorkoutDetailsResults(int requestCode, int resultCode, Intent data)
     {
-        fragmentInterface.showAddWorkoutDialog();
-    }
-
-    public void onExerciseClicked(ExerciseSession session)
-    {
-        Intent intent = new Intent(attachedFragment.getActivity(), WorkoutDetailsActivity.class);
-        intent.putExtra(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(session));
-        attachedFragment.startActivity(intent);
+        if (requestCode == LogWorkoutFragmentPresenter.WORKOUT_DETAILS_REQUEST_CODE &&
+                resultCode == LogWorkoutFragmentPresenter.WORKOUT_DETAILS_CONTENT_UPDATED)
+        {
+            fetchPopulatedWorkoutSession();
+        }
     }
 
     @Override

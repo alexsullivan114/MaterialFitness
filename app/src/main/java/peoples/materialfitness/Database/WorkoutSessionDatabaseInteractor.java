@@ -57,6 +57,7 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
 
             entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+            mHelper.getReadableDatabase().close();
             subscriber.onNext(entity.getId());
             subscriber.onCompleted();
         });
@@ -69,6 +70,7 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
         String[] ARGS = new String[]{String.valueOf(entity.getId())};
         mHelper.getReadableDatabase().delete(ExerciseSessionContract.TABLE_NAME,
                 WHERE_CLAUSE, ARGS);
+        mHelper.getReadableDatabase().close();
     }
 
     public Observable<WorkoutSession> getTodaysWorkoutSession()

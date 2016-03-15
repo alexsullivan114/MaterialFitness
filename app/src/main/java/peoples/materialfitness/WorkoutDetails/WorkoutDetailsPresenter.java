@@ -5,16 +5,18 @@ import android.os.Bundle;
 import org.parceler.Parcels;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Database.ExerciseSession;
 import peoples.materialfitness.Database.WeightSet;
+import peoples.materialfitness.Database.WeightSetDatabaseInteractor;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
 public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetailsActivityInterface>
 {
-    private ExerciseSession mExerciseSession;
+    public ExerciseSession mExerciseSession;
 
     public static final String EXTRA_EXERCISE_SESSION = "extraExercise";
 
@@ -47,6 +49,10 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
     public void addSet(int reps, int weight)
     {
         WeightSet set = new WeightSet(weight, reps);
+        set.setExerciseSessionId(mExerciseSession.getId());
+        new WeightSetDatabaseInteractor(MaterialFitnessApplication.getApplication()).save(set).subscribe();
         mExerciseSession.addSet(set);
+        activityInterface.addSet(set);
+        activityInterface.contentUpdated(true);
     }
 }

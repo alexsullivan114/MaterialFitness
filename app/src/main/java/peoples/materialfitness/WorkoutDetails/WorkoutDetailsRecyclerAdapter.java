@@ -1,28 +1,43 @@
 package peoples.materialfitness.WorkoutDetails;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import peoples.materialfitness.Database.ExerciseSession;
+import peoples.materialfitness.Database.WeightSet;
+import peoples.materialfitness.R;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
-public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutDetailsRecyclerAdapter.RepViewHolder>
 {
     private ExerciseSession mExerciseSession;
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public WorkoutDetailsRecyclerAdapter(ExerciseSession exerciseSession)
     {
-        return null;
+        mExerciseSession = exerciseSession;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    public RepViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View repLayout = inflater.inflate(R.layout.rep_adapter_layout, parent, false);
+        return new RepViewHolder(repLayout);
+    }
 
+    @Override
+    public void onBindViewHolder(RepViewHolder holder, int position)
+    {
+        WeightSet set = mExerciseSession.getSets().get(position);
+        holder.weightTextView.setText(String.valueOf(set.getWeight()));
+        holder.repTextView.setText(String.valueOf(set.getNumReps()));
     }
 
     @Override
@@ -31,11 +46,16 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<Recycler
         return mExerciseSession.getSets().size();
     }
 
-    private static class RepViewHolder extends RecyclerView.ViewHolder
+    protected static final class RepViewHolder extends RecyclerView.ViewHolder
     {
+        @Bind(R.id.position) TextView positionTextView;
+        @Bind(R.id.weight) TextView weightTextView;
+        @Bind(R.id.reps) TextView repTextView;
+
         public RepViewHolder(View itemView)
         {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

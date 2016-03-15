@@ -62,6 +62,7 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
 
             entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+            mHelper.getReadableDatabase().close();
             subscriber.onNext(entity.getId());
             subscriber.onCompleted();
         });
@@ -74,6 +75,7 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
         String[] ARGS = new String[]{String.valueOf(entity.getId())};
         mHelper.getReadableDatabase().delete(ExerciseSessionContract.TABLE_NAME,
                 WHERE_CLAUSE, ARGS);
+        mHelper.getReadableDatabase().close();
     }
 
     @Override

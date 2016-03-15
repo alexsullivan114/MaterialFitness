@@ -71,6 +71,7 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
 
             long updatedId = mHelper.getReadableDatabase().insert(ExerciseContract.TABLE_NAME,
                     null, contentValues);
+            mHelper.getReadableDatabase().close();
             exercise.setId(updatedId);
             subscriber.onNext(updatedId);
             subscriber.onCompleted();
@@ -86,6 +87,7 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
 
         mHelper.getReadableDatabase().delete(ExerciseContract.TABLE_NAME,
                 whereClause, arguments);
+        mHelper.getReadableDatabase().close();
     }
 
     /**

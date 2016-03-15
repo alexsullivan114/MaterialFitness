@@ -104,6 +104,7 @@ public class ExerciseSession
                                                      List<WeightSet> weightSetList)
     {
         ExerciseSession exerciseSession = new ExerciseSession();
+        exerciseSession.setId(contentValues.getAsLong(ExerciseSessionContract._ID));
         exerciseSession.setExercise(exercise);
         exerciseSession.setWorkoutSessionId(contentValues.getAsLong(ExerciseSessionContract.COLUMN_NAME_WORKOUT_SESSION_ID));
         exerciseSession.setSets(weightSetList);
