@@ -22,7 +22,7 @@
     <string name="add_workout">Add Workout</string>
     <string name="log_exercise">Log an exercise</string>
     <string name="exercise_name">Exercise name</string>
-    <string name="add_sets_later">You\'ll be able to add sets and sets right after this!</string>
+    <string name="add_sets_later">You\'ll be able to add sets right after this!</string>
     <string name="error_empty_exercise">Please add a title for your exercise!</string>
     <string name="error_empty_muscle_group">Please select a muscle group!</string>
 

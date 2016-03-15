@@ -86,6 +86,7 @@ public class Exercise
                 contentValues.getAsInteger(ExerciseContract.COLUMN_NAME_MUSCLE_GROUP));
 
         Exercise exercise = new Exercise(title, muscleGroup);
+        exercise.setId(contentValues.getAsLong(ExerciseContract._ID));
 
         return exercise;
     }
