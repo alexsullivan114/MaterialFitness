@@ -12,35 +12,13 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.DarkestGray.30"
         android:layout_marginRight="20dp"
-        android:text="1st"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DarkestGray.20"
-        android:text="@string/weight_set_label"/>
+        android:text="1"/>
 
     <TextView
-        android:id="@+id/weight"
+        android:id="@+id/rep_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="30dp"
         android:textAppearance="@style/TextAppearance.DarkerGray.25"
-        android:text="145"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DarkestGray.20"
-        android:text="@string/reps_set_label"/>
-
-    <TextView
-        android:id="@+id/reps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textAppearance="@style/TextAppearance.DarkerGray.25"
-        android:text="5"/>
+        android:text="5 reps at 125 lbs"/>
 
 </LinearLayout>

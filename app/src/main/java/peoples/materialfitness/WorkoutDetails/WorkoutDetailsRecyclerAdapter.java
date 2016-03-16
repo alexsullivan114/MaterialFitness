@@ -36,8 +36,12 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     public void onBindViewHolder(RepViewHolder holder, int position)
     {
         WeightSet set = mExerciseSession.getSets().get(position);
-        holder.weightTextView.setText(String.valueOf(set.getWeight()));
-        holder.repTextView.setText(String.valueOf(set.getNumReps()));
+
+        String formattedString = holder.repDetailsView.getContext()
+                .getResources()
+                .getString(R.string.reps_at_weight, set.getNumReps(), set.getWeight());
+        holder.repDetailsView.setText(formattedString);
+        holder.positionTextView.setText(String.valueOf(position + 1));
     }
 
     @Override
@@ -49,8 +53,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     protected static final class RepViewHolder extends RecyclerView.ViewHolder
     {
         @Bind(R.id.position) TextView positionTextView;
-        @Bind(R.id.weight) TextView weightTextView;
-        @Bind(R.id.reps) TextView repTextView;
+        @Bind(R.id.rep_details) TextView repDetailsView;
 
         public RepViewHolder(View itemView)
         {
