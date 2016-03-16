@@ -7,12 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Database.ExerciseSession;
+import peoples.materialfitness.Database.WeightSet;
 import peoples.materialfitness.Database.WorkoutSession;
 import peoples.materialfitness.R;
 
@@ -37,7 +40,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         CardView cardView = (CardView)inflater.inflate(R.layout.fragment_workout_card, parent, false);
 
-        ExerciseCardViewHolder viewHolder = new ExerciseCardViewHolder(cardView);
+        ExerciseCardViewHolder viewHolder = new ExerciseCardViewHolder(cardView, mCallback);
 
         return viewHolder;
     }
@@ -47,7 +50,23 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     {
         ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(position);
 
-        holder.mTextView.setText(exerciseSession.getExercise().getTitle());
+        holder.mTitleView.setText(exerciseSession.getExercise().getTitle());
+        holder.setExerciseSession(exerciseSession);
+        // Clear our any old views.
+        holder.mRepContainer.removeAllViews();
+        // Now loop through our weights and add each one to our container.
+        for (WeightSet weightSet : exerciseSession.getSets())
+        {
+            LayoutInflater inflater = LayoutInflater.from(holder.mCardView.getContext());
+            TextView textView = (TextView)inflater.inflate(R.layout.workout_card_rep, holder.mRepContainer, false);
+
+            String formattedString = holder.mRepContainer.getContext()
+                    .getResources()
+                    .getString(R.string.reps_at_weight, weightSet.getNumReps(), weightSet.getWeight());
+
+            textView.setText(formattedString);
+            holder.mRepContainer.addView(textView);
+        }
     }
 
     @Override
@@ -66,17 +85,22 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         notifyItemInserted(mWorkoutSession.getExercises().size() - 1);
     }
 
-    public class ExerciseCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    protected static class ExerciseCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         CardView mCardView;
-        TextView mTextView;
+        ExerciseCardAdapterInterface mCallback;
+        ExerciseSession mExerciseSession;
+        @Bind(R.id.exercise_title) TextView mTitleView;
+        @Bind(R.id.rep_container) LinearLayout mRepContainer;
 
-        public ExerciseCardViewHolder(CardView cardView)
+        public ExerciseCardViewHolder(CardView cardView, ExerciseCardAdapterInterface callback)
         {
             super(cardView);
 
             mCardView = cardView;
-            mTextView = ButterKnife.findById(cardView, R.id.exercise_title);
+            mCallback = callback;
+
+            ButterKnife.bind(this, cardView);
 
             cardView.setOnClickListener(this);
         }
@@ -84,10 +108,18 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         @Override
         public void onClick(View v)
         {
-            mCallback.onExerciseClicked(mWorkoutSession.getExercises().get(this.getLayoutPosition()));
+            mCallback.onExerciseClicked(mExerciseSession);
+        }
+
+        public void setExerciseSession(ExerciseSession exerciseSession)
+        {
+            mExerciseSession = exerciseSession;
         }
     }
 
+    /**
+     * Interface for communication between this adapter and the calling/creating class.
+     */
     public interface ExerciseCardAdapterInterface
     {
         void onExerciseClicked(ExerciseSession session);

@@ -8,5 +8,6 @@
     <color name="lighter_gray">#ddd</color>
     <color name="darker_gray">#aaa</color>
     <color name="darkest_gray">#545454</color>
-    <color name="black">@android:color/black</color>
+    <color name="default_background">#EEEEEE</color>
+    <color name="black">#212121</color>
 </resources>

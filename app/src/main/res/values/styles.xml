@@ -74,6 +74,10 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="TextAppearance.DarkestGray.20">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="TextAppearance.LighterGray">
         <item name="android:textColor">@color/lighter_gray</item>
     </style>
@@ -102,8 +106,16 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="TextAppearance.Black.20">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="TextAppearance.Black.24">
         <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextAppearance.">
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>
