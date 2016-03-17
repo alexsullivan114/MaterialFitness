@@ -1,8 +1,7 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import peoples.materialfitness.Database.Exercise;
-import peoples.materialfitness.Database.ExerciseSession;
-import peoples.materialfitness.Database.WorkoutSession;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.View.BaseFragmentInterface;
 
 /**

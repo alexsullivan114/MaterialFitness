@@ -9,11 +9,10 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import peoples.materialfitness.Database.Exercise;
+import peoples.materialfitness.Model.Exercise.Exercise;
 
 /**
  * Created by Alex Sullivan on 1/3/16.

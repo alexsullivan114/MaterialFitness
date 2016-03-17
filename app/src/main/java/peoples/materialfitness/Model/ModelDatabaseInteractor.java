@@ -1,6 +1,4 @@
-package peoples.materialfitness.Database;
-
-import java.util.List;
+package peoples.materialfitness.Model;
 
 import rx.Observable;
 

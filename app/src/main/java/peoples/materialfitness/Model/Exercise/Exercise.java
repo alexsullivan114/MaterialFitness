@@ -1,10 +1,10 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.Exercise;
 
 import android.content.ContentValues;
 
 import org.parceler.Parcel;
 
-import java.util.UUID;
+import peoples.materialfitness.Model.MuscleGroup.MuscleGroup;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.

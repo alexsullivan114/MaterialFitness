@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.ExerciseSession;
 
 
 import android.content.ContentValues;
@@ -8,13 +8,16 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
+
 /**
  * Created by Alex Sullivan on 10/20/2015.
  *
  * An exercise session. This represents a certain number of sets at a certain weight for a certain
- * {@link peoples.materialfitness.Database.Exercise} object. For example, if I were to do
+ * {@link Exercise} object. For example, if I were to do
  * 5 sets of squats at 10lbs, then 20lbs, then 30lbs, then 40lbs, then a giant
- * PR at 320lbs, then this would be a {@link peoples.materialfitness.Database.ExerciseSession}
+ * PR at 320lbs, then this would be a {@link ExerciseSession}
  */
 @Parcel(value = Parcel.Serialization.BEAN, analyze = ExerciseSession.class)
 public class ExerciseSession

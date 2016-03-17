@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.Exercise;
 
 import android.provider.BaseColumns;
 

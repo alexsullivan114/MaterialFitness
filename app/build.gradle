@@ -18,6 +18,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debugFreshDb {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
     }
     // For retrolambda
     compileOptions {
@@ -71,4 +76,6 @@ dependencies {
 
     // stetho.
     compile 'com.facebook.stetho:stetho:1.3.0'
+    // gson.
+    compile 'com.google.code.gson:gson:2.6.2'
 }

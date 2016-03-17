@@ -2,7 +2,9 @@ package peoples.materialfitness.Core;
 
 import android.app.Application;
 
-import com.facebook.stetho.BuildConfig;
+import peoples.materialfitness.BuildConfig;
+import peoples.materialfitness.Model.FitnessDatabaseHelper;
+
 import com.facebook.stetho.Stetho;
 
 /**
@@ -20,6 +22,10 @@ public class MaterialFitnessApplication extends Application
         application = this;
         // TODO: Get debug builds working and wrap this in one of dem.
         Stetho.initializeWithDefaults(this);
+        if (BuildConfig.BUILD_TYPE.equals("debugFreshDb"))
+        {
+            FitnessDatabaseHelper.buildDebugDatabase = true;
+        }
     }
 
     public static MaterialFitnessApplication getApplication()

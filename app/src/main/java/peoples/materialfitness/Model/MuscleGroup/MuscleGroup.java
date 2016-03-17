@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.MuscleGroup;
 
 import android.content.Context;
 
@@ -24,7 +24,8 @@ public enum MuscleGroup
     CHEST(R.string.chest, 1),
     LEGS(R.string.legs, 2),
     ARMS(R.string.arms, 3),
-    BACK(R.string.back, 4);
+    BACK(R.string.back, 4),
+    CORE(R.string.core, 5);
 
     private int mTitleId;
     private int mValue;
@@ -60,7 +61,7 @@ public enum MuscleGroup
     {
         for (MuscleGroup muscleGroup: MuscleGroup.class.getEnumConstants())
         {
-            if (muscleGroup.getTitle(context).equals(title))
+            if (muscleGroup.getTitle(context).equalsIgnoreCase(title))
             {
                 return muscleGroup;
             }
@@ -85,6 +86,7 @@ public enum MuscleGroup
             case 2: return MuscleGroup.LEGS;
             case 3: return MuscleGroup.ARMS;
             case 4: return MuscleGroup.BACK;
+            case 5: return MuscleGroup.CORE;
             // everyones always doin' arms.
             default: return MuscleGroup.ARMS;
         }

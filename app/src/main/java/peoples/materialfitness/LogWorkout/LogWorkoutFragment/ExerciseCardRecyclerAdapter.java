@@ -1,7 +1,5 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import android.provider.Contacts;
-import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,13 +8,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import peoples.materialfitness.Database.ExerciseSession;
-import peoples.materialfitness.Database.WeightSet;
-import peoples.materialfitness.Database.WorkoutSession;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 
 /**

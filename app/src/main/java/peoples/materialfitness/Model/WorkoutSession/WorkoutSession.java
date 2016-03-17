@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.WorkoutSession;
 
 import android.content.ContentValues;
 import android.support.v4.util.SimpleArrayMap;
@@ -9,6 +9,10 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.MuscleGroup.MuscleGroup;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.

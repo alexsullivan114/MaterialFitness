@@ -1,18 +1,16 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.WeightSet;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-import java.util.List;
-
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
+import peoples.materialfitness.Model.FitnessDatabaseHelper;
+import peoples.materialfitness.Model.FitnessDatabaseUtils;
+import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -25,7 +23,7 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     public WeightSetDatabaseInteractor(Context context)
     {
         mContext = context.getApplicationContext();
-        mHelper = new FitnessDatabaseHelper(mContext);
+        mHelper = FitnessDatabaseHelper.getInstance(mContext);;
     }
 
     @Override
@@ -60,9 +58,8 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
                 contentValues.remove(BaseColumns._ID);
             }
 
-            entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
+            entity.setId(mHelper.getDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-            mHelper.getReadableDatabase().close();
             subscriber.onNext(entity.getId());
             subscriber.onCompleted();
         });
@@ -73,9 +70,8 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     {
         String WHERE_CLAUSE = WeightSetContract._ID + " = ?";
         String[] ARGS = new String[]{String.valueOf(entity.getId())};
-        mHelper.getReadableDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+        mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
                 WHERE_CLAUSE, ARGS);
-        mHelper.getReadableDatabase().close();
     }
 
     @Override

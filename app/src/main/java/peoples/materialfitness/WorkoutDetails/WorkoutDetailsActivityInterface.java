@@ -1,6 +1,6 @@
 package peoples.materialfitness.WorkoutDetails;
 
-import peoples.materialfitness.Database.WeightSet;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.View.BaseActivityInterface;
 
 /**

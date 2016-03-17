@@ -15,9 +15,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.ButterKnife;
-import peoples.materialfitness.Database.Exercise;
-import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
-import peoples.materialfitness.Database.MuscleGroup;
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
+import peoples.materialfitness.Model.MuscleGroup.MuscleGroup;
 import peoples.materialfitness.R;
 
 /**

@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.ExerciseSession;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,14 +7,18 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.Exercise.ExerciseContract;
+import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
+import peoples.materialfitness.Model.FitnessDatabaseHelper;
+import peoples.materialfitness.Model.FitnessDatabaseUtils;
+import peoples.materialfitness.Model.ModelDatabaseInteractor;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightSet.WeightSetContract;
+import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -27,7 +31,7 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     public ExerciseSessionDatabaseInteractor(Context context)
     {
         mContext = context.getApplicationContext();
-        mHelper = new FitnessDatabaseHelper(mContext);
+        mHelper = FitnessDatabaseHelper.getInstance(mContext);;
     }
 
     @Override
@@ -48,9 +52,11 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     @Override
     public Observable<Long> cascadeSave(ExerciseSession entity)
     {
-        // First save ourselves.
-        return save(entity)
-                .subscribeOn(Schedulers.io())
+        // First save our exercise if it hasn't been saved...
+        // And our exercise if it hasn't been saved...
+        ExerciseDatabaseInteractor exerciseInteracor = new ExerciseDatabaseInteractor(mContext);
+        return exerciseInteracor.uniqueSaveExercise(entity.getExercise())
+                .flatMap(exerciseId -> save(entity))
                 .flatMap(id -> {
                     // Now save all of our sets.
                     WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
@@ -88,9 +94,8 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
                 contentValues.remove(BaseColumns._ID);
             }
 
-            entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
+            entity.setId(mHelper.getDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-            mHelper.getReadableDatabase().close();
 
             subscriber.onNext(entity.getId());
             subscriber.onCompleted();
@@ -101,9 +106,8 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     {
         String WHERE_CLAUSE = ExerciseSessionContract._ID + " = ?";
         String[] ARGS = new String[]{String.valueOf(entity.getId())};
-        mHelper.getReadableDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+        mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
                 WHERE_CLAUSE, ARGS);
-        mHelper.getReadableDatabase().close();
     }
 
     private Observable<ExerciseSession> getExerciseSessionFromCursor(Cursor cursor)

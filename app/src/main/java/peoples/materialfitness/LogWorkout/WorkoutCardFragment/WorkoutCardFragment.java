@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import org.parceler.Parcels;
 
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Database.ExerciseSession;
-import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragmentPresenter;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseFragment;
 

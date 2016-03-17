@@ -7,9 +7,9 @@ import org.parceler.Parcels;
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Database.ExerciseSession;
-import peoples.materialfitness.Database.WeightSet;
-import peoples.materialfitness.Database.WeightSetDatabaseInteractor;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 
 /**
  * Created by Alex Sullivan on 2/15/16.

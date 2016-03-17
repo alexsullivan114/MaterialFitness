@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.WorkoutSession;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,14 +7,16 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-import java.util.Date;
 import java.util.List;
 
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
+import peoples.materialfitness.Model.FitnessDatabaseHelper;
+import peoples.materialfitness.Model.FitnessDatabaseUtils;
+import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
 import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -27,7 +29,7 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
     public WorkoutSessionDatabaseInteractor(Context context)
     {
         mContext = context.getApplicationContext();
-        mHelper = new FitnessDatabaseHelper(mContext);
+        mHelper = FitnessDatabaseHelper.getInstance(mContext);;
     }
 
     @Override
@@ -55,9 +57,8 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
                 contentValues.remove(BaseColumns._ID);
             }
 
-            entity.setId(mHelper.getReadableDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
+            entity.setId(mHelper.getDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-            mHelper.getReadableDatabase().close();
             subscriber.onNext(entity.getId());
             subscriber.onCompleted();
         });
@@ -68,9 +69,8 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
     {
         String WHERE_CLAUSE = WorkoutSessionContract._ID + " = ?";
         String[] ARGS = new String[]{String.valueOf(entity.getId())};
-        mHelper.getReadableDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+        mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
                 WHERE_CLAUSE, ARGS);
-        mHelper.getReadableDatabase().close();
     }
 
     public Observable<WorkoutSession> getTodaysWorkoutSession()

@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model.Exercise;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,15 +9,15 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
+import peoples.materialfitness.Model.FitnessDatabaseHelper;
+import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 10/18/2015.
  *
- * Interactor for the {@link peoples.materialfitness.Database.Exercise} object.
+ * Interactor for the {@link Exercise} object.
  * Handled CRUD operations for the exercise object.
  */
 public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exercise>
@@ -28,7 +28,7 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
     public ExerciseDatabaseInteractor(Context context)
     {
         mContext = context.getApplicationContext();
-        mHelper = new FitnessDatabaseHelper(mContext);
+        mHelper = FitnessDatabaseHelper.getInstance(mContext);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
         return Observable.create(subscriber -> {
            if (!subscriber.isUnsubscribed())
            {
-               Cursor cursor = mHelper.getReadableDatabase().query(ExerciseContract.TABLE_NAME,
+               Cursor cursor = mHelper.getDatabase().query(ExerciseContract.TABLE_NAME,
                        null, whereClause, arguments, null, null, null);
 
                while (cursor.moveToNext())
@@ -69,9 +69,8 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
                 contentValues.remove(BaseColumns._ID);
             }
 
-            long updatedId = mHelper.getReadableDatabase().insert(ExerciseContract.TABLE_NAME,
+            long updatedId = mHelper.getDatabase().insert(ExerciseContract.TABLE_NAME,
                     null, contentValues);
-            mHelper.getReadableDatabase().close();
             exercise.setId(updatedId);
             subscriber.onNext(updatedId);
             subscriber.onCompleted();
@@ -85,9 +84,8 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
         String whereClause = ExerciseContract._ID + " = ?";
         String[] arguments = new String[]{String.valueOf(exercise.getId())};
 
-        mHelper.getReadableDatabase().delete(ExerciseContract.TABLE_NAME,
+        mHelper.getDatabase().delete(ExerciseContract.TABLE_NAME,
                 whereClause, arguments);
-        mHelper.getReadableDatabase().close();
     }
 
     /**

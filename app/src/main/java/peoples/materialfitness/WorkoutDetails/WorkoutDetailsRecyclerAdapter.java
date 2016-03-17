@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import peoples.materialfitness.Database.ExerciseSession;
-import peoples.materialfitness.Database.WeightSet;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
 
 /**

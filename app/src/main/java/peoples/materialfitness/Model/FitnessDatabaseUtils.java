@@ -1,4 +1,4 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,13 +16,13 @@ public final class FitnessDatabaseUtils
                                                          final String[] args,
                                                          Context context)
     {
-        FitnessDatabaseHelper helper = new FitnessDatabaseHelper(context.getApplicationContext());
+        FitnessDatabaseHelper helper = FitnessDatabaseHelper.getInstance(context);;
 
         return Observable.create((Observable.OnSubscribe<Cursor>) subscriber ->
         {
             if (!subscriber.isUnsubscribed())
             {
-                Cursor cursor = helper.getReadableDatabase().query(tableName,
+                Cursor cursor = helper.getDatabase().query(tableName,
                         null, whereClause, args, null, null, null);
                 while (cursor.moveToNext())
                 {

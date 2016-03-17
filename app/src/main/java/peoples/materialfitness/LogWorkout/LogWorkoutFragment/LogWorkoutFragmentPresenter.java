@@ -1,6 +1,5 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -11,17 +10,16 @@ import java.util.Date;
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Database.Exercise;
-import peoples.materialfitness.Database.ExerciseDatabaseInteractor;
-import peoples.materialfitness.Database.ExerciseSession;
-import peoples.materialfitness.Database.WorkoutSession;
-import peoples.materialfitness.Database.WorkoutSessionDatabaseInteractor;
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**

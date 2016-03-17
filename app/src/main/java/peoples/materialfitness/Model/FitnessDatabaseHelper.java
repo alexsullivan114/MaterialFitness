@@ -1,16 +1,30 @@
-package peoples.materialfitness.Database;
+package peoples.materialfitness.Model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.MuscleGroup.MuscleGroup;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionJsonDeserializer;
 import peoples.materialfitness.R;
 
 /**
@@ -22,27 +36,73 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "MaterialFitness.db";
+    private static FitnessDatabaseHelper INSTANCE;
+    public static boolean buildDebugDatabase = false;
 
     private Context mContext;
     private SQLiteDatabase mDb;
 
-    public FitnessDatabaseHelper(Context context)
+    public static synchronized FitnessDatabaseHelper getInstance(Context context)
+    {
+        if (INSTANCE == null)
+        {
+            INSTANCE = new FitnessDatabaseHelper(context.getApplicationContext());
+        }
+
+        return INSTANCE;
+    }
+
+    private FitnessDatabaseHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context.getApplicationContext();
     }
+
+    /**
+     * Grab the database connection being used by the database manager.
+     * @return The opened writeable database.
+     */
+    public SQLiteDatabase getDatabase()
+    {
+        if (mDb == null)
+        {
+            mDb = getWritableDatabase();
+        }
+
+        return mDb;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        // Run through and apply all updates that exist.
         mDb = db;
         applyUpdates();
+        if (buildDebugDatabase)
+        {
+            buildDebugDatabase();
+            buildDebugDatabase = false;
+        }
+        // Run through and apply all updates that exist.
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
 
+    }
+
+    public void buildDebugDatabase()
+    {
+        InputStream inputStream = mContext.getResources().openRawResource(R.raw.test_workout_database);
+        JsonReader jsonReader = new JsonReader(new InputStreamReader(inputStream));
+        JsonArray workoutSessionsArray = (JsonArray)new JsonParser().parse(jsonReader);
+        List<WorkoutSession> workoutSessions = new WorkoutSessionJsonDeserializer().deserialize(workoutSessionsArray);
+
+        WorkoutSessionDatabaseInteractor interactor = new WorkoutSessionDatabaseInteractor(mContext);
+        for (WorkoutSession workoutSession : workoutSessions)
+        {
+            interactor.cascadeSave(workoutSession).subscribe();
+        }
     }
 
     private void applyUpdates()

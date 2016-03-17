@@ -6,30 +6,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import peoples.materialfitness.Database.Exercise;
-import peoples.materialfitness.Database.ExerciseSession;
-import peoples.materialfitness.Database.WorkoutSession;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
-import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.View.BaseFragment;
 
 /**
