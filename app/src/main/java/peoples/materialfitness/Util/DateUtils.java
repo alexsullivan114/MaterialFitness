@@ -20,4 +20,42 @@ public class DateUtils
 
         return date.getTime();
     }
+
+    public static boolean isToday(Date date)
+    {
+        return isToday(date.getTime());
+    }
+
+    public static boolean isToday(long millisSinceEpoch)
+    {
+        Calendar today = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(millisSinceEpoch);
+
+        return (today.get(Calendar.ERA) == date.get(Calendar.ERA) &&
+                today.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
+                today.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR));
+    }
+
+    public static long getDatesMidnightTime(long millisSinceEpoch)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millisSinceEpoch);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis();
+    }
+
+    public static long getDatesEndOfDayTime(long millisSinceEpoch)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millisSinceEpoch);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTimeInMillis();
+    }
 }

@@ -119,5 +119,126 @@
         ]
       }
     ]
+  },
+  {
+    "workoutSessionDate": 1458687878097,
+    "exerciseSessions": [
+      {
+        "exercise": {
+          "title": "Shoulder Press",
+          "muscleGroup": "Shoulders"
+        },
+        "weightSets": [
+          {
+            "weight": 0,
+            "reps": 5
+          },
+          {
+            "weight": 40,
+            "reps": 5
+          },
+          {
+            "weight": 50,
+            "reps": 5
+          },
+          {
+            "weight": 60,
+            "reps": 4
+          },
+          {
+            "weight": 70,
+            "reps": 2
+          }
+        ]
+      },
+      {
+        "exercise": {
+          "title": "Leg Raise",
+          "muscleGroup": "Core"
+        },
+        "weightSets": [
+          {
+            "weight": 0,
+            "reps": 15
+          },
+          {
+            "weight": 0,
+            "reps": 15
+          },
+          {
+            "weight": 0,
+            "reps": 15
+          }
+        ]
+      },
+      {
+        "exercise": {
+          "title": "Dumbell Overhead Press",
+          "muscleGroup": "Shoulders"
+        },
+        "weightSets": [
+          {
+            "weight": 30,
+            "reps": 5
+          },
+          {
+            "weight": 40,
+            "reps": 5
+          },
+          {
+            "weight": 50,
+            "reps": 5
+          },
+          {
+            "weight": 55,
+            "reps": 3
+          }
+        ]
+      },
+      {
+        "exercise": {
+          "title": "Decline Crunch",
+          "muscleGroup": "Core"
+        },
+        "weightSets": [
+          {
+            "weight": 25,
+            "reps": 15
+          },
+          {
+            "weight": 25,
+            "reps": 15
+          },
+          {
+            "weight": 25,
+            "reps": 15
+          }
+        ]
+      },
+      {
+        "exercise": {
+          "title": "Side Dip",
+          "muscleGroup": "Core"
+        },
+        "weightSets": [
+          {
+            "weight": 30,
+            "reps": 8
+          },
+          {
+            "weight": 40,
+            "reps": 8
+          },
+          {
+            "weight": 50,
+            "reps": 8
+          },
+          {
+            "weight": 60,
+            "reps": 8
+          }
+        ]
+      }
+    ]
   }
 ]

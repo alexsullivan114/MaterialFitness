@@ -80,8 +80,11 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
 
     public Observable<WorkoutSession> getDatesWorkoutSession(long millisSinceEpoch)
     {
-        String whereClause = WorkoutSessionContract.COLUMN_NAME_DATE + " = ?";
-        String[] arguments = new String[]{String.valueOf(millisSinceEpoch)};
+        long midnightDate = DateUtils.getDatesMidnightTime(millisSinceEpoch);
+        long endOfDayDate = DateUtils.getDatesEndOfDayTime(millisSinceEpoch);
+
+        String whereClause = WorkoutSessionContract.COLUMN_NAME_DATE + " >= ? AND " + WorkoutSessionContract.COLUMN_NAME_DATE + " <= ?";
+        String[] arguments = new String[]{String.valueOf(midnightDate), String.valueOf(endOfDayDate)};
 
         return fetchWithClause(whereClause, arguments);
     }
