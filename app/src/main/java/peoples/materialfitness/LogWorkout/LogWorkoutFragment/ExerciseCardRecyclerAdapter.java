@@ -54,14 +54,19 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         for (WeightSet weightSet : exerciseSession.getSets())
         {
             LayoutInflater inflater = LayoutInflater.from(holder.mCardView.getContext());
-            TextView textView = (TextView)inflater.inflate(R.layout.workout_card_rep, holder.mRepContainer, false);
+            LinearLayout setContainer = (LinearLayout)inflater.inflate(R.layout.workout_card_rep, holder.mRepContainer, false);
 
-            String formattedString = holder.mRepContainer.getContext()
-                    .getResources()
-                    .getString(R.string.reps_at_weight, weightSet.getNumReps(), weightSet.getWeight());
+            TextView repsTextView = (TextView)setContainer.findViewById(R.id.num_reps);
+            TextView weightTextView = (TextView)setContainer.findViewById(R.id.weight);
 
-            textView.setText(formattedString);
-            holder.mRepContainer.addView(textView);
+            String repsString = String.valueOf(weightSet.getNumReps());
+            // TODO: Use our weight units. Should be attached to the rep.
+            String weightString = holder.mCardView.getContext().getResources().getString(R.string.weight_units, weightSet.getWeight(), "lbs");
+
+            repsTextView.setText(repsString);
+            weightTextView.setText(weightString);
+
+            holder.mRepContainer.addView(setContainer);
         }
     }
 
