@@ -4,21 +4,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/activity_vertical_margin"
-    android:orientation="horizontal">
-`
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+    `
+
     <TextView
         android:id="@+id/position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DarkestGray.30"
         android:layout_marginRight="20dp"
-        android:text="1"/>
+        android:text="1"
+        android:textAppearance="@style/TextAppearance.DarkestGray.30"/>
 
     <TextView
-        android:id="@+id/rep_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DarkerGray.25"
-        android:text="5 reps at 125 lbs"/>
+        android:text="@string/reps_set_label"
+        android:textAppearance="@style/TextAppearance.DarkestGray.22"/>
+
+    <TextView
+        android:id="@+id/num_reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="5"
+        android:textAppearance="@style/TextAppearance.DarkerGray.20"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="@string/weight_set_label"
+        android:textAppearance="@style/TextAppearance.DarkestGray.22"/>
+
+    <TextView
+        android:id="@+id/weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="5 lbs"
+        android:textAppearance="@style/TextAppearance.DarkerGray.20"/>
 
 </LinearLayout>
