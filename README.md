@@ -19,3 +19,4 @@ TODO:
 - Add Weight set units (what weight was that rep done in)
 - Add PRs
 - Make the add set dialog not display poorly (i.e. delay before focusing the first text)
+    - Done
