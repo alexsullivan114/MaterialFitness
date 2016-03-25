@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import rx.Observable;
@@ -25,9 +26,9 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
 
-    public ExerciseDatabaseInteractor(Context context)
+    public ExerciseDatabaseInteractor()
     {
-        mContext = context.getApplicationContext();
+        mContext = MaterialFitnessApplication.getApplication();
         mHelper = FitnessDatabaseHelper.getInstance(mContext);
     }
 

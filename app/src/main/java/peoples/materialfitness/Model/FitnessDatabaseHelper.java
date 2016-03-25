@@ -98,7 +98,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
         JsonArray workoutSessionsArray = (JsonArray)new JsonParser().parse(jsonReader);
         List<WorkoutSession> workoutSessions = new WorkoutSessionJsonDeserializer().deserialize(workoutSessionsArray);
 
-        WorkoutSessionDatabaseInteractor interactor = new WorkoutSessionDatabaseInteractor(mContext);
+        WorkoutSessionDatabaseInteractor interactor = new WorkoutSessionDatabaseInteractor();
         for (WorkoutSession workoutSession : workoutSessions)
         {
             interactor.cascadeSave(workoutSession).subscribe();

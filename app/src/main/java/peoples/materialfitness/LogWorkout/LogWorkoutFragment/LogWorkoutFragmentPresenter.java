@@ -61,7 +61,7 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
 
     private void fetchPopulatedWorkoutSession()
     {
-        new WorkoutSessionDatabaseInteractor(MaterialFitnessApplication.getApplication())
+        new WorkoutSessionDatabaseInteractor()
                 .getTodaysWorkoutSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -107,13 +107,13 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
             // Update our UI
             fragmentInterface.updateExerciseCard(exerciseSession);
             // Fire off a save of the exercise. It won't do anything if we already have it.
-            new ExerciseDatabaseInteractor(MaterialFitnessApplication.getApplication()).uniqueSaveExercise(exercise)
+            new ExerciseDatabaseInteractor().uniqueSaveExercise(exercise)
                     .observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
                     .subscribe(id -> {
                         // Make sure our local exercise copy has the right ID.
                         exercise.setId(id);
-                        new WorkoutSessionDatabaseInteractor(MaterialFitnessApplication.getApplication())
+                        new WorkoutSessionDatabaseInteractor()
                                 .cascadeSave(mWorkoutSession)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(Schedulers.io())

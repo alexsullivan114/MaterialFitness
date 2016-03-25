@@ -6,6 +6,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
@@ -20,9 +21,9 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
 
-    public WeightSetDatabaseInteractor(Context context)
+    public WeightSetDatabaseInteractor()
     {
-        mContext = context.getApplicationContext();
+        mContext = MaterialFitnessApplication.getApplication();
         mHelper = FitnessDatabaseHelper.getInstance(mContext);;
     }
 

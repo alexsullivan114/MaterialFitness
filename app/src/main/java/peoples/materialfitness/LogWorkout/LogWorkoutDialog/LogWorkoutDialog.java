@@ -121,7 +121,7 @@ public class LogWorkoutDialog extends MaterialDialog implements
 
     private void setExerciseTitleAdapter()
     {
-        new ExerciseDatabaseInteractor(getContext()).fetchAll().toList().subscribe(values -> {
+        new ExerciseDatabaseInteractor().fetchAll().toList().subscribe(values -> {
             ExerciseTitleAutoCompleteAdapter adapter =
                     new ExerciseTitleAutoCompleteAdapter(mContext, values);
             mExerciseTitleText.setAdapter(adapter);

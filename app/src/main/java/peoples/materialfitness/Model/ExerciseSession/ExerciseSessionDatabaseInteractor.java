@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 
 import java.util.List;
 
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.Exercise.ExerciseContract;
 import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
@@ -28,9 +29,9 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
 
-    public ExerciseSessionDatabaseInteractor(Context context)
+    public ExerciseSessionDatabaseInteractor()
     {
-        mContext = context.getApplicationContext();
+        mContext = MaterialFitnessApplication.getApplication();
         mHelper = FitnessDatabaseHelper.getInstance(mContext);;
     }
 
@@ -54,12 +55,12 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     {
         // First save our exercise if it hasn't been saved...
         // And our exercise if it hasn't been saved...
-        ExerciseDatabaseInteractor exerciseInteracor = new ExerciseDatabaseInteractor(mContext);
+        ExerciseDatabaseInteractor exerciseInteracor = new ExerciseDatabaseInteractor();
         return exerciseInteracor.uniqueSaveExercise(entity.getExercise())
                 .flatMap(exerciseId -> save(entity))
                 .flatMap(id -> {
                     // Now save all of our sets.
-                    WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
+                    WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
                     for (WeightSet set : entity.getSets())
                     {
                         set.setExerciseSessionId(entity.getId());
@@ -76,7 +77,7 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
         // First delete ourselves
         delete(entity);
         // Now delete all of our sets.
-        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor(mContext);
+        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
         for (WeightSet set : entity.getSets())
         {
             interactor.delete(set);
@@ -118,14 +119,14 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
         // Build up our weight sets for this exercise session
         String setWhereClause = WeightSetContract.COLUMN_NAME_EXERCISE_SESSION_ID + " = ?";
         String[] setArguments = new String[]{contentValues.getAsString(ExerciseSessionContract._ID)};
-        Observable<List<WeightSet>> setsObservable = new WeightSetDatabaseInteractor(mContext)
+        Observable<List<WeightSet>> setsObservable = new WeightSetDatabaseInteractor()
                 .fetchWithClause(setWhereClause, setArguments)
                 .toList();
 
         // Build up our Exercise for this exercise session
         String exerciseWhereClause = ExerciseContract._ID + " = ?";
         String[] exerciseArguments = new String[]{contentValues.getAsString(ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID)};
-        Observable<Exercise> exerciseObservable = new ExerciseDatabaseInteractor(mContext)
+        Observable<Exercise> exerciseObservable = new ExerciseDatabaseInteractor()
                 .fetchWithClause(exerciseWhereClause, exerciseArguments);
 
         return Observable.zip(setsObservable, exerciseObservable,

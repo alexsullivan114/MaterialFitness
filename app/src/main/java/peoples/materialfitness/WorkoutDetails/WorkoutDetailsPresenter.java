@@ -50,7 +50,7 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
     {
         WeightSet set = new WeightSet(weight, reps);
         set.setExerciseSessionId(mExerciseSession.getId());
-        new WeightSetDatabaseInteractor(MaterialFitnessApplication.getApplication()).save(set).subscribe();
+        new WeightSetDatabaseInteractor().save(set).subscribe();
         mExerciseSession.addSet(set);
         activityInterface.addSet(set);
         activityInterface.contentUpdated(true);

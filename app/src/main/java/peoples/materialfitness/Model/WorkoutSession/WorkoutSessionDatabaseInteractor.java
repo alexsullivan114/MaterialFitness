@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 
 import java.util.List;
 
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
@@ -26,9 +27,9 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
 
-    public WorkoutSessionDatabaseInteractor(Context context)
+    public WorkoutSessionDatabaseInteractor()
     {
-        mContext = context.getApplicationContext();
+        mContext = MaterialFitnessApplication.getApplication();
         mHelper = FitnessDatabaseHelper.getInstance(mContext);;
     }
 
@@ -96,7 +97,7 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
         return save(entity)
                 .flatMap(id -> {
                     // Now save all of our exercise sessions.
-                    ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor(mContext);
+                    ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor();
                     for (ExerciseSession session : entity.getExercises())
                     {
                         session.setWorkoutSessionId(entity.getId());
@@ -113,7 +114,7 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
         // First delete ourselves
         delete(entity);
         // Now delete all of our exercise sessions.
-        ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor(mContext);
+        ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor();
         for (ExerciseSession session : entity.getExercises())
         {
             interactor.delete(session);
@@ -128,7 +129,7 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
         // Build up our exercises for this exercise session
         String setWhereClause = ExerciseSessionContract.COLUMN_NAME_WORKOUT_SESSION_ID + " = ?";
         String[] setArguments = new String[]{contentValues.getAsString(WorkoutSessionContract._ID)};
-        Observable<List<ExerciseSession>> exerciseObservable = new ExerciseSessionDatabaseInteractor(mContext)
+        Observable<List<ExerciseSession>> exerciseObservable = new ExerciseSessionDatabaseInteractor()
                 .fetchWithClause(setWhereClause, setArguments)
                 .toList();
 
