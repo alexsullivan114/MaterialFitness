@@ -74,14 +74,24 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     @Override
     public void showAddSetDialog()
     {
-        new MaterialDialog.Builder(this)
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title(R.string.add_set)
                 .customView(R.layout.add_rep_dialog, false)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
                 .onPositive(this)
-                .build()
-                .show();
+                .build();
+
+        EditText repEditText = (EditText)dialog.findViewById(R.id.reps);
+        EditText weightEditText = (EditText)dialog.findViewById(R.id.weight);
+
+        repEditText.postDelayed(() -> {
+            repEditText.setFocusableInTouchMode(true);
+            repEditText.requestFocus();
+            weightEditText.setFocusableInTouchMode(true);
+        }, 100);
+
+        dialog.show();
     }
 
     @Override
