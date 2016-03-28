@@ -4,8 +4,9 @@ import android.os.Bundle;
 
 import org.parceler.Parcels;
 
+import java.util.List;
+
 import peoples.materialfitness.Core.BaseActivityPresenter;
-import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
@@ -43,7 +44,19 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
 
     public void fabClicked()
     {
-        activityInterface.showAddSetDialog();
+        String repsText = "";
+        String weightText = "";
+
+        List<WeightSet> addedSets = mExerciseSession.getSets();
+
+        if (addedSets.size() >= 1)
+        {
+            WeightSet lastWeightSet = addedSets.get(addedSets.size() - 1);
+            repsText = String.valueOf(lastWeightSet.getNumReps());
+            weightText = String.valueOf(lastWeightSet.getWeight());
+        }
+
+        activityInterface.showAddSetDialog(repsText, weightText);
     }
 
     public void addSet(int reps, int weight)

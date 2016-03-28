@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -17,8 +18,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragmentPresenter;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
 
@@ -72,7 +73,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     }
 
     @Override
-    public void showAddSetDialog()
+    public void showAddSetDialog(String repsText, String weightText)
     {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title(R.string.add_set)
@@ -85,11 +86,11 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
         EditText repEditText = (EditText)dialog.findViewById(R.id.reps);
         EditText weightEditText = (EditText)dialog.findViewById(R.id.weight);
 
-        repEditText.postDelayed(() -> {
-            repEditText.setFocusableInTouchMode(true);
-            repEditText.requestFocus();
-            weightEditText.setFocusableInTouchMode(true);
-        }, 100);
+        repEditText.append(repsText);
+        weightEditText.append(weightText);
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
 
         dialog.show();
     }

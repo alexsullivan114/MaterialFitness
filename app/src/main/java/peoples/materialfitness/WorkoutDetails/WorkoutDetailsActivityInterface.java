@@ -9,7 +9,7 @@ import peoples.materialfitness.View.BaseActivityInterface;
 public interface WorkoutDetailsActivityInterface extends BaseActivityInterface
 {
     void setTitle(String title);
-    void showAddSetDialog();
+    void showAddSetDialog(String repsText, String weightText);
     void addSet(WeightSet set);
     void contentUpdated(boolean didUpdate);
 }
