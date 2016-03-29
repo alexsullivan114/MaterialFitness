@@ -1,15 +1,20 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
@@ -22,6 +27,8 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 {
     private WorkoutSession mWorkoutSession;
     private ExerciseCardAdapterInterface mCallback;
+
+    private static final int NUM_DISPLAY_SETS = 4;
 
     public ExerciseCardRecyclerAdapter(WorkoutSession workoutSession,
                                        ExerciseCardAdapterInterface callback)
@@ -36,7 +43,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         CardView cardView = (CardView)inflater.inflate(R.layout.fragment_workout_card, parent, false);
 
-        ExerciseCardViewHolder viewHolder = new ExerciseCardViewHolder(cardView, mCallback);
+        ExerciseCardViewHolder viewHolder = new ExerciseCardViewHolder(cardView);
 
         return viewHolder;
     }
@@ -47,26 +54,14 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(position);
 
         holder.mTitleView.setText(exerciseSession.getExercise().getTitle());
-        holder.setExerciseSession(exerciseSession);
         // Clear our any old views.
         holder.mRepContainer.removeAllViews();
         // Now loop through our weights and add each one to our container.
-        for (WeightSet weightSet : exerciseSession.getSets())
+        for (int i = 0; i < exerciseSession.getSets().size(); i++)
         {
-            LayoutInflater inflater = LayoutInflater.from(holder.mCardView.getContext());
-            LinearLayout setContainer = (LinearLayout)inflater.inflate(R.layout.workout_card_rep, holder.mRepContainer, false);
-
-            TextView repsTextView = (TextView)setContainer.findViewById(R.id.num_reps);
-            TextView weightTextView = (TextView)setContainer.findViewById(R.id.weight);
-
-            String repsString = String.valueOf(weightSet.getNumReps());
-            // TODO: Use our weight units. Should be attached to the rep.
-            String weightString = holder.mCardView.getContext().getResources().getString(R.string.weight_units, weightSet.getWeight(), "lbs");
-
-            repsTextView.setText(repsString);
-            weightTextView.setText(weightString);
-
-            holder.mRepContainer.addView(setContainer);
+            WeightSet weightSet = exerciseSession.getSets().get(i);
+            int visibility = i <= NUM_DISPLAY_SETS ? View.VISIBLE : View.GONE;
+            addWeightSetViewToHolder(holder, weightSet, visibility);
         }
     }
 
@@ -86,36 +81,120 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         notifyItemInserted(mWorkoutSession.getExercises().size() - 1);
     }
 
-    protected static class ExerciseCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    private void addWeightSetViewToHolder(ExerciseCardViewHolder holder, WeightSet weightSet, int visibility)
+    {
+        LayoutInflater inflater = LayoutInflater.from(holder.mCardView.getContext());
+        LinearLayout setContainer = (LinearLayout)inflater.inflate(R.layout.workout_card_rep, holder.mRepContainer, false);
+
+        TextView repsTextView = (TextView)setContainer.findViewById(R.id.num_reps);
+        TextView weightTextView = (TextView)setContainer.findViewById(R.id.weight);
+
+        String repsString = String.valueOf(weightSet.getNumReps());
+        // TODO: Use our weight units. Should be attached to the rep.
+        String weightString = holder.mCardView.getContext().getResources().getString(R.string.weight_units, weightSet.getWeight(), "lbs");
+
+        repsTextView.setText(repsString);
+        weightTextView.setText(weightString);
+
+        setContainer.setVisibility(visibility);
+
+        holder.mRepContainer.addView(setContainer);
+    }
+
+    protected class ExerciseCardViewHolder extends RecyclerView.ViewHolder
     {
         CardView mCardView;
-        ExerciseCardAdapterInterface mCallback;
-        ExerciseSession mExerciseSession;
+
         @Bind(R.id.exercise_title) TextView mTitleView;
         @Bind(R.id.rep_container) LinearLayout mRepContainer;
+        @Bind(R.id.dropdown_layout) FrameLayout dropDownLayout;
+        @Bind(R.id.dropdown_divider) View divider;
+        @Bind(R.id.dropdown_indicator) ImageView dividerView;
 
-        public ExerciseCardViewHolder(CardView cardView, ExerciseCardAdapterInterface callback)
+        boolean isDropdownToggled = false;
+
+        public ExerciseCardViewHolder(CardView cardView)
         {
             super(cardView);
 
             mCardView = cardView;
-            mCallback = callback;
 
             ButterKnife.bind(this, cardView);
-
-            cardView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v)
+        @OnClick(R.id.card_view)
+        public void onCardClicked(View v)
         {
-            mCallback.onExerciseClicked(mExerciseSession);
+            ExerciseCardRecyclerAdapter.this.onCardClicked(this);
         }
 
-        public void setExerciseSession(ExerciseSession exerciseSession)
+        @OnClick(R.id.dropdown_layout)
+        public void onDropDownClicked(View v)
         {
-            mExerciseSession = exerciseSession;
+            ExerciseCardRecyclerAdapter.this.onDropdownClicked(this);
         }
+    }
+
+    private void onDropdownClicked(ExerciseCardViewHolder viewHolder)
+    {
+        boolean isDropdownToggled = viewHolder.isDropdownToggled;
+
+        if (isDropdownToggled)
+        {
+            removeWeightSets(viewHolder);
+        }
+        else
+        {
+            addWeightSets(viewHolder);
+        }
+
+        animateDividerView(isDropdownToggled, viewHolder.dividerView);
+
+        viewHolder.isDropdownToggled = !viewHolder.isDropdownToggled;
+    }
+
+    private void addWeightSets(ExerciseCardViewHolder viewHolder)
+    {
+        ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
+
+        for (int i = NUM_DISPLAY_SETS; i < exerciseSession.getSets().size(); i++)
+        {
+            View v = viewHolder.mRepContainer.getChildAt(i);
+            v.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void removeWeightSets(ExerciseCardViewHolder viewHolder)
+    {
+        ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
+        LinearLayout repsContainer = viewHolder.mRepContainer;
+
+        for (int i = exerciseSession.getSets().size() - 1; i > NUM_DISPLAY_SETS; i--)
+        {
+            View v = repsContainer.getChildAt(i);
+            v.setVisibility(View.GONE);
+        }
+    }
+
+    private void animateDividerView(boolean isDropdownToggled, ImageView dividerView)
+    {
+
+        int pivotX = dividerView.getWidth()/2;
+        int pivotY = dividerView.getHeight()/2;
+        int startDegrees = isDropdownToggled ? 180 : 0;
+        int endDegrees = isDropdownToggled ? 360 : 180;
+
+        RotateAnimation rotateAnimation = new RotateAnimation(startDegrees, endDegrees, pivotX, pivotY);
+        rotateAnimation.setInterpolator(new FastOutSlowInInterpolator());
+        rotateAnimation.setDuration(500);
+        rotateAnimation.setFillAfter(true);
+        dividerView.startAnimation(rotateAnimation);
+    }
+
+    private void onCardClicked(ExerciseCardViewHolder viewHolder)
+    {
+        ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
+        mCallback.onExerciseClicked(exerciseSession);
     }
 
     /**
