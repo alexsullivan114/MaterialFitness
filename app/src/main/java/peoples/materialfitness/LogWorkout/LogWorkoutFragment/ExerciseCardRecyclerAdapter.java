@@ -31,7 +31,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     private ExerciseCardAdapterInterface mCallback;
     private static final int EXPAND_ANIMATION_DURATION = 600;
 
-    private static final int NUM_DISPLAY_SETS = 4;
+    private static final int NUM_DISPLAY_SETS = 5;
 
     public ExerciseCardRecyclerAdapter(WorkoutSession workoutSession,
                                        ExerciseCardAdapterInterface callback)
@@ -63,8 +63,18 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         for (int i = 0; i < exerciseSession.getSets().size(); i++)
         {
             WeightSet weightSet = exerciseSession.getSets().get(i);
-            int visibility = i <= NUM_DISPLAY_SETS ? View.VISIBLE : View.GONE;
-            addWeightSetViewToHolder(holder, weightSet, visibility);
+            addWeightSetViewToHolder(holder, weightSet);
+            // Lets only do this once for performance.
+            // +1 for zero indexing offset.
+            if (i+1 == NUM_DISPLAY_SETS)
+            {
+                LinearLayout repContainer = holder.mRepContainer;
+                repContainer.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                // Lock our view at a certain height.
+                ViewGroup.LayoutParams oldParams = repContainer.getLayoutParams();
+                oldParams.height = repContainer.getMeasuredHeight();
+                repContainer.setLayoutParams(oldParams);
+            }
         }
     }
 
@@ -84,7 +94,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         notifyItemInserted(mWorkoutSession.getExercises().size() - 1);
     }
 
-    private void addWeightSetViewToHolder(ExerciseCardViewHolder holder, WeightSet weightSet, int visibility)
+    private void addWeightSetViewToHolder(ExerciseCardViewHolder holder, WeightSet weightSet)
     {
         LayoutInflater inflater = LayoutInflater.from(holder.mCardView.getContext());
         LinearLayout setContainer = (LinearLayout)inflater.inflate(R.layout.workout_card_rep, holder.mRepContainer, false);
@@ -98,8 +108,6 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
         repsTextView.setText(repsString);
         weightTextView.setText(weightString);
-
-        setContainer.setVisibility(visibility);
 
         holder.mRepContainer.addView(setContainer);
     }
@@ -158,15 +166,17 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
         int spilloverSetsNum = exerciseSession.getSets().size() - NUM_DISPLAY_SETS;
         // Note: We know we have at least NUM_DISPLAY_SETS children here, which is why this is safe.
-        int heightOfSetsToAdd = viewHolder.mRepContainer.getChildAt(0).getHeight() * spilloverSetsNum;
-        int heightOfContainer = viewHolder.mCardView.getHeight();
+        View firstChild = viewHolder.mRepContainer.getChildAt(0);
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)firstChild.getLayoutParams();
+        int totalheight = firstChild.getHeight() + layoutParams.bottomMargin + layoutParams.topMargin + firstChild.getPaddingBottom();
+        int heightOfSetsToAdd = totalheight * spilloverSetsNum;
+        int heightOfContainer = viewHolder.mRepContainer.getHeight();
 
-        ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(viewHolder.dropDownLayout, "translationY", heightOfSetsToAdd);
         ObjectAnimator rotationAnimator = ObjectAnimator.ofFloat(viewHolder.dividerView, "rotation", 0f, 180f);
-        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.mCardView, heightOfContainer + heightOfSetsToAdd);
+        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.mRepContainer, heightOfContainer + heightOfSetsToAdd);
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(heightAnimator, translationAnimator, rotationAnimator);
+        animatorSet.playTogether(heightAnimator, rotationAnimator);
         animatorSet.setDuration(EXPAND_ANIMATION_DURATION);
         animatorSet.setInterpolator(new FastOutSlowInInterpolator());
         animatorSet.start();
@@ -177,16 +187,18 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
         int spilloverSetsNum = exerciseSession.getSets().size() - NUM_DISPLAY_SETS;
         // Note: We know we have at least NUM_DISPLAY_SETS children here, which is why this is safe.
-        int heightOfSetsToRemove = viewHolder.mRepContainer.getChildAt(0).getHeight() * spilloverSetsNum;
-        int heightOfContainer = viewHolder.mCardView.getHeight();
+        View firstChild = viewHolder.mRepContainer.getChildAt(0);
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)firstChild.getLayoutParams();
+        int totalheight = firstChild.getHeight() + layoutParams.bottomMargin + layoutParams.topMargin + firstChild.getPaddingBottom();
+        int heightOfSetsToRemove = totalheight * spilloverSetsNum;
+        int heightOfContainer = viewHolder.mRepContainer.getHeight();
         int desiredHeight = heightOfContainer - heightOfSetsToRemove;
 
-        ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(viewHolder.dropDownLayout, "translationY", 0);
         ObjectAnimator rotationAnimator = ObjectAnimator.ofFloat(viewHolder.dividerView, "rotation", 180f, 360f);
-        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.mCardView, desiredHeight);
+        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.mRepContainer, desiredHeight);
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(heightAnimator, translationAnimator, rotationAnimator);
+        animatorSet.playTogether(heightAnimator, rotationAnimator);
         animatorSet.setDuration(EXPAND_ANIMATION_DURATION);
         animatorSet.setInterpolator(new FastOutSlowInInterpolator());
         animatorSet.start();
