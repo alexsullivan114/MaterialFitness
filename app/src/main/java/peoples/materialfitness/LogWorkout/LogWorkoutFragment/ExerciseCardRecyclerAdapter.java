@@ -1,5 +1,7 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.HeightAnimator;
 
 /**
  * Created by Alex Sullivan on 1/24/16.
@@ -27,6 +29,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 {
     private WorkoutSession mWorkoutSession;
     private ExerciseCardAdapterInterface mCallback;
+    private static final int EXPAND_ANIMATION_DURATION = 600;
 
     private static final int NUM_DISPLAY_SETS = 4;
 
@@ -107,8 +110,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
         @Bind(R.id.exercise_title) TextView mTitleView;
         @Bind(R.id.rep_container) LinearLayout mRepContainer;
-        @Bind(R.id.dropdown_layout) FrameLayout dropDownLayout;
-        @Bind(R.id.dropdown_divider) View divider;
+        @Bind(R.id.dropdown_layout) LinearLayout dropDownLayout;
         @Bind(R.id.dropdown_indicator) ImageView dividerView;
 
         boolean isDropdownToggled = false;
@@ -148,32 +150,46 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
             addWeightSets(viewHolder);
         }
 
-        animateDividerView(isDropdownToggled, viewHolder.dividerView);
-
         viewHolder.isDropdownToggled = !viewHolder.isDropdownToggled;
     }
 
     private void addWeightSets(ExerciseCardViewHolder viewHolder)
     {
         ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
+        int spilloverSetsNum = exerciseSession.getSets().size() - NUM_DISPLAY_SETS;
+        // Note: We know we have at least NUM_DISPLAY_SETS children here, which is why this is safe.
+        int heightOfSetsToAdd = viewHolder.mRepContainer.getChildAt(0).getHeight() * spilloverSetsNum;
+        int heightOfContainer = viewHolder.mCardView.getHeight();
 
-        for (int i = NUM_DISPLAY_SETS; i < exerciseSession.getSets().size(); i++)
-        {
-            View v = viewHolder.mRepContainer.getChildAt(i);
-            v.setVisibility(View.VISIBLE);
-        }
+        ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(viewHolder.dropDownLayout, "translationY", heightOfSetsToAdd);
+        ObjectAnimator rotationAnimator = ObjectAnimator.ofFloat(viewHolder.dividerView, "rotation", 0f, 180f);
+        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.mCardView, heightOfContainer + heightOfSetsToAdd);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(heightAnimator, translationAnimator, rotationAnimator);
+        animatorSet.setDuration(EXPAND_ANIMATION_DURATION);
+        animatorSet.setInterpolator(new FastOutSlowInInterpolator());
+        animatorSet.start();
     }
 
     private void removeWeightSets(ExerciseCardViewHolder viewHolder)
     {
         ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
-        LinearLayout repsContainer = viewHolder.mRepContainer;
+        int spilloverSetsNum = exerciseSession.getSets().size() - NUM_DISPLAY_SETS;
+        // Note: We know we have at least NUM_DISPLAY_SETS children here, which is why this is safe.
+        int heightOfSetsToRemove = viewHolder.mRepContainer.getChildAt(0).getHeight() * spilloverSetsNum;
+        int heightOfContainer = viewHolder.mCardView.getHeight();
+        int desiredHeight = heightOfContainer - heightOfSetsToRemove;
 
-        for (int i = exerciseSession.getSets().size() - 1; i > NUM_DISPLAY_SETS; i--)
-        {
-            View v = repsContainer.getChildAt(i);
-            v.setVisibility(View.GONE);
-        }
+        ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(viewHolder.dropDownLayout, "translationY", 0);
+        ObjectAnimator rotationAnimator = ObjectAnimator.ofFloat(viewHolder.dividerView, "rotation", 180f, 360f);
+        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.mCardView, desiredHeight);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(heightAnimator, translationAnimator, rotationAnimator);
+        animatorSet.setDuration(EXPAND_ANIMATION_DURATION);
+        animatorSet.setInterpolator(new FastOutSlowInInterpolator());
+        animatorSet.start();
     }
 
     private void animateDividerView(boolean isDropdownToggled, ImageView dividerView)
