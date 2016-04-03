@@ -23,3 +23,5 @@ TODO:
     - Done
 - Make the add set dialog not display poorly (i.e. delay before focusing the first text)
     - Done
+- Make the recyclerview scroll to the newly added item when you add a set.
+    - Done

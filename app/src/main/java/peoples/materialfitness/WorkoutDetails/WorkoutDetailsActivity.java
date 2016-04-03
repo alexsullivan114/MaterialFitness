@@ -98,7 +98,9 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     @Override
     public void addSet(WeightSet set)
     {
-        recyclerView.getAdapter().notifyItemInserted(presenter.mExerciseSession.getSets().size() - 1);
+        int updatedItemPosition = presenter.mExerciseSession.getSets().size() - 1;
+        recyclerView.getAdapter().notifyItemInserted(updatedItemPosition);
+        recyclerView.getLayoutManager().scrollToPosition(updatedItemPosition);
     }
 
     @Override
