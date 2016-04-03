@@ -14,6 +14,7 @@ TODO:
     - Done
 - Add frame popup to edit current exercise stuff.
 - Add drop down for exercises that have too many sets
+    - Done :)
 - Add animation when clicking into an exercise
 - Add chart stuff for exercise page
 - Add Weight set units (what weight was that rep done in)
