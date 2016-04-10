@@ -11,7 +11,10 @@ import java.util.List;
 
 import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
+import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
@@ -21,41 +24,22 @@ import rx.schedulers.Schedulers;
  * Interactor for the {@link Exercise} object.
  * Handled CRUD operations for the exercise object.
  */
-public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exercise>
+public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise>
 {
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
 
     public ExerciseDatabaseInteractor()
     {
+        super();
         mContext = MaterialFitnessApplication.getApplication();
         mHelper = FitnessDatabaseHelper.getInstance(mContext);
     }
 
     @Override
-    public Observable<Exercise> fetchAll()
-    {
-        return fetchWithClause(null, null);
-    }
-
-    @Override
     public Observable<Exercise> fetchWithClause(String whereClause, String[] arguments)
     {
-        return Observable.create(subscriber -> {
-           if (!subscriber.isUnsubscribed())
-           {
-               Cursor cursor = mHelper.getDatabase().query(ExerciseContract.TABLE_NAME,
-                       null, whereClause, arguments, null, null, null);
-
-               while (cursor.moveToNext())
-               {
-                   Exercise exercise = getExerciseFromCursor(cursor);
-                   subscriber.onNext(exercise);
-               }
-
-               subscriber.onCompleted();
-           }
-        });
+        return fetchWithArguments(whereClause, arguments, null, null, null, null, null);
     }
 
     @Override
@@ -124,19 +108,21 @@ public class ExerciseDatabaseInteractor implements ModelDatabaseInteractor<Exerc
     @Override
     public void cascadeDelete(Exercise entity)
     {
-        // no-op
+        delete(entity);
     }
 
-    private List<Exercise> getExercisesFromCursor(Cursor cursor)
+    @Override
+    public Observable<Exercise> fetchWithArguments(final String whereClause,
+                                                         final String[] args,
+                                                         final String groupBy,
+                                                         final String[] columns,
+                                                         final String having,
+                                                         final String orderBy,
+                                                         final String limit)
     {
-        ArrayList<Exercise> exercises = new ArrayList<>();
-
-        while (cursor.moveToNext())
-        {
-            exercises.add(getExerciseFromCursor(cursor));
-        }
-
-        return exercises;
+        return FitnessDatabaseUtils.getCursorObservable(ExerciseContract.TABLE_NAME,
+                whereClause, args, groupBy, columns, having, orderBy, limit, mContext)
+                .map(this::getExerciseFromCursor);
     }
 
     private Exercise getExerciseFromCursor(Cursor cursor)

@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -65,6 +66,8 @@ public class LogWorkoutDialog extends MaterialDialog implements
             mExerciseTitleText.setFocusableInTouchMode(true);
             mExerciseTitleText.requestFocus();
         }, 100);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     private void assignDialogViews()

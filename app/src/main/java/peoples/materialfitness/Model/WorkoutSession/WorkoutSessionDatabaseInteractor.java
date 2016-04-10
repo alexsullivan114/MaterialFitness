@@ -22,7 +22,7 @@ import rx.Observable;
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
-public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor<WorkoutSession>
+public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<WorkoutSession>
 {
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
@@ -31,20 +31,6 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
     {
         mContext = MaterialFitnessApplication.getApplication();
         mHelper = FitnessDatabaseHelper.getInstance(mContext);;
-    }
-
-    @Override
-    public Observable<WorkoutSession> fetchAll()
-    {
-        return fetchWithClause(null, null);
-    }
-
-    @Override
-    public Observable<WorkoutSession> fetchWithClause(String whereClause, String[] arguments)
-    {
-        return FitnessDatabaseUtils.getCursorObservable(WorkoutSessionContract.TABLE_NAME,
-                whereClause, arguments, mContext)
-                .flatMap(this::getWorkoutSessionFromCursor);
     }
 
     @Override
@@ -88,6 +74,20 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
         String[] arguments = new String[]{String.valueOf(midnightDate), String.valueOf(endOfDayDate)};
 
         return fetchWithClause(whereClause, arguments);
+    }
+
+    @Override
+    public Observable<WorkoutSession> fetchWithArguments(final String whereClause,
+                                                         final String[] args,
+                                                         final String groupBy,
+                                                         final String[] columns,
+                                                         final String having,
+                                                         final String orderBy,
+                                                         final String limit)
+    {
+        return FitnessDatabaseUtils.getCursorObservable(WorkoutSessionContract.TABLE_NAME,
+                whereClause, args, groupBy, columns, having, orderBy, limit, mContext)
+                .flatMap(this::getWorkoutSessionFromCursor);
     }
 
     @Override
@@ -135,5 +135,12 @@ public class WorkoutSessionDatabaseInteractor implements ModelDatabaseInteractor
 
         return exerciseObservable
                 .map(exerciseSessions -> WorkoutSession.getWorkoutSession(contentValues, exerciseSessions));
+    }
+
+    public Observable<WorkoutSession> getWorkoutSessionsByDate(Ordering ordering, int limit)
+    {
+        String orderingString = WorkoutSessionContract.COLUMN_NAME_DATE + " " + ordering.toString();
+        String limitString = limit == 0 ? null : String.valueOf(limit);
+        return fetchWithArguments(null, null, null, null, null, orderingString, limitString);
     }
 }

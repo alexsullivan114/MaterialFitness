@@ -24,7 +24,7 @@ import rx.Observable;
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
-public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteractor<ExerciseSession>
+public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<ExerciseSession>
 {
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
@@ -36,17 +36,16 @@ public class ExerciseSessionDatabaseInteractor implements ModelDatabaseInteracto
     }
 
     @Override
-    public Observable<ExerciseSession> fetchAll()
+    public Observable<ExerciseSession> fetchWithArguments(final String whereClause,
+                                                   final String[] args,
+                                                   final String groupBy,
+                                                   final String[] columns,
+                                                   final String having,
+                                                   final String orderBy,
+                                                   final String limit)
     {
-        return fetchWithClause(null, null);
-    }
-
-    @Override
-    public Observable<ExerciseSession> fetchWithClause(String whereClause, String[] arguments)
-    {
-
         return FitnessDatabaseUtils.getCursorObservable(ExerciseSessionContract.TABLE_NAME,
-                whereClause, arguments, mContext)
+                whereClause, args, groupBy, columns, having, orderBy, limit, mContext)
                 .flatMap(this::getExerciseSessionFromCursor);
     }
 

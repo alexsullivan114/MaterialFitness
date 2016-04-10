@@ -107,12 +107,6 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onFabClicked(FloatingActionButton fab)
     {
         presenter.onFabClicked();
@@ -158,5 +152,11 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     public void onExerciseClicked(ExerciseSession session)
     {
         presenter.onExerciseClicked(session);
+    }
+
+    @Override
+    public void startWorkoutDetailsActivity(Intent startingIntent, int workoutDetailsRequestCode)
+    {
+        startActivityForResult(startingIntent, workoutDetailsRequestCode);
     }
 }

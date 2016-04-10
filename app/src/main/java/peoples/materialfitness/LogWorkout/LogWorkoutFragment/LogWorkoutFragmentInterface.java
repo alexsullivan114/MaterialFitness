@@ -1,5 +1,7 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
+import android.content.Intent;
+
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.View.BaseFragmentInterface;
@@ -12,4 +14,5 @@ public interface LogWorkoutFragmentInterface extends BaseFragmentInterface
     void showAddWorkoutDialog();
     void updateExerciseCard(ExerciseSession exerciseSession);
     void updateWorkoutList(WorkoutSession workoutSession);
+    void startWorkoutDetailsActivity(Intent startingIntent, int requestCode);
 }

@@ -56,7 +56,7 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
     {
         Intent intent = new Intent(attachedFragment.getActivity(), WorkoutDetailsActivity.class);
         intent.putExtra(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(session));
-        attachedFragment.startActivityForResult(intent, WORKOUT_DETAILS_REQUEST_CODE);
+        fragmentInterface.startWorkoutDetailsActivity(intent, WORKOUT_DETAILS_REQUEST_CODE);
     }
 
     private void fetchPopulatedWorkoutSession()

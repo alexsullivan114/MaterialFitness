@@ -14,6 +14,11 @@ public final class FitnessDatabaseUtils
     public static Observable<Cursor> getCursorObservable(final String tableName,
                                                          final String whereClause,
                                                          final String[] args,
+                                                         final String groupBy,
+                                                         final String[] columns,
+                                                         final String having,
+                                                         final String orderBy,
+                                                         final String limit,
                                                          Context context)
     {
         FitnessDatabaseHelper helper = FitnessDatabaseHelper.getInstance(context);;
@@ -23,7 +28,7 @@ public final class FitnessDatabaseUtils
             if (!subscriber.isUnsubscribed())
             {
                 Cursor cursor = helper.getDatabase().query(tableName,
-                        null, whereClause, args, null, null, null);
+                        columns, whereClause, args, groupBy, having, orderBy, limit);
                 while (cursor.moveToNext())
                 {
                     subscriber.onNext(cursor);

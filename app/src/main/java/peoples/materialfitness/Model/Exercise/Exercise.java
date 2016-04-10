@@ -90,4 +90,25 @@ public class Exercise
 
         return exercise;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Exercise exercise = (Exercise) o;
+
+        if (!title.equals(exercise.title)) return false;
+        return muscleGroup == exercise.muscleGroup;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = title.hashCode();
+        result = 31 * result + muscleGroup.hashCode();
+        return result;
+    }
 }

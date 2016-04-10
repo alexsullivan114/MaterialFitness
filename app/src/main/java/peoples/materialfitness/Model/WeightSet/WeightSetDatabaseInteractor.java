@@ -16,7 +16,7 @@ import rx.Observable;
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
-public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<WeightSet>
+public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightSet>
 {
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
@@ -31,20 +31,6 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     public Observable<WeightSet> fetchAll()
     {
         return fetchWithClause(null, null);
-    }
-
-    @Override
-    public Observable<WeightSet> fetchWithClause(String whereClause, String[] arguments)
-    {
-        return FitnessDatabaseUtils.getCursorObservable(WeightSetContract.TABLE_NAME,
-                whereClause, arguments, mContext)
-                .map(cursor -> {
-                    ContentValues contentValues = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
-
-                    return WeightSet.getWeightSet(contentValues);
-                });
-
     }
 
     @Override
@@ -85,5 +71,24 @@ public class WeightSetDatabaseInteractor implements ModelDatabaseInteractor<Weig
     public void cascadeDelete(WeightSet entity)
     {
         // no-op
+    }
+
+    @Override
+    public Observable<WeightSet> fetchWithArguments(final String whereClause,
+                                                    final String[] args,
+                                                    final String groupBy,
+                                                    final String[] columns,
+                                                    final String having,
+                                                    final String orderBy,
+                                                    final String limit)
+    {
+        return FitnessDatabaseUtils.getCursorObservable(WeightSetContract.TABLE_NAME,
+                whereClause, args, groupBy, columns, having, orderBy, limit, mContext)
+                .map(cursor -> {
+                    ContentValues contentValues = new ContentValues();
+                    DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
+
+                    return WeightSet.getWeightSet(contentValues);
+                });
     }
 }

@@ -25,3 +25,6 @@ TODO:
     - Done
 - Make the recyclerview scroll to the newly added item when you add a set.
     - Done
+- Make the workout details view remember a previous weight from a previous session
+    - Done
+- Make the number for the set a standard width so it doesn't look off when you have 2 numbers

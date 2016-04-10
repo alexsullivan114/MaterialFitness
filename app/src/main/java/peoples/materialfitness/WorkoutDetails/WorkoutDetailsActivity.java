@@ -73,7 +73,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     }
 
     @Override
-    public void showAddSetDialog(String repsText, String weightText)
+    public void showAddSetDialog(int reps, int weight)
     {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title(R.string.add_set)
@@ -86,11 +86,10 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
         EditText repEditText = (EditText)dialog.findViewById(R.id.reps);
         EditText weightEditText = (EditText)dialog.findViewById(R.id.weight);
 
-        repEditText.append(repsText);
-        weightEditText.append(weightText);
+        repEditText.append(String.valueOf(reps));
+        weightEditText.append(String.valueOf(weight));
 
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
 
         dialog.show();
     }
@@ -98,9 +97,17 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     @Override
     public void addSet(WeightSet set)
     {
+        // Add our item.
         int updatedItemPosition = presenter.mExerciseSession.getSets().size() - 1;
         recyclerView.getAdapter().notifyItemInserted(updatedItemPosition);
-        recyclerView.getLayoutManager().scrollToPosition(updatedItemPosition);
+        // Check to see if we should scroll to our item
+        LinearLayoutManager layoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
+        boolean isVisible = updatedItemPosition > layoutManager.findFirstCompletelyVisibleItemPosition()
+                && updatedItemPosition < layoutManager.findLastCompletelyVisibleItemPosition();
+        if (!isVisible)
+        {
+            layoutManager.scrollToPosition(updatedItemPosition);
+        }
     }
 
     @Override

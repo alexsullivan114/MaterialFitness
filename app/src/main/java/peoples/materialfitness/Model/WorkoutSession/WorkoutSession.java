@@ -23,8 +23,6 @@ import peoples.materialfitness.Model.MuscleGroup.MuscleGroup;
  *
  * Also I think I'm going a little crazy with the links...but I like them!
  *
- *  * Note: We use Serialization.BEAN because we want the ID of the sugar record object, but we
- * only want to analyze this class for parceling since there's other stuff we dont want.
  */
 @Parcel(value = Parcel.Serialization.BEAN)
 public class WorkoutSession
