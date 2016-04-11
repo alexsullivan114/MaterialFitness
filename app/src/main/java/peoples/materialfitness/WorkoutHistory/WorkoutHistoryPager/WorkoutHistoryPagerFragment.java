@@ -17,6 +17,7 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
+import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
 
 /**
@@ -51,6 +52,26 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
         ButterKnife.bind(this, v);
 
         pager.setAdapter(new WorkoutHistoryPagerAdapter(getFragmentManager(), presenter.getWorkoutSessions()));
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                presenter.pageChanged(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+
+            }
+        });
 
         v.post(this::onViewVisible);
 
@@ -76,5 +97,11 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
         {
             pager.setAdapter(new WorkoutHistoryPagerAdapter(getFragmentManager(), workoutSessions));
         }
+    }
+
+    @Override
+    public void setTitle(String title)
+    {
+        ((BaseActivity)getActivity()).getSupportActionBar().setTitle(title);
     }
 }

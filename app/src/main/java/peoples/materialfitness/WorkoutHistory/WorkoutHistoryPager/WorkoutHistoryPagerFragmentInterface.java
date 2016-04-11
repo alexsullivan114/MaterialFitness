@@ -11,4 +11,5 @@ import peoples.materialfitness.View.BaseFragmentInterface;
 public interface WorkoutHistoryPagerFragmentInterface extends BaseFragmentInterface
 {
     void setWorkoutSessions(List<WorkoutSession> workoutSessions);
+    void setTitle(String title);
 }

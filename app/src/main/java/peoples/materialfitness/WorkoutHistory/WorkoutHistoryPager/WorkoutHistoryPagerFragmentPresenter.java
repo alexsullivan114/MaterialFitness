@@ -9,6 +9,7 @@ import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
+import peoples.materialfitness.Util.DateUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -27,9 +28,11 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
+                .filter(workoutSessionList -> workoutSessionList.size() > 0)
                 .subscribe(workoutSessions -> {
                     WorkoutHistoryPagerFragmentPresenter.this.workoutSessions = workoutSessions;
                     fragmentInterface.setWorkoutSessions(workoutSessions);
+                    fragmentInterface.setTitle(getWorkoutSessionDateString(workoutSessions.get(0)));
                 });
 
     }
@@ -46,5 +49,18 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
     public List<WorkoutSession> getWorkoutSessions()
     {
         return workoutSessions;
+    }
+
+    public void pageChanged(int newPagePosition)
+    {
+        WorkoutSession newWorkoutSession = workoutSessions.get(newPagePosition);
+        String dateString = getWorkoutSessionDateString(newWorkoutSession);
+        fragmentInterface.setTitle(dateString);
+    }
+
+    private String getWorkoutSessionDateString(WorkoutSession workoutSession)
+    {
+        String dateString = DateUtils.getShortDateDisplaySTring(workoutSession.getWorkoutSessionDate());
+        return dateString;
     }
 }

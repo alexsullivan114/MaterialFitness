@@ -14,6 +14,8 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
+import peoples.materialfitness.R;
+import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionFragment;
 
 /**
@@ -68,6 +70,8 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
         {
             getView().post(this::onViewVisible);
         }
+
+        ((BaseActivity)getActivity()).getSupportActionBar().setTitle(R.string.todays_workout);
     }
 
     @Override

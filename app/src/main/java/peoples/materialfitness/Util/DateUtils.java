@@ -1,5 +1,7 @@
 package peoples.materialfitness.Util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -57,5 +59,19 @@ public class DateUtils
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTimeInMillis();
+    }
+
+    /**
+     * Returns a date string of the format MM/DD/YYYY
+     * @param millisSinceEpoch
+     * @return
+     */
+    public static String getShortDateDisplaySTring(long millisSinceEpoch)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millisSinceEpoch);
+
+        DateFormat dateFormat = DateFormat.getDateInstance();
+        return dateFormat.format(calendar.getTime());
     }
 }
