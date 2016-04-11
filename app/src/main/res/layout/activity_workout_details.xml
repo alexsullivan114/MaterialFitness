@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            android:theme="@style/ToolBarStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:theme="@style/ToolBarStyle"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp">

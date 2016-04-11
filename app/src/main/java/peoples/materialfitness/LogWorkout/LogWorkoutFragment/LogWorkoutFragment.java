@@ -61,9 +61,9 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
     }
 
     @Override
-    public void onAttach(Context context)
+    public void onActivityCreated(Bundle savedInstanceState)
     {
-        super.onAttach(context);
+        super.onActivityCreated(savedInstanceState);
 
         // If getView is not null then onCreateView has already been called.
         if (getView() != null)
