@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,7 +36,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.chart)
-    FrameLayout chart;
+    TextView chart;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.fab)
