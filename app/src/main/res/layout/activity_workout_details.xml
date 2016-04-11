@@ -53,11 +53,21 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/middleFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|right|end"
         android:src="@drawable/ic_add_24dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bottomFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        app:layout_anchor="@id/recyclerView"
+        app:layout_anchorGravity="bottom|right|end"
+        android:src="@drawable/ic_add_24dp"
+        android:alpha="0"/>
 </android.support.design.widget.CoordinatorLayout>

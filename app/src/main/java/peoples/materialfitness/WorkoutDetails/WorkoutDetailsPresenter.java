@@ -118,4 +118,17 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
                     lastSessionsFirstWeightSet = Optional.of(finalWeightSets.get(0));
                 });
     }
+
+    public void appBarOffsetChanged(int totalAppBarHeight, int newOffset)
+    {
+        if (Math.abs(newOffset) >= totalAppBarHeight)
+        {
+            activityInterface.showBottomFab();
+        }
+        else
+        {
+            activityInterface.hideBottomFab();
+        }
+    }
+
 }

@@ -12,4 +12,6 @@ public interface WorkoutDetailsActivityInterface extends BaseActivityInterface
     void showAddSetDialog(int reps, int weight);
     void addSet(WeightSet set);
     void contentUpdated(boolean didUpdate);
+    void showBottomFab();
+    void hideBottomFab();
 }

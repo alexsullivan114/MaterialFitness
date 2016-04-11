@@ -2,6 +2,7 @@ package peoples.materialfitness.WorkoutDetails;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Util.AnimationUtils;
+import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
@@ -31,7 +34,8 @@ import peoples.materialfitness.View.BaseActivity;
 
 public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter>
         implements WorkoutDetailsActivityInterface,
-        MaterialDialog.SingleButtonCallback
+                   MaterialDialog.SingleButtonCallback,
+                   AppBarLayout.OnOffsetChangedListener
 {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -39,8 +43,14 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     TextView chart;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-    @Bind(R.id.fab)
-    FloatingActionButton fab;
+    @Bind(R.id.middleFab)
+    FloatingActionButton middleFab;
+    @Bind(R.id.appBar)
+    AppBarLayout appBarLayout;
+    @Bind(R.id.bottomFab)
+    FloatingActionButton bottomFab;
+
+    private boolean bottomFabShown = false;
 
     @Override
     public PresenterFactory<WorkoutDetailsPresenter> getPresenterFactory()
@@ -59,9 +69,10 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
         presenter.setBundle(getIntent().getExtras());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.mExerciseSession));
+        appBarLayout.addOnOffsetChangedListener(this);
     }
 
-    @OnClick(R.id.fab)
+    @OnClick({R.id.middleFab, R.id.bottomFab})
     public void onFabClicked()
     {
         presenter.fabClicked();
@@ -128,6 +139,55 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
             int repsInt = Integer.parseInt(reps.getText().toString());
             int weightInt = Integer.parseInt(weight.getText().toString());
             presenter.addSet(repsInt,weightInt);
+        }
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset)
+    {
+        presenter.appBarOffsetChanged(appBarLayout.getTotalScrollRange(), verticalOffset);
+    }
+
+    @Override
+    public void showBottomFab()
+    {
+        if (bottomFabShown)
+        {
+            return;
+        }
+        else
+        {
+            bottomFabShown = true;
+        }
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            AnimationUtils.circularRevealFadeInView(bottomFab);
+        }
+        else
+        {
+            AnimationUtils.fadeInView(bottomFab);
+        }
+    }
+
+    @Override
+    public void hideBottomFab()
+    {
+        if (!bottomFabShown)
+        {
+            return;
+        }
+        else
+        {
+            bottomFabShown = false;
+        }
+
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            AnimationUtils.circularHideFadeOutView(bottomFab);
+        }
+        else
+        {
+            AnimationUtils.fadeOutView(bottomFab);
         }
     }
 }
