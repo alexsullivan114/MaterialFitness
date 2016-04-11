@@ -1,13 +1,17 @@
 package peoples.materialfitness.WorkoutHistory;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 
+import com.google.common.base.Optional;
+
 import java.util.List;
 
+import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragment;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 
 /**
@@ -17,7 +21,8 @@ public class WorkoutHistoryPagerAdapter extends FragmentStatePagerAdapter
 {
     private final List<WorkoutSession> sortedWorkoutSessions;
 
-    public WorkoutHistoryPagerAdapter(FragmentManager fm, List<WorkoutSession> sortedWorkoutSessions)
+    public WorkoutHistoryPagerAdapter(@NonNull FragmentManager fm,
+                                      @NonNull  List<WorkoutSession> sortedWorkoutSessions)
     {
         super(fm);
         this.sortedWorkoutSessions = sortedWorkoutSessions;
@@ -26,12 +31,13 @@ public class WorkoutHistoryPagerAdapter extends FragmentStatePagerAdapter
     @Override
     public Fragment getItem(int position)
     {
-        return null;
+        WorkoutSession workoutSession = sortedWorkoutSessions.get(position);
+        return LogWorkoutFragment.newInstance(Optional.of(workoutSession));
     }
 
     @Override
     public int getCount()
     {
-        return 0;
+        return sortedWorkoutSessions.size();
     }
 }
