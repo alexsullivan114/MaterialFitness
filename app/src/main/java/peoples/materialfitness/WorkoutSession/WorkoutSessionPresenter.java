@@ -29,12 +29,12 @@ import rx.schedulers.Schedulers;
 public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> extends BaseFragmentPresenter<T>
     implements LogWorkoutDialog.OnExerciseLoggedCallback
 {
-    private Optional<WorkoutSession> mWorkoutSession = Optional.absent();
+    protected Optional<WorkoutSession> mWorkoutSession = Optional.absent();
 
     public static final int WORKOUT_DETAILS_REQUEST_CODE = 12312;
     public static final int WORKOUT_DETAILS_CONTENT_UPDATED = 124412;
 
-    private Subscription todaysWorkoutSubscription;
+    protected Subscription todaysWorkoutSubscription;
 
     public static class WorkoutSessionFragmentPresenterFactory implements PresenterFactory<WorkoutSessionPresenter>
     {

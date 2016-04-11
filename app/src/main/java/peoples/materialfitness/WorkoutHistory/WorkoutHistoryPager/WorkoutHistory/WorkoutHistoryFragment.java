@@ -31,4 +31,13 @@ public class WorkoutHistoryFragment extends WorkoutSessionFragment<WorkoutHistor
 
         return fragment;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        WorkoutSession workoutSession = Parcels.unwrap(getArguments().getParcelable(WORKOUT_SESSION_KEY));
+        presenter.setWorkoutSession(workoutSession);
+    }
 }

@@ -1,6 +1,9 @@
 package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistory;
 
+import com.google.common.base.Optional;
+
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 /**
@@ -14,6 +17,16 @@ public class WorkoutHistoryFragmentPresenter extends WorkoutSessionPresenter<Wor
         public WorkoutHistoryFragmentPresenter createPresenter()
         {
             return new WorkoutHistoryFragmentPresenter();
+        }
+    }
+
+    public void setWorkoutSession(WorkoutSession workoutSession)
+    {
+        mWorkoutSession = Optional.of(workoutSession);
+
+        if (!todaysWorkoutSubscription.isUnsubscribed())
+        {
+            todaysWorkoutSubscription.unsubscribe();
         }
     }
 }
