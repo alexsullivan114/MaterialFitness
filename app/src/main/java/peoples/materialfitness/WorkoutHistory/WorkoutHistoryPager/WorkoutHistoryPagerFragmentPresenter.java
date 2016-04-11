@@ -1,4 +1,4 @@
-package peoples.materialfitness.WorkoutHistory;
+package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,11 +15,11 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Alex Sullivan on 11/21/15.
  */
-public class WorkoutHistoryFragmentPresenter extends BaseFragmentPresenter<WorkoutHistoryFragmentInterface>
+public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<WorkoutHistoryPagerFragmentInterface>
 {
     private List<WorkoutSession> workoutSessions = Collections.emptyList();
 
-    public WorkoutHistoryFragmentPresenter()
+    public WorkoutHistoryPagerFragmentPresenter()
     {
         String ordering = WorkoutSessionContract.COLUMN_NAME_DATE + " " + ModelDatabaseInteractor.Ordering.DESC.name();
         new WorkoutSessionDatabaseInteractor()
@@ -28,18 +28,18 @@ public class WorkoutHistoryFragmentPresenter extends BaseFragmentPresenter<Worko
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
                 .subscribe(workoutSessions -> {
-                    WorkoutHistoryFragmentPresenter.this.workoutSessions = workoutSessions;
+                    WorkoutHistoryPagerFragmentPresenter.this.workoutSessions = workoutSessions;
                     fragmentInterface.setWorkoutSessions(workoutSessions);
                 });
 
     }
 
-    public static class WorkoutHistoryFragmentPresenterFactory implements PresenterFactory<WorkoutHistoryFragmentPresenter>
+    public static class WorkoutHistoryFragmentPresenterFactory implements PresenterFactory<WorkoutHistoryPagerFragmentPresenter>
     {
         @Override
-        public WorkoutHistoryFragmentPresenter createPresenter()
+        public WorkoutHistoryPagerFragmentPresenter createPresenter()
         {
-            return new WorkoutHistoryFragmentPresenter();
+            return new WorkoutHistoryPagerFragmentPresenter();
         }
     }
 

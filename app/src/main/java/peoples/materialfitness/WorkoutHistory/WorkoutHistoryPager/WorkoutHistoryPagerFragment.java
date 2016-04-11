@@ -1,4 +1,4 @@
-package peoples.materialfitness.WorkoutHistory;
+package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Collections;
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -21,14 +22,14 @@ import peoples.materialfitness.View.BaseFragment;
 /**
  * Created by Alex Sullivan on 12/24/15.
  */
-public class WorkoutHistoryFragment extends BaseFragment<WorkoutHistoryFragmentPresenter> implements WorkoutHistoryFragmentInterface
+public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPagerFragmentPresenter> implements WorkoutHistoryPagerFragmentInterface
 {
     @Bind(R.id.pager)
     ViewPager pager;
 
-    public static WorkoutHistoryFragment newInstance()
+    public static WorkoutHistoryPagerFragment newInstance()
     {
-        WorkoutHistoryFragment fragment = new WorkoutHistoryFragment();
+        WorkoutHistoryPagerFragment fragment = new WorkoutHistoryPagerFragment();
 
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
@@ -37,9 +38,9 @@ public class WorkoutHistoryFragment extends BaseFragment<WorkoutHistoryFragmentP
     }
 
     @Override
-    protected PresenterFactory<WorkoutHistoryFragmentPresenter> getPresenterFactory()
+    protected PresenterFactory<WorkoutHistoryPagerFragmentPresenter> getPresenterFactory()
     {
-        return new WorkoutHistoryFragmentPresenter.WorkoutHistoryFragmentPresenterFactory();
+        return new WorkoutHistoryPagerFragmentPresenter.WorkoutHistoryFragmentPresenterFactory();
     }
 
     @Nullable

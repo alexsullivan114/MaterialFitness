@@ -1,18 +1,11 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import android.content.Intent;
-
-import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
-import peoples.materialfitness.View.BaseFragmentInterface;
+import peoples.materialfitness.WorkoutSession.WorkoutSessionFragmentInterface;
 
 /**
- * Created by Alex Sullivan on 11/21/15.
+ * Created by Alex Sullivan on 4/11/2016.
  */
-public interface LogWorkoutFragmentInterface extends BaseFragmentInterface
+public interface LogWorkoutFragmentInterface extends WorkoutSessionFragmentInterface
 {
     void showAddWorkoutDialog();
-    void updateExerciseCard(ExerciseSession exerciseSession);
-    void updateWorkoutList(WorkoutSession workoutSession);
-    void startWorkoutDetailsActivity(Intent startingIntent, int requestCode);
 }

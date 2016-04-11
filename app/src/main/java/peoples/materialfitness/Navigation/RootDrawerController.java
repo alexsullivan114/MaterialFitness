@@ -149,7 +149,7 @@ public class RootDrawerController implements
         else
         {
             throw new RuntimeException("Fab clicked but currently displayed fragment " +
-                    currentFragment.getClass().getSimpleName() + "Doesn't implement RootFabOnClick!");
+                    currentFragment.getClass().getSimpleName() + " Doesn't implement RootFabOnClick!");
         }
     }
 }

@@ -1,49 +1,39 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.google.common.base.Optional;
-
-import org.parceler.Parcel;
-import org.parceler.Parcels;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
-import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.R;
-import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
-import peoples.materialfitness.View.BaseFragment;
+import peoples.materialfitness.WorkoutSession.WorkoutSessionFragment;
 
 /**
- * Created by Alex Sullivan on 11/21/15.
+ * Created by Alex Sullivan on 4/11/2016.
+ *
+ * This is the fragment that actually handles allowing a user to add an exercise session.
  */
-public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter>
-        implements LogWorkoutFragmentInterface,
+public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmentPresenter> implements
         RootFabOnClick,
-        ExerciseCardRecyclerAdapter.ExerciseCardAdapterInterface
+        LogWorkoutFragmentInterface
 {
-    public static final String WORKOUT_SESSION_KEY = "workoutSessionKey";
 
-    @Bind(R.id.recycler_empty_view)
-    TextView recyclerEmptyView;
-    @Bind(R.id.recyclerView)
-    RecyclerView recyclerView;
+    public static LogWorkoutFragment newInstance()
+    {
+        LogWorkoutFragment fragment = new LogWorkoutFragment();
 
+        Bundle bundle = new Bundle();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
 
     @Override
     public PresenterFactory<LogWorkoutFragmentPresenter> getPresenterFactory()
@@ -51,52 +41,15 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         return new LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterFactory();
     }
 
-    public static LogWorkoutFragment newInstance(Optional<WorkoutSession> workoutSession)
-    {
-        LogWorkoutFragment fragment = new LogWorkoutFragment();
-
-        Bundle bundle = new Bundle();
-
-        if (workoutSession.isPresent())
-        {
-            bundle.putParcelable(WORKOUT_SESSION_KEY, Parcels.wrap(workoutSession.get()));
-        }
-
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(WORKOUT_SESSION_KEY))
-        {
-            presenter.setWorkoutSession(Parcels.unwrap(savedInstanceState.getParcelable(WORKOUT_SESSION_KEY)));
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_log_workout, container, false);
-        ButterKnife.bind(this, v);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        if (presenter.getWorkoutSession().isPresent() &&
-                presenter.getWorkoutSession().get().getExercises().size() > 0)
-        {
-            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.getWorkoutSession().get(), this));
-            recyclerEmptyView.setVisibility(View.GONE);
-        }
+        View v = super.onCreateView(inflater, container, savedInstanceState);
 
         // If we have our activity then onAttach has already been called. So we should run this code
         // here instead.
-        if (getActivity() != null)
+        if (getActivity() != null && v != null)
         {
             v.post(this::onViewVisible);
         }
@@ -116,28 +69,6 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         }
     }
 
-    private void onViewVisible()
-    {
-        if (getActivity() != null)
-        {
-            new Handler().postDelayed(((RootFabDisplay)getActivity())::showFab, 500);
-        }
-    }
-
-    @Override
-    public void onFabClicked(FloatingActionButton fab)
-    {
-        presenter.onFabClicked();
-    }
-
-    @Override
-    public void updateExerciseCard(ExerciseSession exerciseSession)
-    {
-        recyclerEmptyView.setVisibility(View.GONE);
-
-        ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
-    }
-
     @Override
     public void showAddWorkoutDialog()
     {
@@ -146,35 +77,16 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    public void onFabClicked(FloatingActionButton fab)
     {
-        super.onActivityResult(requestCode, resultCode, data);
-        presenter.handleWorkoutDetailsResults(requestCode, resultCode, data);
+        presenter.onFabClicked();
     }
 
-    @Override
-    public void updateWorkoutList(WorkoutSession workoutSession)
+    private void onViewVisible()
     {
-        if (recyclerView.getAdapter() != null)
+        if (getActivity() != null)
         {
-            ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).setWorkoutSession(workoutSession);
+            new Handler().postDelayed(((RootFabDisplay)getActivity())::showFab, 500);
         }
-        else
-        {
-            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.getWorkoutSession().get(), this));
-            recyclerEmptyView.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onExerciseClicked(ExerciseSession session)
-    {
-        presenter.onExerciseClicked(session);
-    }
-
-    @Override
-    public void startWorkoutDetailsActivity(Intent startingIntent, int workoutDetailsRequestCode)
-    {
-        startActivityForResult(startingIntent, workoutDetailsRequestCode);
     }
 }

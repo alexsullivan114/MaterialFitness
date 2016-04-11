@@ -2,12 +2,10 @@ package peoples.materialfitness.Navigation;
 
 import android.view.MenuItem;
 
-import com.google.common.base.Optional;
-
+import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragment;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseFragment;
-import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragment;
-import peoples.materialfitness.WorkoutHistory.WorkoutHistoryFragment;
+import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryPagerFragment;
 
 /**
  * Created by Alex Sullivan on 11/27/15.
@@ -21,8 +19,8 @@ public enum NavigationItem
     // Good for speed switching back and forth? YOU KNOW IT!
     // Maybe revisit this later.
 
-    NAV_ITEM_LOG_WORKOUT(LogWorkoutFragment.newInstance(Optional.absent())),
-    NAV_ITEM_WORKOUT_HISTORY(WorkoutHistoryFragment.newInstance());
+    NAV_ITEM_LOG_WORKOUT(LogWorkoutFragment.newInstance()),
+    NAV_ITEM_WORKOUT_HISTORY(WorkoutHistoryPagerFragment.newInstance());
 
     private BaseFragment fragment;
 

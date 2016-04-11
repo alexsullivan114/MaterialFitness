@@ -18,7 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragmentPresenter;
+import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
@@ -113,7 +113,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     @Override
     public void contentUpdated(boolean didUpdate)
     {
-        setResult(LogWorkoutFragmentPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
+        setResult(WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
     }
 
     @Override
