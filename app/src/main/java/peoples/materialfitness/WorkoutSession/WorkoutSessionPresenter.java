@@ -57,7 +57,7 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
         fragmentInterface.startWorkoutDetailsActivity(intent, WORKOUT_DETAILS_REQUEST_CODE);
     }
 
-    private void fetchPopulatedWorkoutSession()
+    protected void fetchPopulatedWorkoutSession()
     {
         todaysWorkoutSubscription = new WorkoutSessionDatabaseInteractor()
                 .getTodaysWorkoutSession()
@@ -73,21 +73,6 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
                 .subscribe(session -> {
                     mWorkoutSession = Optional.of(session);
                 });
-    }
-
-    /**
-     * Refresh our workout session if our data has been updated.
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void handleWorkoutDetailsResults(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == WorkoutSessionPresenter.WORKOUT_DETAILS_REQUEST_CODE &&
-                resultCode == WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED)
-        {
-            fetchPopulatedWorkoutSession();
-        }
     }
 
     @Override
@@ -121,16 +106,5 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
     public Optional<WorkoutSession> getWorkoutSession()
     {
         return mWorkoutSession;
-    }
-
-    public void setWorkoutSession(WorkoutSession workoutSession)
-    {
-        mWorkoutSession = Optional.of(workoutSession);
-
-        // Cancel our fetch if someone is setting our workout.
-        if (!todaysWorkoutSubscription.isUnsubscribed())
-        {
-            todaysWorkoutSubscription.unsubscribe();
-        }
     }
 }

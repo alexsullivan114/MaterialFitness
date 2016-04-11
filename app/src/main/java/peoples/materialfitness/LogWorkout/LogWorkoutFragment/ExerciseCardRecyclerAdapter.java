@@ -74,7 +74,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
             // since we want to include the extra items but we don't want the layout to grow with them.
             // We will grow the layout via animation if the user selects the dropdown.
             // +1 for zero indexing offset.
-            if (i+1 == NUM_DISPLAY_SETS)
+            if (i+1 == NUM_DISPLAY_SETS && !holder.isDropdownToggled)
             {
                 LinearLayout repContainer = holder.mRepContainer;
                 repContainer.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);

@@ -64,13 +64,6 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        presenter.handleWorkoutDetailsResults(requestCode, resultCode, data);
-    }
-
-    @Override
     public void updateWorkoutList(WorkoutSession workoutSession)
     {
         if (recyclerView.getAdapter() != null)
