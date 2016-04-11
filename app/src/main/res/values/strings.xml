@@ -48,4 +48,7 @@
     <string name="lbs">lbs</string>
     <string name="kgs">kgs</string>
 
+    <!-- workout history screen -->
+    <string name="calendar_menu_item_tooltip">Select a date</string>
+
 </resources>

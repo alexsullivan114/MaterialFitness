@@ -1,5 +1,7 @@
 package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager;
 
+import android.widget.DatePicker;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
                 .fetchAll(null, ordering)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(workoutSession -> !DateUtils.isToday(workoutSession.getWorkoutSessionDate()))
                 .toList()
                 .filter(workoutSessionList -> workoutSessionList.size() > 0)
                 .subscribe(workoutSessions -> {
@@ -62,5 +65,10 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
     {
         String dateString = DateUtils.getShortDateDisplaySTring(workoutSession.getWorkoutSessionDate());
         return dateString;
+    }
+
+    public void calendarMenuClicked()
+    {
+        fragmentInterface.openDatePickerDialog();
     }
 }
