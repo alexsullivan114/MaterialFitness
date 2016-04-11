@@ -13,6 +13,7 @@ TODO:
 - Add todays list in main fragment of drawer
     - Done
 - Add frame popup to edit current exercise stuff.
+    - Not sure if I'm going to do this anymore
 - Add drop down for exercises that have too many sets
     - Done :)
 - Add animation when clicking into an exercise
@@ -28,3 +29,6 @@ TODO:
 - Make the workout details view remember a previous weight from a previous session
     - Done
 - Make the number for the set a standard width so it doesn't look off when you have 2 numbers
+    - Done
+- Make the workout details screen parallax with a funky scrolling toolbar
+- Add history page

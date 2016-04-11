@@ -3,6 +3,8 @@ package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 import android.content.Intent;
 import android.util.Log;
 
+import com.google.common.base.Optional;
+
 import org.parceler.Parcels;
 
 import java.util.Date;
@@ -19,6 +21,7 @@ import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -28,10 +31,12 @@ import rx.schedulers.Schedulers;
 public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkoutFragmentInterface>
     implements LogWorkoutDialog.OnExerciseLoggedCallback
 {
-    public WorkoutSession mWorkoutSession = null;
+    private Optional<WorkoutSession> mWorkoutSession = Optional.absent();
 
     public static final int WORKOUT_DETAILS_REQUEST_CODE = 12312;
     public static final int WORKOUT_DETAILS_CONTENT_UPDATED = 124412;
+
+    private Subscription todaysWorkoutSubscription;
 
     public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
     {
@@ -61,22 +66,19 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
 
     private void fetchPopulatedWorkoutSession()
     {
-        new WorkoutSessionDatabaseInteractor()
+        todaysWorkoutSubscription = new WorkoutSessionDatabaseInteractor()
                 .getTodaysWorkoutSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnCompleted(() -> {
-                    if (mWorkoutSession == null)
+                    if (!mWorkoutSession.isPresent())
                     {
-                        mWorkoutSession = new WorkoutSession(DateUtils.getTodaysDate().getTime());
+                        mWorkoutSession = Optional.of(new WorkoutSession(DateUtils.getTodaysDate().getTime()));
                     }
-                    fragmentInterface.updateWorkoutList(mWorkoutSession);
-                })
-                .doOnError(error -> {
-                    Log.d(TAG, error.toString());
+                    fragmentInterface.updateWorkoutList(mWorkoutSession.get());
                 })
                 .subscribe(session -> {
-                    mWorkoutSession = session;
+                    mWorkoutSession = Optional.of(session);
                 });
     }
 
@@ -99,11 +101,11 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
     public void onExerciseLogged(Exercise exercise)
     {
         // Check to see if this workout session already contains the exercise...
-        if (!mWorkoutSession.containsExercise(exercise))
+        if (!mWorkoutSession.get().containsExercise(exercise))
         {
             // If not add the exercise.
             final ExerciseSession exerciseSession = new ExerciseSession(exercise, new Date().getTime());
-            mWorkoutSession.addExerciseSession(exerciseSession);
+            mWorkoutSession.get().addExerciseSession(exerciseSession);
             // Update our UI
             fragmentInterface.updateExerciseCard(exerciseSession);
             // Fire off a save of the exercise. It won't do anything if we already have it.
@@ -114,12 +116,28 @@ public class LogWorkoutFragmentPresenter extends BaseFragmentPresenter<LogWorkou
                         // Make sure our local exercise copy has the right ID.
                         exercise.setId(id);
                         new WorkoutSessionDatabaseInteractor()
-                                .cascadeSave(mWorkoutSession)
+                                .cascadeSave(mWorkoutSession.get())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(Schedulers.io())
                                 .subscribe();
 
                     });
+        }
+    }
+
+    public Optional<WorkoutSession> getWorkoutSession()
+    {
+        return mWorkoutSession;
+    }
+
+    public void setWorkoutSession(WorkoutSession workoutSession)
+    {
+        mWorkoutSession = Optional.of(workoutSession);
+
+        // Cancel our fetch if someone is setting our workout.
+        if (!todaysWorkoutSubscription.isUnsubscribed())
+        {
+            todaysWorkoutSubscription.unsubscribe();
         }
     }
 }

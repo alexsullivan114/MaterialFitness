@@ -13,6 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.common.base.Optional;
+
+import org.parceler.Parcel;
+import org.parceler.Parcels;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
@@ -32,6 +37,8 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         RootFabOnClick,
         ExerciseCardRecyclerAdapter.ExerciseCardAdapterInterface
 {
+    public static final String WORKOUT_SESSION_KEY = "workoutSessionKey";
+
     @Bind(R.id.recycler_empty_view)
     TextView recyclerEmptyView;
     @Bind(R.id.recyclerView)
@@ -44,11 +51,17 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         return new LogWorkoutFragmentPresenter.LogWorkoutFragmentPresenterFactory();
     }
 
-    public static LogWorkoutFragment newInstance()
+    public static LogWorkoutFragment newInstance(Optional<WorkoutSession> workoutSession)
     {
         LogWorkoutFragment fragment = new LogWorkoutFragment();
 
         Bundle bundle = new Bundle();
+
+        if (workoutSession.isPresent())
+        {
+            bundle.putParcelable(WORKOUT_SESSION_KEY, Parcels.wrap(workoutSession.get()));
+        }
+
         fragment.setArguments(bundle);
 
         return fragment;
@@ -58,6 +71,11 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(WORKOUT_SESSION_KEY))
+        {
+            presenter.setWorkoutSession(Parcels.unwrap(savedInstanceState.getParcelable(WORKOUT_SESSION_KEY)));
+        }
     }
 
     @Nullable
@@ -69,10 +87,10 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        if (presenter.mWorkoutSession != null &&
-                presenter.mWorkoutSession.getExercises().size() > 0)
+        if (presenter.getWorkoutSession().isPresent() &&
+                presenter.getWorkoutSession().get().getExercises().size() > 0)
         {
-            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession, this));
+            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.getWorkoutSession().get(), this));
             recyclerEmptyView.setVisibility(View.GONE);
         }
 
@@ -143,7 +161,7 @@ public class LogWorkoutFragment extends BaseFragment<LogWorkoutFragmentPresenter
         }
         else
         {
-            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.mWorkoutSession, this));
+            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(presenter.getWorkoutSession().get(), this));
             recyclerEmptyView.setVisibility(View.GONE);
         }
     }

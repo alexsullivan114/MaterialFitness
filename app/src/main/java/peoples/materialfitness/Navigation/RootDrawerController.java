@@ -1,11 +1,11 @@
 package peoples.materialfitness.Navigation;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import peoples.materialfitness.R;
+import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
 
 /**
@@ -28,13 +29,13 @@ public class RootDrawerController implements
         RootFabOnClick
 {
     private final ActionBarDrawerToggle mDrawerToggle;
-    private final Activity mContainingActivity;
+    private final BaseActivity mContainingActivity;
     private final DrawerLayout drawerLayout;
 
     private NavigationItem navItemToShow = null;
     public NavigationItem currentNavItem = NavigationItem.NAV_ITEM_LOG_WORKOUT;
 
-    public RootDrawerController(Activity drawerActivity,
+    public RootDrawerController(BaseActivity drawerActivity,
                                 DrawerLayout layout,
                                 Toolbar toolbar)
     {
@@ -115,7 +116,7 @@ public class RootDrawerController implements
 
     public void showNavigationItem(NavigationItem navItem)
     {
-        FragmentManager fragmentManager = mContainingActivity.getFragmentManager();
+        FragmentManager fragmentManager = mContainingActivity.getSupportFragmentManager();
 
         BaseFragment fragmentToShow = navItem.getFragmentForNavItem();
         Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentToShow.TAG);
@@ -125,8 +126,8 @@ public class RootDrawerController implements
             fragmentManager.beginTransaction().remove(currentFragment).commit();
         }
 
-        android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
 
         currentNavItem = navItem;

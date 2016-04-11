@@ -18,16 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            android:textColorPrimary="@android:color/white"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/ToolBarStyle"/>
+            android:theme="@style/ToolBarStyle"/>
 
         <FrameLayout
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_below="@+id/toolbar"
             android:background="@color/lighter_gray">
 
             <TextView
@@ -43,8 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
-            android:paddingTop="30dp"
-            android:layout_alignParentBottom="true"/>
+            android:paddingTop="30dp"/>
 
     </LinearLayout>
 

@@ -1,7 +1,8 @@
 package peoples.materialfitness.View;
 
-import android.app.Fragment;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterCache;

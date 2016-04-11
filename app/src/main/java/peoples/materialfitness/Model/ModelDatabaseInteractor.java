@@ -33,6 +33,11 @@ public abstract class ModelDatabaseInteractor<T>
         return fetchWithClause(null, null);
     }
 
+    public Observable<T> fetchAll(String limit, String ordering)
+    {
+        return fetchWithArguments(null, null, null, null, null, ordering, limit);
+    }
+
     public Observable<T> fetchWithClause(String whereClause, String[] arguments)
     {
         return fetchWithArguments(whereClause, arguments, null, null, null, null, null);
