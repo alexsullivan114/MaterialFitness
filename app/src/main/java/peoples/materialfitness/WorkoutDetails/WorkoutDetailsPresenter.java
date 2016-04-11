@@ -21,6 +21,7 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -52,7 +53,26 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
             mExerciseSession = Parcels.unwrap(bundle.getParcelable(EXTRA_EXERCISE_SESSION));
             activityInterface.setTitle(mExerciseSession.getExercise().getTitle());
             populateLastSessionFirstWeightSet();
+            populateChartData();
         }
+    }
+
+    private void populateChartData()
+    {
+        String whereClause = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
+        String[] args = new String[]{String.valueOf(mExerciseSession.getExercise().getId())};
+        new ExerciseSessionDatabaseInteractor().fetchWithClause(whereClause, args)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(exerciseSession -> {
+                    String workoutSessionClause = WorkoutSessionContract._ID + " = ?";
+                    String[] workoutArgs = new String[]{String.valueOf(exerciseSession.getWorkoutSessionId())};
+                    return new WorkoutSessionDatabaseInteractor().fetchWithClause(workoutSessionClause, workoutArgs);
+                })
+                .toList()
+                .subscribe(workoutSessions -> {
+                    activityInterface.setChartData(workoutSessions, mExerciseSession.getExercise());
+                });
     }
 
     public void fabClicked()
@@ -91,7 +111,6 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
      */
     private void populateLastSessionFirstWeightSet()
     {
-        // TODO No, we want exercise. Not exercise session.
         String whereClause = ExerciseContract._ID + " = ?";
         String[] args = new String[]{String.valueOf(mExerciseSession.getExercise().getId())};
 

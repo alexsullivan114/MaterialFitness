@@ -16,10 +16,14 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
@@ -40,7 +44,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.chart)
-    TextView chart;
+    ExerciseGraph chart;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.middleFab)
@@ -189,5 +193,12 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
         {
             AnimationUtils.fadeOutView(bottomFab);
         }
+    }
+
+    @Override
+    public void setChartData(List<WorkoutSession> workoutSessionList, Exercise exercise)
+    {
+        chart.setExercise(exercise);
+        chart.setWorkoutSessions(workoutSessionList);
     }
 }

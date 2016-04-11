@@ -82,4 +82,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     // guava.
     compile 'com.google.guava:guava:19.0'
+    // Charting library.
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }

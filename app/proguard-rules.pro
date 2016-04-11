@@ -23,3 +23,5 @@
 }
 
 -keep class org.parceler.Parceler$$Parcels
+# Charting library
+-keep class com.github.mikephil.charting.** { *; }

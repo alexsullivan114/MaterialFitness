@@ -31,4 +31,6 @@ TODO:
 - Make the number for the set a standard width so it doesn't look off when you have 2 numbers
     - Done
 - Make the workout details screen parallax with a funky scrolling toolbar
+    - Done!
 - Add history page
+    - Partially Done. Still need to make the calendar view work.
