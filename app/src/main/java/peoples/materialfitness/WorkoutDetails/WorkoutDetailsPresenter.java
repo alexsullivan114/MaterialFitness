@@ -104,6 +104,8 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
         mExerciseSession.addSet(set);
         activityInterface.addSet(set);
         activityInterface.contentUpdated(true);
+        // and finally repopulate our chart data.
+        populateChartData();
     }
 
     /**
