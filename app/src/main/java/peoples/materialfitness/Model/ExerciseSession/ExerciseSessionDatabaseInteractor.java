@@ -56,7 +56,10 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
         // And our exercise if it hasn't been saved...
         ExerciseDatabaseInteractor exerciseInteracor = new ExerciseDatabaseInteractor();
         return exerciseInteracor.uniqueSaveExercise(entity.getExercise())
-                .flatMap(exerciseId -> save(entity))
+                .flatMap(exerciseId -> {
+                    entity.getExercise().setId(exerciseId);
+                    return save(entity);
+                })
                 .flatMap(id -> {
                     // Now save all of our sets.
                     WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();

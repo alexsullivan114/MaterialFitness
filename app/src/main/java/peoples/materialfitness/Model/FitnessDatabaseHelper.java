@@ -95,7 +95,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
     {
         InputStream inputStream = mContext.getResources().openRawResource(R.raw.test_workout_database);
         JsonReader jsonReader = new JsonReader(new InputStreamReader(inputStream));
-        JsonArray workoutSessionsArray = (JsonArray)new JsonParser().parse(jsonReader);
+        JsonArray workoutSessionsArray = (JsonArray) new JsonParser().parse(jsonReader);
         List<WorkoutSession> workoutSessions = new WorkoutSessionJsonDeserializer().deserialize(workoutSessionsArray);
 
         WorkoutSessionDatabaseInteractor interactor = new WorkoutSessionDatabaseInteractor();

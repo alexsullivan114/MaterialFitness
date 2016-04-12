@@ -10,6 +10,7 @@ import android.view.View;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import peoples.materialfitness.Navigation.NavigationItem;
 import peoples.materialfitness.Navigation.RootDrawerController;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Core.PresenterFactory;
@@ -26,6 +27,8 @@ import peoples.materialfitness.View.BaseActivity;
  */
 public class RootActivity extends BaseActivity implements RootFabDisplay
 {
+    private static final String NAV_ITEM_KEY = "currentNavItemKey";
+
     @Bind(R.id.drawer)
     DrawerLayout drawer;
     @Bind(R.id.root_fab)
@@ -38,7 +41,6 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         return new RootActivityPresenter.RootActivityPresenterFactory();
     }
 
-    // TODO: Need to save currentNavItem in onSavedInstanceState.
     @Override
     public void onCreate(Bundle instanceState)
     {
@@ -48,6 +50,11 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         ButterKnife.bind(this);
 
         mDrawerController = new RootDrawerController(this, drawer, toolbar);
+
+        if (instanceState != null && instanceState.containsKey(NAV_ITEM_KEY))
+        {
+            mDrawerController.showNavigationItem((NavigationItem)instanceState.getSerializable(NAV_ITEM_KEY));
+        }
     }
 
     @Override
@@ -61,6 +68,13 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerController.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        outState.putSerializable(NAV_ITEM_KEY, mDrawerController.currentNavItem);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

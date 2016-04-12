@@ -84,7 +84,6 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
         String[] arguments = new String[]{String.valueOf(exercise.getTitle())};
 
         return fetchWithClause(whereClause, arguments)
-                .subscribeOn(Schedulers.io())
                 .toList()
                 .distinct()
                 .flatMap(exercises -> {
