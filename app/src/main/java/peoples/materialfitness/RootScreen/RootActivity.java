@@ -7,6 +7,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.common.base.Optional;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,12 +51,13 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         setContentView(R.layout.root_activity);
         ButterKnife.bind(this);
 
-        mDrawerController = new RootDrawerController(this, drawer, toolbar);
-
+        Optional<NavigationItem> savedNavItem = Optional.absent();
         if (instanceState != null && instanceState.containsKey(NAV_ITEM_KEY))
         {
-            mDrawerController.showNavigationItem((NavigationItem)instanceState.getSerializable(NAV_ITEM_KEY));
+            savedNavItem = Optional.of((NavigationItem)instanceState.getSerializable(NAV_ITEM_KEY));
         }
+
+        mDrawerController = new RootDrawerController(this, drawer, toolbar, savedNavItem);
     }
 
     @Override
@@ -98,11 +101,11 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         {
             if (VersionUtils.isLollipopOrGreater())
             {
-                AnimationUtils.circularHideFadeOutView(fab);
+                fab.post(() -> AnimationUtils.circularHideFadeOutView(fab));
             }
             else
             {
-                AnimationUtils.fadeOutView(fab);
+                fab.post(() -> AnimationUtils.fadeOutView(fab));
             }
         }
     }
@@ -120,11 +123,11 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         {
             if (VersionUtils.isLollipopOrGreater())
             {
-                AnimationUtils.circularRevealFadeInView(fab);
+                fab.post(() -> AnimationUtils.circularRevealFadeInView(fab));
             }
             else
             {
-                AnimationUtils.fadeInView(fab);
+                fab.post(() -> AnimationUtils.fadeInView(fab));
             }
         }
     }

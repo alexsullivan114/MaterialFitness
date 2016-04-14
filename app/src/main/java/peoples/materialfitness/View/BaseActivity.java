@@ -32,6 +32,7 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
         presenter.setActivity(this);
         // TODO: Ok, make this less shitty at some point.
         presenter.setActivityInterface(this);
+        Log.d(TAG, "onCreate called");
     }
 
     @Override
@@ -39,6 +40,7 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
     {
         super.onResume();
         isDestroyedBySystem = false;
+        Log.d(TAG, "onResume called");
     }
 
     @Override
@@ -46,6 +48,7 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
     {
         super.setContentView(layoutId);
         setToolbar();
+        Log.d(TAG, "setContentView called");
     }
 
     @Override
@@ -53,6 +56,7 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
     {
         super.onSaveInstanceState(outState);
         isDestroyedBySystem = true;
+        Log.d(TAG, "onSaveInstanceState called");
     }
 
     @Override
@@ -63,6 +67,7 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
         {
             PresenterCache.getInstance().removePresenter(TAG);
         }
+        Log.d(TAG, "onDestroy called");
     }
 
     @Override

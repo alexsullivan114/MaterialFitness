@@ -9,8 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.google.common.base.Optional;
 
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
@@ -28,16 +31,19 @@ public class RootDrawerController implements
         DrawerLayout.DrawerListener,
         RootFabOnClick
 {
+    private static final String TAG = RootDrawerController.class.getSimpleName();
+
     private final ActionBarDrawerToggle mDrawerToggle;
     private final BaseActivity mContainingActivity;
     private final DrawerLayout drawerLayout;
 
     private NavigationItem navItemToShow = null;
-    public NavigationItem currentNavItem = NavigationItem.NAV_ITEM_LOG_WORKOUT;
+    public NavigationItem currentNavItem;
 
     public RootDrawerController(BaseActivity drawerActivity,
                                 DrawerLayout layout,
-                                Toolbar toolbar)
+                                Toolbar toolbar,
+                                Optional<NavigationItem> initialNavItem)
     {
         mDrawerToggle = new ActionBarDrawerToggle(drawerActivity, layout, toolbar, 0, 0);
         mContainingActivity = drawerActivity;
@@ -46,6 +52,8 @@ public class RootDrawerController implements
 
         layout.setDrawerListener(this);
         navigationView.setNavigationItemSelectedListener(this);
+
+        currentNavItem = initialNavItem.isPresent() ? initialNavItem.get() : NavigationItem.NAV_ITEM_LOG_WORKOUT;
 
         setInitialFragmentSelected();
     }
@@ -95,7 +103,7 @@ public class RootDrawerController implements
     public void setInitialFragmentSelected()
     {
         NavigationView navView = (NavigationView)drawerLayout.findViewById(R.id.nav_view);
-        navView.getMenu().getItem(0).setChecked(true);
+        navView.getMenu().getItem(currentNavItem.getPosition()).setChecked(true);
         showNavigationItem(currentNavItem);
     }
 
@@ -129,6 +137,13 @@ public class RootDrawerController implements
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
+
+        Log.d(TAG, "Added fragment with tag : " + fragmentToShow.TAG);
+
+        if (fragmentToShow.TAG == null)
+        {
+            Log.e(TAG, "Null tag.");
+        }
 
         currentNavItem = navItem;
     }

@@ -18,6 +18,7 @@ TODO:
     - Done :)
 - Add animation when clicking into an exercise
 - Add chart stuff for exercise page
+    - Done :)
 - Add Weight set units (what weight was that rep done in)
 - Add PRs
 - Make the add a weight set dialog remember your last weight
@@ -34,3 +35,6 @@ TODO:
     - Done!
 - Add history page
     - Partially Done. Still need to make the calendar view work.
+- Fix that damnn orientation change bug when you go from log -> history (orient change).
+- Build out a more robust navigation fragment swapping/state remembering system
+- Add a schedule section with 7 items (days of week) all colorfull and shit and they expand to show the workouts you setup for that day.

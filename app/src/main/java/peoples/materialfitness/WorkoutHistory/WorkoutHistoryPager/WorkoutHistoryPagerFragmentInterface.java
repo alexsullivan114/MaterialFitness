@@ -13,4 +13,5 @@ public interface WorkoutHistoryPagerFragmentInterface extends BaseFragmentInterf
     void setWorkoutSessions(List<WorkoutSession> workoutSessions);
     void setTitle(String title);
     void openDatePickerDialog();
+    void hideFab();
 }

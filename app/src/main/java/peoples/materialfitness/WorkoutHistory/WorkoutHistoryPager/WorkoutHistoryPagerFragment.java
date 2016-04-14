@@ -62,8 +62,6 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
         pager.setAdapter(new WorkoutHistoryPagerAdapter(getFragmentManager(), presenter.getWorkoutSessions()));
         pager.addOnPageChangeListener(this);
 
-        v.post(this::onViewVisible);
-
         return v;
     }
 
@@ -87,11 +85,6 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
                     return true;
                 })
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    }
-
-    private void onViewVisible()
-    {
-        ((RootFabDisplay) getActivity()).hideFab();
     }
 
     @Override
@@ -144,5 +137,11 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
     {
 
+    }
+
+    @Override
+    public void hideFab()
+    {
+        ((RootFabDisplay) getActivity()).hideFab();
     }
 }

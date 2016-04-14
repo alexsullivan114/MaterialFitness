@@ -19,19 +19,26 @@ public enum NavigationItem
     // Good for speed switching back and forth? YOU KNOW IT!
     // Maybe revisit this later.
 
-    NAV_ITEM_LOG_WORKOUT(LogWorkoutFragment.newInstance()),
-    NAV_ITEM_WORKOUT_HISTORY(WorkoutHistoryPagerFragment.newInstance());
+    NAV_ITEM_LOG_WORKOUT(LogWorkoutFragment.newInstance(), 0),
+    NAV_ITEM_WORKOUT_HISTORY(WorkoutHistoryPagerFragment.newInstance(), 1);
 
-    private BaseFragment fragment;
+    private final BaseFragment fragment;
+    private final int position;
 
-    NavigationItem(BaseFragment fragment)
+    NavigationItem(BaseFragment fragment, int position)
     {
         this.fragment = fragment;
+        this.position = position;
     }
 
     public BaseFragment getFragmentForNavItem()
     {
         return this.fragment;
+    }
+
+    public int getPosition()
+    {
+        return this.position;
     }
 
     public static NavigationItem getNavItemFromMenuItem(MenuItem item)

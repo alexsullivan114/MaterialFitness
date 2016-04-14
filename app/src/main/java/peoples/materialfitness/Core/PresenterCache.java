@@ -17,6 +17,8 @@ import android.util.Log;
  */
 public class PresenterCache
 {
+    private static final String TAG = PresenterCache.class.getSimpleName();
+
     private static PresenterCache instance;
 
     private SimpleArrayMap<String, BasePresenter> presenterMap = new SimpleArrayMap<>();
@@ -50,6 +52,10 @@ public class PresenterCache
         try
         {
             p = (T) presenterMap.get(id);
+            if (p != null)
+            {
+                Log.d(TAG, "Fetched existing presenter for " + id);
+            }
         } catch (ClassCastException e)
         {
             Log.w("PresenterActivity", "Duplicate Presenter " +
@@ -58,6 +64,7 @@ public class PresenterCache
         }
         if (p == null) {
             p = presenterFactory.createPresenter();
+            Log.d(TAG, "Created presenter for " + id);
             presenterMap.put(id, p);
         }
         return p;

@@ -1,5 +1,6 @@
 package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager;
 
+import android.content.Context;
 import android.widget.DatePicker;
 
 import java.util.Collections;
@@ -11,6 +12,7 @@ import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
+import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Util.DateUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -70,5 +72,13 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
     public void calendarMenuClicked()
     {
         fragmentInterface.openDatePickerDialog();
+    }
+
+    @Override
+    public void onContextAvailable(Context context)
+    {
+        super.onContextAvailable(context);
+
+        fragmentInterface.hideFab();
     }
 }

@@ -3,6 +3,7 @@ package peoples.materialfitness.View;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterCache;
@@ -19,13 +20,19 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
     protected T presenter;
     private boolean isDestroyedBySystem;
 
+    public BaseFragment()
+    {
+        super();
+        setTag();
+    }
+
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setTag();
         setPresenter(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
         presenter.setFragment(this);
         presenter.setFragmentInterface(this);
+        Log.d(TAG, "onCreate called");
     }
 
     @Override
@@ -33,6 +40,7 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
     {
         super.onResume();
         isDestroyedBySystem = false;
+        Log.d(TAG, "onResume called");
     }
 
     @Override
@@ -40,6 +48,7 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
     {
         super.onSaveInstanceState(outState);
         isDestroyedBySystem = true;
+        Log.d(TAG, "onSaveInstanceState called");
     }
 
     @Override
@@ -48,7 +57,9 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
         super.onDestroy();
         if (!isDestroyedBySystem) {
             PresenterCache.getInstance().removePresenter(TAG);
+            Log.d(TAG, "Removed presenter for " + TAG);
         }
+        Log.d(TAG, "onDestroy called");
     }
 
     @Override
@@ -57,6 +68,7 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
         super.onActivityCreated(savedInstanceState);
 
         presenter.onContextAvailable(getActivity());
+        Log.d(TAG, "onActivityCreated called");
     }
 
     private void setPresenter(T presenter)
