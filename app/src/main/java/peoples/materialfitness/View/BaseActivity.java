@@ -19,7 +19,8 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
 {
     private static final String BASE_TAG = BaseActivity.class.getSimpleName();
     private boolean isDestroyedBySystem;
-    protected String TAG;
+    protected String TAG = this.getClass().getSimpleName();
+    private String presenterKey = TAG;
     protected Toolbar toolbar;
     protected T presenter;
 
@@ -27,12 +28,21 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setTag();
-        setPresenter(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
+        setPresenter(PresenterCache.getInstance().getPresenter(presenterKey, getPresenterFactory()));
         presenter.setActivity(this);
         // TODO: Ok, make this less shitty at some point.
         presenter.setActivityInterface(this);
         Log.d(TAG, "onCreate called");
+    }
+
+    /**
+     * This is necessary so that our presenter cache can keep multiple presenters for fragments that are used multiple times
+     * in one activity.
+     * @param presenterKey The key to use to insert and fetch this views presenter from memory.
+     */
+    public void setPresenterKey(String presenterKey)
+    {
+        this.presenterKey = presenterKey;
     }
 
     @Override
@@ -96,11 +106,6 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
     private void setPresenter(T presenter)
     {
         this.presenter = presenter;
-    }
-
-    private void setTag()
-    {
-        TAG =  this.getClass().getSimpleName();
     }
 
     /**

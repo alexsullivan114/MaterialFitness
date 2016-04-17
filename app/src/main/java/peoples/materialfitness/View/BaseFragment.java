@@ -16,23 +16,28 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
         implements BaseFragmentInterface
 {
     private static final String BASE_TAG = BaseFragment.class.getSimpleName();
-    public String TAG;
+    public String TAG = this.getClass().getSimpleName();;
     protected T presenter;
+    private String presenterKey = TAG;
     private boolean isDestroyedBySystem;
-
-    public BaseFragment()
-    {
-        super();
-        setTag();
-    }
 
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setPresenter(PresenterCache.getInstance().getPresenter(TAG, getPresenterFactory()));
+        setPresenter(PresenterCache.getInstance().getPresenter(presenterKey, getPresenterFactory()));
         presenter.setFragment(this);
         presenter.setFragmentInterface(this);
         Log.d(TAG, "onCreate called");
+    }
+
+    /**
+     * This is necessary so that our presenter cache can keep multiple presenters for fragments that are used multiple times
+     * in one activity.
+     * @param presenterKey The key to use to insert and fetch this views presenter from memory.
+     */
+    public void setPresenterKey(String presenterKey)
+    {
+        this.presenterKey = presenterKey;
     }
 
     @Override
@@ -77,9 +82,4 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
     }
 
     protected abstract PresenterFactory<T> getPresenterFactory();
-
-    private void setTag()
-    {
-        TAG =  this.getClass().getSimpleName();
-    }
 }

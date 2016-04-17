@@ -28,7 +28,9 @@ public class WorkoutHistoryPagerAdapter extends FragmentStatePagerAdapter
     public Fragment getItem(int position)
     {
         WorkoutSession workoutSession = sortedWorkoutSessions.get(position);
-        return WorkoutHistoryFragment.newInstance(workoutSession);
+        WorkoutHistoryFragment fragment = WorkoutHistoryFragment.newInstance(workoutSession);
+        fragment.setPresenterKey(fragment.TAG + String.valueOf(position));
+        return fragment;
     }
 
     @Override
