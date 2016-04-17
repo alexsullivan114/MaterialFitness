@@ -56,9 +56,9 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
     // Third party libraries
     // Rx java. For being awesome.
     compile 'io.reactivex:rxjava:1.0.10'
@@ -66,8 +66,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.0.1'
     // Butterknife for view injection
     compile 'com.jakewharton:butterknife:7.0.1'
-    // Android specific joda time to make dates a little less oh dear god why-ish.
-    compile 'net.danlew:android.joda:2.8.2'
     // Material dialogs.
     compile('com.afollestad.material-dialogs:core:0.8.4.0@aar') {
         transitive = true
@@ -84,4 +82,8 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     // Charting library.
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    // Calendar view so we can customize individual days
+    compile 'com.prolificinteractive:material-calendarview:1.2.0'
+    // Event bus for fragment -> fragment communication.
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

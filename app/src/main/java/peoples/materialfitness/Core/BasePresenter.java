@@ -13,7 +13,7 @@ import android.os.Bundle;
  */
 public class BasePresenter
 {
-    protected String TAG;
+    private final String TAG;
 
     public BasePresenter()
     {

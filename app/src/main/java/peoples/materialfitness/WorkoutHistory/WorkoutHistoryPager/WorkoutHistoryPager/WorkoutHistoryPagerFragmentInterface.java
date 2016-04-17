@@ -1,4 +1,4 @@
-package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager;
+package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryPager;
 
 import java.util.List;
 
@@ -14,4 +14,5 @@ public interface WorkoutHistoryPagerFragmentInterface extends BaseFragmentInterf
     void setTitle(String title);
     void openDatePickerDialog();
     void hideFab();
+    void scrollToIndex(int index);
 }

@@ -1,7 +1,8 @@
-package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager;
+package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryPager;
 
 import android.content.Context;
-import android.widget.DatePicker;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,8 +13,8 @@ import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
-import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Util.DateUtils;
+import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -80,5 +81,16 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
         super.onContextAvailable(context);
 
         fragmentInterface.hideFab();
+    }
+
+    @Subscribe
+    public void onWorkoutSelected(WorkoutHistoryCalendarDialogFragment.WorkoutCalendarSessionSelected workoutSessionHolder)
+    {
+        WorkoutSession workoutSession = workoutSessionHolder.workoutSession;
+        int index = workoutSessions.indexOf(workoutSession);
+        if (index != -1)
+        {
+            fragmentInterface.scrollToIndex(index);
+        }
     }
 }

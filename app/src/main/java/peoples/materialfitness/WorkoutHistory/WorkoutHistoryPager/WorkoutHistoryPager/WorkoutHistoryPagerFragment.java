@@ -1,4 +1,4 @@
-package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager;
+package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryPager;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -12,18 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import org.greenrobot.eventbus.*;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
+import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;
 
 /**
  * Created by Alex Sullivan on 12/24/15.
@@ -70,7 +70,15 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     {
         super.onCreate(savedInstanceState);
 
+        EventBus.getDefault().register(presenter);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        EventBus.getDefault().unregister(presenter);
     }
 
     @Override
@@ -130,7 +138,7 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     @Override
     public void openDatePickerDialog()
     {
-        new DatePickerDialog(getActivity(), this, 1990, 11, 4).show();
+        WorkoutHistoryCalendarDialogFragment.newInstance(presenter.getWorkoutSessions()).show(getFragmentManager(), TAG);
     }
 
     @Override
@@ -143,5 +151,11 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     public void hideFab()
     {
         ((RootFabDisplay) getActivity()).hideFab();
+    }
+
+    @Override
+    public void scrollToIndex(int index)
+    {
+        pager.setCurrentItem(index, true);
     }
 }
