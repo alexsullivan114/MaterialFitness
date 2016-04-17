@@ -23,8 +23,8 @@ public abstract class ModelDatabaseInteractor<T>
                                      final String having,
                                      final String orderBy,
                                      final String limit);
-    public abstract Observable<Long> save(T entity);
-    public abstract Observable<Long> cascadeSave(T entity);
+    public abstract Observable<T> save(T entity);
+    public abstract Observable<T> cascadeSave(T entity);
     public abstract void delete(T entity);
     public abstract void cascadeDelete(T entity);
 

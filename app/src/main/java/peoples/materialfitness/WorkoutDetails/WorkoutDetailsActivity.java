@@ -10,8 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,13 +21,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
-import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
-import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
+import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 /**
  * Created by Alex Sullivan on 2/15/16.

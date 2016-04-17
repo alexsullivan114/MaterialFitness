@@ -6,17 +6,11 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import rx.Observable;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 10/18/2015.
@@ -43,7 +37,7 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
     }
 
     @Override
-    public Observable<Long> save(Exercise exercise)
+    public Observable<Exercise> save(Exercise exercise)
     {
         return Observable.create(subscriber -> {
 
@@ -57,7 +51,7 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
             long updatedId = mHelper.getDatabase().insert(ExerciseContract.TABLE_NAME,
                     null, contentValues);
             exercise.setId(updatedId);
-            subscriber.onNext(updatedId);
+            subscriber.onNext(exercise);
             subscriber.onCompleted();
 
         });
@@ -77,7 +71,7 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
      * Perform a unique save of this exercise. Current ORM doesn't support unique columns.
      * @param exercise
      */
-    public Observable<Long> uniqueSaveExercise(Exercise exercise)
+    public Observable<Exercise> uniqueSaveExercise(Exercise exercise)
     {
 
         String whereClause = ExerciseContract.COLUMN_NAME_TITLE + " = ?";
@@ -89,7 +83,7 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
                 .flatMap(exercises -> {
                     if (exercises.size() > 0)
                     {
-                        return Observable.just(exercises.get(0).getId());
+                        return Observable.just(exercises.get(0));
                     }
                     else
                     {
@@ -99,7 +93,7 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
     }
 
     @Override
-    public Observable<Long> cascadeSave(Exercise entity)
+    public Observable<Exercise> cascadeSave(Exercise entity)
     {
         return this.save(entity);
     }

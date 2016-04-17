@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import peoples.materialfitness.Core.MaterialFitnessApplication;
+import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
@@ -34,21 +37,55 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
     }
 
     @Override
-    public Observable<Long> save(WeightSet entity)
+    public Observable<WeightSet> save(WeightSet entity)
+    {
+        final String WHERE = ExerciseSessionContract._ID + " = ?";
+        final String[] ARGS = new String[]{String.valueOf(entity.getExerciseSessionId())};
+
+        return new ExerciseSessionDatabaseInteractor()
+                .fetchWithClause(WHERE, ARGS)
+                .map(ExerciseSession::getExercise)
+                .flatMap(this::getPrForExercise)
+                .toList()
+                .flatMap(weightSets -> {
+                    if (weightSets.isEmpty())
+                    {
+                        entity.setIsPr(true);
+                        return performWeightSetSave(entity);
+                    }
+                    else
+                    {
+                        WeightSet pr = weightSets.get(0);
+                        if (entity.getWeight() > pr.getWeight())
+                        {
+                            entity.setIsPr(true);
+                            pr.setIsPr(false);
+                        }
+
+                        return performWeightSetSave(pr)
+                                .flatMap(weightSet -> performWeightSetSave(entity));
+                    }
+                });
+    }
+
+    private Observable<WeightSet> performWeightSetSave(final WeightSet weightSet)
     {
         return Observable.create(subscriber -> {
 
-            ContentValues contentValues = entity.getContentValues();
-
-            if (entity.getId() == INVALID_ID)
+            if (!subscriber.isUnsubscribed())
             {
-                contentValues.remove(BaseColumns._ID);
-            }
+                ContentValues contentValues = weightSet.getContentValues();
 
-            entity.setId(mHelper.getDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
-                    null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-            subscriber.onNext(entity.getId());
-            subscriber.onCompleted();
+                if (weightSet.getId() == INVALID_ID)
+                {
+                    contentValues.remove(BaseColumns._ID);
+                }
+
+                weightSet.setId(mHelper.getDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
+                                                                        null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+                subscriber.onNext(weightSet);
+                subscriber.onCompleted();
+            }
         });
     }
 
@@ -62,7 +99,7 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
     }
 
     @Override
-    public Observable<Long> cascadeSave(WeightSet entity)
+    public Observable<WeightSet> cascadeSave(WeightSet entity)
     {
         return this.save(entity);
     }
@@ -90,5 +127,16 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
 
                     return WeightSet.getWeightSet(contentValues);
                 });
+    }
+
+    public Observable<WeightSet> getPrForExercise(final Exercise exercise)
+    {
+        final String WHERE = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
+        final String[] ARGS = new String[]{String.valueOf(exercise.getId())};
+
+        return new ExerciseSessionDatabaseInteractor().fetchWithClause(WHERE, ARGS)
+                .map(ExerciseSession::getSets)
+                .flatMap(Observable::from)
+                .filter(WeightSet::getIsPr);
     }
 }

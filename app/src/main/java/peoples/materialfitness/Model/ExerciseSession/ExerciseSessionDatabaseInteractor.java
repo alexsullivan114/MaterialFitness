@@ -50,17 +50,17 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
     }
 
     @Override
-    public Observable<Long> cascadeSave(ExerciseSession entity)
+    public Observable<ExerciseSession> cascadeSave(ExerciseSession entity)
     {
         // First save our exercise if it hasn't been saved...
         // And our exercise if it hasn't been saved...
         ExerciseDatabaseInteractor exerciseInteracor = new ExerciseDatabaseInteractor();
         return exerciseInteracor.uniqueSaveExercise(entity.getExercise())
-                .flatMap(exerciseId -> {
-                    entity.getExercise().setId(exerciseId);
+                .flatMap(exercise -> {
+                    entity.getExercise().setId(exercise.getId());
                     return save(entity);
                 })
-                .flatMap(id -> {
+                .flatMap(exerciseSession -> {
                     // Now save all of our sets.
                     WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
                     for (WeightSet set : entity.getSets())
@@ -69,7 +69,7 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
                         interactor.save(set).subscribe();
                     }
 
-                    return Observable.just(id);
+                    return Observable.just(exerciseSession);
                 });
     }
 
@@ -87,7 +87,7 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
     }
 
     @Override
-    public Observable<Long> save(ExerciseSession entity)
+    public Observable<ExerciseSession> save(ExerciseSession entity)
     {
         return Observable.create(subscriber -> {
             ContentValues contentValues = entity.getContentValues();
@@ -100,7 +100,7 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
             entity.setId(mHelper.getDatabase().insertWithOnConflict(ExerciseSessionContract.TABLE_NAME,
                     null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
 
-            subscriber.onNext(entity.getId());
+            subscriber.onNext(entity);
             subscriber.onCompleted();
         });
     }

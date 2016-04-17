@@ -36,5 +36,18 @@
         android:textAppearance="@style/TextAppearance.DarkerGray.20"
         android:text="5 lbs"/>
 
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:id="@+id/pr_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:visibility="gone"
+        android:src="@drawable/ic_flag_accent_24dp"/>
+
 </LinearLayout>
 

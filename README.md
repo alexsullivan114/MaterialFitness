@@ -34,7 +34,9 @@ TODO:
 - Make the workout details screen parallax with a funky scrolling toolbar
     - Done!
 - Add history page
-    - Partially Done. Still need to make the calendar view work.
+    - Done!
 - Fix that damnn orientation change bug when you go from log -> history (orient change).
+    - Done!
 - Build out a more robust navigation fragment swapping/state remembering system
+    - Done!
 - Add a schedule section with 7 items (days of week) all colorfull and shit and they expand to show the workouts you setup for that day.

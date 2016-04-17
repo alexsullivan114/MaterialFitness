@@ -34,20 +34,23 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
     }
 
     @Override
-    public Observable<Long> save(final WorkoutSession entity)
+    public Observable<WorkoutSession> save(final WorkoutSession entity)
     {
         return Observable.create(subscriber -> {
-            ContentValues contentValues = entity.getContentValues();
-
-            if (entity.getId() == INVALID_ID)
+            if (!subscriber.isUnsubscribed())
             {
-                contentValues.remove(BaseColumns._ID);
-            }
+                ContentValues contentValues = entity.getContentValues();
 
-            entity.setId(mHelper.getDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
-                    null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-            subscriber.onNext(entity.getId());
-            subscriber.onCompleted();
+                if (entity.getId() == INVALID_ID)
+                {
+                    contentValues.remove(BaseColumns._ID);
+                }
+
+                entity.setId(mHelper.getDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
+                                                                        null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+                subscriber.onNext(entity);
+                subscriber.onCompleted();
+            }
         });
     }
 
@@ -91,11 +94,11 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
     }
 
     @Override
-    public Observable<Long> cascadeSave(WorkoutSession entity)
+    public Observable<WorkoutSession> cascadeSave(WorkoutSession entity)
     {
         // First save ourselves.
         return save(entity)
-                .flatMap(id -> {
+                .flatMap(workoutSession -> {
                     // Now save all of our exercise sessions.
                     ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor();
                     for (ExerciseSession session : entity.getExercises())
@@ -104,7 +107,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                         interactor.cascadeSave(session).subscribe();
                     }
 
-                    return Observable.just(id);
+                    return Observable.just(workoutSession);
                 });
     }
 

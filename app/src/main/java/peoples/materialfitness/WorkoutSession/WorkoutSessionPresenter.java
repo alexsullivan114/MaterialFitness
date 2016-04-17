@@ -90,9 +90,9 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
             new ExerciseDatabaseInteractor().uniqueSaveExercise(exercise)
                     .observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(id -> {
+                    .subscribe(savedExercise -> {
                         // Make sure our local exercise copy has the right ID.
-                        exercise.setId(id);
+                        exercise.setId(savedExercise.getId());
                         new WorkoutSessionDatabaseInteractor()
                                 .cascadeSave(mWorkoutSession.get())
                                 .subscribeOn(Schedulers.io())
