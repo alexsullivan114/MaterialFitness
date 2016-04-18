@@ -1,5 +1,7 @@
 package peoples.materialfitness.RootScreen;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +37,9 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     DrawerLayout drawer;
     @Bind(R.id.root_fab)
     FloatingActionButton fab;
+
+    private boolean isShowingFab = false;
+    private boolean isHidingFab = false;
 
     private RootDrawerController mDrawerController;
 
@@ -101,7 +106,21 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         {
             if (VersionUtils.isLollipopOrGreater())
             {
-                fab.post(() -> AnimationUtils.circularHideFadeOutView(fab));
+                if (!isHidingFab)
+                {
+                    fab.post(() -> {
+                        isHidingFab = true;
+                        AnimationUtils.circularHideFadeOutView(fab, new AnimatorListenerAdapter()
+                        {
+                            @Override
+                            public void onAnimationEnd(Animator animation)
+                            {
+                                super.onAnimationEnd(animation);
+                                isHidingFab = false;
+                            }
+                        });
+                    });
+                }
             }
             else
             {
@@ -123,7 +142,21 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         {
             if (VersionUtils.isLollipopOrGreater())
             {
-                fab.post(() -> AnimationUtils.circularRevealFadeInView(fab));
+                if (!isShowingFab)
+                {
+                    fab.post(() -> {
+                        isShowingFab = true;
+                        AnimationUtils.circularRevealFadeInView(fab, new AnimatorListenerAdapter()
+                        {
+                            @Override
+                            public void onAnimationEnd(Animator animation)
+                            {
+                                super.onAnimationEnd(animation);
+                                isShowingFab = false;
+                            }
+                        });
+                    });
+                }
             }
             else
             {

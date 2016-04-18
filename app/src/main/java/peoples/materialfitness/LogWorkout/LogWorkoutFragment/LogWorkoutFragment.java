@@ -1,6 +1,5 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,6 +98,29 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
         if (getActivity() != null)
         {
             new Handler().postDelayed(((RootFabDisplay)getActivity())::showFab, 500);
+        }
+    }
+
+    @Override
+    protected void onPositiveScroll()
+    {
+        super.onPositiveScroll();
+        ((RootFabDisplay)getActivity()).showFab();
+    }
+
+    @Override
+    protected void onNegativeScroll()
+    {
+        super.onNegativeScroll();
+        ((RootFabDisplay)getActivity()).hideFab();
+    }
+
+    @Override
+    public void onSpilloverAnimationEnd()
+    {
+        if (!recyclerView.canScrollVertically(-1))
+        {
+            ((RootFabDisplay)getActivity()).showFab();
         }
     }
 }

@@ -1,5 +1,6 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -181,6 +182,32 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         animatorSet.playTogether(heightAnimator, rotationAnimator);
         animatorSet.setDuration(SHOW_SPILLOVER_ANIMATION_DURATION);
         animatorSet.setInterpolator(new FastOutSlowInInterpolator());
+        animatorSet.addListener(new Animator.AnimatorListener()
+        {
+            @Override
+            public void onAnimationStart(Animator animation)
+            {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation)
+            {
+                mCallback.onSpilloverAnimationEnd();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation)
+            {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation)
+            {
+
+            }
+        });
         animatorSet.start();
     }
 
@@ -196,6 +223,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     public interface ExerciseCardAdapterInterface
     {
         void onExerciseClicked(ExerciseSession session);
+        void onSpilloverAnimationEnd();
     }
 
     public void setWorkoutSession(WorkoutSession workoutSession)

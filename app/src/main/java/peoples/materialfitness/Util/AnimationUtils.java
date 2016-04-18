@@ -14,7 +14,7 @@ import android.view.ViewAnimationUtils;
  */
 public class AnimationUtils
 {
-    public static void circularRevealFadeInView(View v)
+    public static void circularRevealFadeInView(View v, AnimatorListenerAdapter listenerAdapter)
     {
         AnimatorSet animatorSet = new AnimatorSet();
 
@@ -24,13 +24,13 @@ public class AnimationUtils
                 android.R.integer.config_shortAnimTime);
         alphaAnimator.setDuration(animDuration);
 
-        Animator circularHideAnimator = getCircularRevealAnimator(v);
+        Animator circularHideAnimator = getCircularRevealAnimator(v, listenerAdapter);
 
         animatorSet.playTogether(alphaAnimator, circularHideAnimator);
         animatorSet.start();
     }
 
-    public static void circularHideFadeOutView(View v)
+    public static void circularHideFadeOutView(View v, AnimatorListenerAdapter listenerAdapter)
     {
         AnimatorSet animatorSet = new AnimatorSet();
 
@@ -39,24 +39,24 @@ public class AnimationUtils
                 android.R.integer.config_shortAnimTime);
         alphaAnimator.setDuration(animDuration);
 
-        Animator circularHideAnimator = getCircularHideAnimator(v);
+        Animator circularHideAnimator = getCircularHideAnimator(v, listenerAdapter);
 
         animatorSet.playTogether(alphaAnimator, circularHideAnimator);
         animatorSet.start();
     }
 
-    public static void circularRevealView(final View v)
+    public static void circularRevealView(final View v, AnimatorListenerAdapter listenerAdapter)
     {
 
-        getCircularRevealAnimator(v).start();
+        getCircularRevealAnimator(v, listenerAdapter).start();
     }
 
-    public static void circularHideView(View v)
+    public static void circularHideView(View v, AnimatorListenerAdapter listenerAdapter)
     {
-        getCircularHideAnimator(v).start();
+        getCircularHideAnimator(v, listenerAdapter).start();
     }
 
-    public static Animator getCircularHideAnimator(View v)
+    public static Animator getCircularHideAnimator(View v, AnimatorListenerAdapter listenerAdapter)
     {
         // get the center for the clipping circle
         int cx = v.getWidth() / 2;
@@ -80,13 +80,15 @@ public class AnimationUtils
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 v.setVisibility(View.INVISIBLE);
+                if (listenerAdapter == null) return;
+                listenerAdapter.onAnimationEnd(animation);
             }
         });
 
         return anim;
     }
 
-    public static Animator getCircularRevealAnimator(View v)
+    public static Animator getCircularRevealAnimator(View v, AnimatorListenerAdapter listenerAdapter)
     {
         // get the center for the clipping circle
         int cx = v.getWidth() / 2;
@@ -108,6 +110,12 @@ public class AnimationUtils
             public void onAnimationStart(Animator animation)
             {
                 v.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onAnimationEnd(Animator animator)
+            {
+                if (listenerAdapter == null) return;
+                listenerAdapter.onAnimationEnd(animator);
             }
         });
 

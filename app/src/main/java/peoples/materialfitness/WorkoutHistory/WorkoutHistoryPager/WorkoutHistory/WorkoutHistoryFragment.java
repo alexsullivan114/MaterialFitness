@@ -1,6 +1,5 @@
 package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistory;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import org.parceler.Parcels;
@@ -40,5 +39,11 @@ public class WorkoutHistoryFragment extends WorkoutSessionFragment<WorkoutHistor
 
         WorkoutSession workoutSession = Parcels.unwrap(getArguments().getParcelable(WORKOUT_SESSION_KEY));
         presenter.setWorkoutSession(workoutSession);
+    }
+
+    @Override
+    public void onSpilloverAnimationEnd()
+    {
+        // don't care.
     }
 }

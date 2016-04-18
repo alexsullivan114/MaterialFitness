@@ -164,7 +164,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
         }
         if (VersionUtils.isLollipopOrGreater())
         {
-            AnimationUtils.circularRevealView(bottomFab);
+            AnimationUtils.circularRevealView(bottomFab, null);
         }
         else
         {
@@ -186,7 +186,7 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
 
         if (VersionUtils.isLollipopOrGreater())
         {
-            AnimationUtils.circularHideView(bottomFab);
+            AnimationUtils.circularHideView(bottomFab, null);
         }
         else
         {

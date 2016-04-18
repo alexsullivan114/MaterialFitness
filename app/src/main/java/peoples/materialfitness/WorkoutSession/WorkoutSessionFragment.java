@@ -27,9 +27,9 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
 {
 
     @Bind(R.id.recycler_empty_view)
-    TextView recyclerEmptyView;
+    protected TextView recyclerEmptyView;
     @Bind(R.id.recyclerView)
-    RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -39,6 +39,23 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
         ButterKnife.bind(this, v);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy < 0)
+                {
+                    onPositiveScroll();
+                }
+                else
+                {
+                    onNegativeScroll();
+                }
+            }
+        });
 
         if (presenter.getWorkoutSession().isPresent() &&
                 ((WorkoutSession)presenter.getWorkoutSession().get()).getExercises().size() > 0)
@@ -83,4 +100,21 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     {
         startActivityForResult(startingIntent, workoutDetailsRequestCode);
     }
+
+    /**
+     * Called when the associated recyclerview scrolls up
+     */
+    protected void onPositiveScroll()
+    {
+
+    }
+
+    /**
+     * Called when the associated recyclerview scrolls down
+     */
+    protected void onNegativeScroll()
+    {
+
+    }
+
 }
