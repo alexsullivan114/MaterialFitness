@@ -77,7 +77,8 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
         recyclerEmptyView.setVisibility(View.GONE);
-
+        recyclerView.setVisibility(View.VISIBLE);
+        
         ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
     }
 

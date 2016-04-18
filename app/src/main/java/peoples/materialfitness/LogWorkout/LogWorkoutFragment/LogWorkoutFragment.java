@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
 import peoples.materialfitness.R;
@@ -71,6 +72,23 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
         }
 
         ((BaseActivity)getActivity()).getSupportActionBar().setTitle(R.string.todays_workout);
+    }
+
+    @Override
+    public void updateWorkoutList(WorkoutSession workoutSession)
+    {
+        super.updateWorkoutList(workoutSession);
+
+        if (workoutSession.getExercises().size() == 0)
+        {
+            recyclerEmptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+        else
+        {
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerEmptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
