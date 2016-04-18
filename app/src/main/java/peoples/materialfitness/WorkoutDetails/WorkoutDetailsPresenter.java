@@ -6,8 +6,6 @@ import com.google.common.base.Optional;
 
 import org.parceler.Parcels;
 
-import java.util.List;
-
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.Exercise.ExerciseContract;
@@ -100,12 +98,16 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
     {
         WeightSet set = new WeightSet(weight, reps);
         set.setExerciseSessionId(mExerciseSession.getId());
-        new WeightSetDatabaseInteractor().save(set).subscribe();
-        mExerciseSession.addSet(set);
-        activityInterface.addSet(set);
-        activityInterface.contentUpdated(true);
-        // and finally repopulate our chart data.
-        populateChartData();
+        new WeightSetDatabaseInteractor().save(set)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(weightSet -> {
+                    mExerciseSession.addSet(set);
+                    activityInterface.addSet(set);
+                    activityInterface.contentUpdated(true);
+                    // and finally repopulate our chart data.
+                    populateChartData();
+                });
     }
 
     /**
@@ -127,7 +129,7 @@ public class WorkoutDetailsPresenter extends BaseActivityPresenter<WorkoutDetail
                     String[] workoutArgs = new String[]{String.valueOf(session.getWorkoutSessionId())};
                     String orderingString = WorkoutSessionContract.COLUMN_NAME_DATE + " " + ModelDatabaseInteractor.Ordering.DESC.toString();
                     return new WorkoutSessionDatabaseInteractor().fetchWithArguments(workoutWhereClause,
-                            workoutArgs, null, null, null, orderingString, "2");
+                                                                                     workoutArgs, null, null, null, orderingString, "2");
                 })
                 .map(WorkoutSession::getExercises)
                 .takeLast(1)

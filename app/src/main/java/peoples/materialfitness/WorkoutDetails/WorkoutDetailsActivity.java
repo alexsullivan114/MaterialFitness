@@ -113,15 +113,16 @@ public class WorkoutDetailsActivity extends BaseActivity<WorkoutDetailsPresenter
     {
         // Add our item.
         int updatedItemPosition = presenter.mExerciseSession.getSets().size() - 1;
-        recyclerView.getAdapter().notifyItemInserted(updatedItemPosition);
-        // Check to see if we should scroll to our item
-        LinearLayoutManager layoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
-        boolean isVisible = updatedItemPosition > layoutManager.findFirstCompletelyVisibleItemPosition()
-                && updatedItemPosition < layoutManager.findLastCompletelyVisibleItemPosition();
-        if (!isVisible)
-        {
-            layoutManager.scrollToPosition(updatedItemPosition);
-        }
+        recyclerView.getAdapter().notifyDataSetChanged();
+        // TODO: This isn't really working with the coordinator layout, so figure this out.
+//        // Check to see if we should scroll to our item
+//        LinearLayoutManager layoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
+//        boolean isVisible = updatedItemPosition > layoutManager.findFirstCompletelyVisibleItemPosition()
+//                && updatedItemPosition < layoutManager.findLastCompletelyVisibleItemPosition();
+//        if (!isVisible)
+//        {
+//            layoutManager.scrollToPosition(updatedItemPosition);
+//        }
     }
 
     @Override

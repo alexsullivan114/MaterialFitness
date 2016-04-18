@@ -50,6 +50,10 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         {
             holder.prImageView.setVisibility(View.VISIBLE);
         }
+        else
+        {
+            holder.prImageView.setVisibility(View.GONE);
+        }
     }
 
     @Override
