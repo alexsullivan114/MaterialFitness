@@ -2,14 +2,25 @@ package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
 import android.content.Intent;
 
+import com.google.common.base.Optional;
+
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
+import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 4/11/2016.
  */
 public class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFragmentInterface>
 {
+    // TODO: Need to figure out where to unsubscribe from this...
+    protected Subscription todaysWorkoutSubscription;
+
     public static class LogWorkoutFragmentPresenterFactory implements PresenterFactory<LogWorkoutFragmentPresenter>
     {
         @Override
@@ -17,6 +28,12 @@ public class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWork
         {
             return new LogWorkoutFragmentPresenter();
         }
+    }
+
+    public LogWorkoutFragmentPresenter()
+    {
+        super();
+        fetchPopulatedWorkoutSession();
     }
 
     /**
@@ -37,5 +54,23 @@ public class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWork
     public void onFabClicked()
     {
         fragmentInterface.showAddWorkoutDialog();
+    }
+
+    protected void fetchPopulatedWorkoutSession()
+    {
+        todaysWorkoutSubscription = new WorkoutSessionDatabaseInteractor()
+                .getTodaysWorkoutSession()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnCompleted(() -> {
+                    if (!mWorkoutSession.isPresent())
+                    {
+                        mWorkoutSession = Optional.of(new WorkoutSession(DateUtils.getTodaysDate().getTime()));
+                    }
+                    fragmentInterface.updateWorkoutList(mWorkoutSession.get());
+                })
+                .subscribe(session -> {
+                    mWorkoutSession = Optional.of(session);
+                });
     }
 }

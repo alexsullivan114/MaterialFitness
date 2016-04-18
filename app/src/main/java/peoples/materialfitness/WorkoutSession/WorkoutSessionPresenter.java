@@ -10,17 +10,14 @@ import java.util.Date;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
-import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
-import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -33,9 +30,7 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
 
     public static final int WORKOUT_DETAILS_REQUEST_CODE = 12312;
     public static final int WORKOUT_DETAILS_CONTENT_UPDATED = 124412;
-
-    protected Subscription todaysWorkoutSubscription;
-
+    
     public static class WorkoutSessionFragmentPresenterFactory implements PresenterFactory<WorkoutSessionPresenter>
     {
         @Override
@@ -45,11 +40,6 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
         }
     }
 
-    public WorkoutSessionPresenter()
-    {
-        fetchPopulatedWorkoutSession();
-    }
-
     public void onExerciseClicked(ExerciseSession session)
     {
         Intent intent = new Intent(attachedFragment.getActivity(), WorkoutDetailsActivity.class);
@@ -57,23 +47,6 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
         fragmentInterface.startWorkoutDetailsActivity(intent, WORKOUT_DETAILS_REQUEST_CODE);
     }
 
-    protected void fetchPopulatedWorkoutSession()
-    {
-        todaysWorkoutSubscription = new WorkoutSessionDatabaseInteractor()
-                .getTodaysWorkoutSession()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnCompleted(() -> {
-                    if (!mWorkoutSession.isPresent())
-                    {
-                        mWorkoutSession = Optional.of(new WorkoutSession(DateUtils.getTodaysDate().getTime()));
-                    }
-                    fragmentInterface.updateWorkoutList(mWorkoutSession.get());
-                })
-                .subscribe(session -> {
-                    mWorkoutSession = Optional.of(session);
-                });
-    }
 
     @Override
     public void onExerciseLogged(Exercise exercise)

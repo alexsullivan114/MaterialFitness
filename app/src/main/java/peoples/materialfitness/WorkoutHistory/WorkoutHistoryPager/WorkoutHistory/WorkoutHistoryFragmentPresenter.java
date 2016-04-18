@@ -23,10 +23,5 @@ public class WorkoutHistoryFragmentPresenter extends WorkoutSessionPresenter<Wor
     public void setWorkoutSession(WorkoutSession workoutSession)
     {
         mWorkoutSession = Optional.of(workoutSession);
-
-        if (!todaysWorkoutSubscription.isUnsubscribed())
-        {
-            todaysWorkoutSubscription.unsubscribe();
-        }
     }
 }
