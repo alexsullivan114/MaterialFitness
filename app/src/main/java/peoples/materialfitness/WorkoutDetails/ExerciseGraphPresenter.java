@@ -65,7 +65,20 @@ public class ExerciseGraphPresenter extends BasePresenter
 
     private void sortWorkoutSessions()
     {
-        Collections.sort(workoutSessions, (lhs, rhs) -> (int)(lhs.getWorkoutSessionDate() - rhs.getWorkoutSessionDate()));
+        Collections.sort(workoutSessions, (lhs, rhs) -> {
+            if (rhs.getWorkoutSessionDate() < lhs.getWorkoutSessionDate())
+            {
+                return 1;
+            }
+            else if (rhs.getWorkoutSessionDate() > lhs.getWorkoutSessionDate())
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+        });
     }
 
     private List<Entry> calculateChartEntries()
