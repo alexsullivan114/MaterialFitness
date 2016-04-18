@@ -1,52 +1,28 @@
 package peoples.materialfitness.WorkoutSession;
 
-import android.content.Intent;
-
 import com.google.common.base.Optional;
-
-import org.parceler.Parcels;
 
 import java.util.Date;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
-import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 11/21/15.
  */
-public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> extends BaseFragmentPresenter<T>
+public abstract class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> extends BaseFragmentPresenter<T>
     implements LogWorkoutDialog.OnExerciseLoggedCallback
 {
     protected Optional<WorkoutSession> mWorkoutSession = Optional.absent();
 
     public static final int WORKOUT_DETAILS_REQUEST_CODE = 12312;
     public static final int WORKOUT_DETAILS_CONTENT_UPDATED = 124412;
-    
-    public static class WorkoutSessionFragmentPresenterFactory implements PresenterFactory<WorkoutSessionPresenter>
-    {
-        @Override
-        public WorkoutSessionPresenter createPresenter()
-        {
-            return new WorkoutSessionPresenter();
-        }
-    }
-
-    public void onExerciseClicked(ExerciseSession session)
-    {
-        Intent intent = new Intent(attachedFragment.getActivity(), WorkoutDetailsActivity.class);
-        intent.putExtra(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(session));
-        fragmentInterface.startWorkoutDetailsActivity(intent, WORKOUT_DETAILS_REQUEST_CODE);
-    }
-
 
     @Override
     public void onExerciseLogged(Exercise exercise)
@@ -75,6 +51,8 @@ public class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> 
                     });
         }
     }
+
+    public abstract void onExerciseClicked(ExerciseSession exerciseSession);
 
     public Optional<WorkoutSession> getWorkoutSession()
     {

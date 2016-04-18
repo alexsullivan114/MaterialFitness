@@ -1,9 +1,16 @@
 package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistory;
 
+import android.content.Intent;
+
 import com.google.common.base.Optional;
 
+import org.parceler.Parcels;
+
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.WorkoutDetails.HistoricalWorkoutDetailsActivity.HistoricalWorkoutDetailsActivity;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 /**
@@ -23,5 +30,13 @@ public class WorkoutHistoryFragmentPresenter extends WorkoutSessionPresenter<Wor
     public void setWorkoutSession(WorkoutSession workoutSession)
     {
         mWorkoutSession = Optional.of(workoutSession);
+    }
+
+    @Override
+    public void onExerciseClicked(ExerciseSession session)
+    {
+        Intent intent = new Intent(attachedFragment.getActivity(), HistoricalWorkoutDetailsActivity.class);
+        intent.putExtra(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(session));
+        fragmentInterface.startWorkoutDetailsActivity(intent, WORKOUT_DETAILS_REQUEST_CODE);
     }
 }

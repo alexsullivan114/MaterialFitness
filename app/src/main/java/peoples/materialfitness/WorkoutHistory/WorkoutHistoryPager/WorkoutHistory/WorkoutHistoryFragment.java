@@ -11,7 +11,7 @@ import peoples.materialfitness.WorkoutSession.WorkoutSessionFragment;
 /**
  * Created by Alex Sullivan on 4/11/2016.
  */
-public class WorkoutHistoryFragment extends WorkoutSessionFragment<WorkoutHistoryFragmentPresenter>
+public class WorkoutHistoryFragment extends WorkoutSessionFragment<WorkoutHistoryFragmentPresenter> implements WorkoutHistoryFragmentInterface
 {
     public static final String WORKOUT_SESSION_KEY = "workoutSessionKey";
 

@@ -4,10 +4,15 @@ import android.content.Intent;
 
 import com.google.common.base.Optional;
 
+import org.parceler.Parcels;
+
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
+import peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -34,6 +39,14 @@ public class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWork
     {
         super();
         fetchPopulatedWorkoutSession();
+    }
+
+    @Override
+    public void onExerciseClicked(ExerciseSession session)
+    {
+        Intent intent = new Intent(attachedFragment.getActivity(), ActiveWorkoutDetailsActivity.class);
+        intent.putExtra(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(session));
+        fragmentInterface.startWorkoutDetailsActivity(intent, WORKOUT_DETAILS_REQUEST_CODE);
     }
 
     /**

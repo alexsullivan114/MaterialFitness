@@ -68,6 +68,12 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     }
 
     @Override
+    public void onExerciseClicked(ExerciseSession session)
+    {
+        presenter.onExerciseClicked(session);
+    }
+
+    @Override
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
         recyclerEmptyView.setVisibility(View.GONE);
@@ -87,12 +93,6 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
             recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(((WorkoutSession)presenter.getWorkoutSession().get()), this));
             recyclerEmptyView.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onExerciseClicked(ExerciseSession session)
-    {
-        presenter.onExerciseClicked(session);
     }
 
     @Override
