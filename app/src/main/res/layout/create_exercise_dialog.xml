@@ -18,7 +18,7 @@
             android:layout_marginBottom="@dimen/create_exercise_vertical_margin"
             android:layout_marginTop="@dimen/create_exercise_vertical_margin"
             android:focusable="false"
-            android:inputType="textCapWords"
+            android:inputType="textCapWords|textFilter|textNoSuggestions"
             android:hint="@string/exercise_name"/>
 
     </android.support.design.widget.TextInputLayout>
