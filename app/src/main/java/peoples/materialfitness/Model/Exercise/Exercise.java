@@ -100,7 +100,7 @@ public class Exercise
         Exercise exercise = (Exercise) o;
 
         if (!title.equals(exercise.title)) return false;
-        return muscleGroup == exercise.muscleGroup;
+        return muscleGroup.equals(exercise.muscleGroup);
 
     }
 

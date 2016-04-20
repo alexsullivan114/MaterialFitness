@@ -31,7 +31,7 @@ public class WorkoutSession
 
     private List<ExerciseSession> exercises = new ArrayList<>();
     // millis since epoch
-    private long workoutSessionDate;
+    private long workoutSessionDate = 0;
 
     public WorkoutSession()
     {

@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
@@ -15,17 +13,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
-import peoples.materialfitness.Model.Exercise.Exercise;
-import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
-import peoples.materialfitness.Model.MuscleGroup.MuscleGroup;
-import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WorkoutSession.FitnotesDeserializer;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionJsonDeserializer;
 import peoples.materialfitness.R;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Alex Sullivan on 2/28/16.
@@ -37,7 +32,9 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "MaterialFitness.db";
     private static FitnessDatabaseHelper INSTANCE;
+    // Flags for debugging/building DBs.
     public static boolean buildDebugDatabase = false;
+    public static boolean importFitnotesDb = false;
 
     private Context mContext;
     private SQLiteDatabase mDb;
@@ -60,6 +57,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
 
     /**
      * Grab the database connection being used by the database manager.
+     *
      * @return The opened writeable database.
      */
     public SQLiteDatabase getDatabase()
@@ -82,6 +80,11 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
             buildDebugDatabase();
             buildDebugDatabase = false;
         }
+        else if (importFitnotesDb)
+        {
+            importFitnotesDb();
+            importFitnotesDb = false;
+        }
         // Run through and apply all updates that exist.
     }
 
@@ -91,7 +94,32 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
 
     }
 
-    public void buildDebugDatabase()
+    private void importFitnotesDb()
+    {
+        InputStream inputStream = mContext.getResources().openRawResource(R.raw.fitnotes_export);
+        BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+        WorkoutSessionDatabaseInteractor interactor = new WorkoutSessionDatabaseInteractor();
+        try
+        {
+            List<WorkoutSession> workoutSessions = FitnotesDeserializer.deserializeFitnotesCsv(r);
+            for (WorkoutSession workoutSession : workoutSessions)
+            {
+                interactor.cascadeSave(workoutSession).observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
+            }
+        } finally
+        {
+            try
+            {
+                inputStream.close();
+                r.close();
+            } catch (Exception e)
+            {
+                Log.e(TAG, "Failed to close streams");
+            }
+        }
+    }
+
+    private void buildDebugDatabase()
     {
         InputStream inputStream = mContext.getResources().openRawResource(R.raw.test_workout_database);
         JsonReader jsonReader = new JsonReader(new InputStreamReader(inputStream));
@@ -116,7 +144,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
             for (int i = 1; i <= DATABASE_VERSION; i++)
             {
                 int resID = mContext.getResources().getIdentifier("db_update_" + String.valueOf(i),
-                        "raw", mContext.getPackageName());
+                                                                  "raw", mContext.getPackageName());
 
                 stream = mContext.getResources().openRawResource(resID);
                 reader = new InputStreamReader(stream);
@@ -128,18 +156,16 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
                     line = line.trim();
 
                     // Don't bother processing blank lines
-                    if(line.length() > 0)
+                    if (line.length() > 0)
                     {
                         mDb.execSQL(line);
                     }
                 }
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             Log.e(TAG, "Failed to update database.");
-        }
-        finally
+        } finally
         {
             try
             {
@@ -155,8 +181,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
                 {
                     reader.close();
                 }
-            }
-            catch (IOException ex)
+            } catch (IOException ex)
             {
                 Log.e(TAG, "Failed to close streams.");
             }

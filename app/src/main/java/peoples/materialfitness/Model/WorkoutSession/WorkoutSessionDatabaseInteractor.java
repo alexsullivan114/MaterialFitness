@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ import rx.Observable;
  */
 public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<WorkoutSession>
 {
+    private static final String TAG = WorkoutSessionDatabaseInteractor.class.getSimpleName();
+
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
 
@@ -106,7 +109,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                         session.setWorkoutSessionId(entity.getId());
                         interactor.cascadeSave(session).subscribe();
                     }
-
+                    Log.d(TAG, "Saving workout session...");
                     return Observable.just(workoutSession);
                 });
     }

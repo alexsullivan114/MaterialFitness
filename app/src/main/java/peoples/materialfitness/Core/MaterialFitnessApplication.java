@@ -2,10 +2,10 @@ package peoples.materialfitness.Core;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import peoples.materialfitness.BuildConfig;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
-
-import com.facebook.stetho.Stetho;
 
 /**
  * Created by Alex Sullivan on 2/28/16.
@@ -25,6 +25,10 @@ public class MaterialFitnessApplication extends Application
         if (BuildConfig.BUILD_TYPE.equals("debugFreshDb"))
         {
             FitnessDatabaseHelper.buildDebugDatabase = true;
+        }
+        else if (BuildConfig.BUILD_TYPE.equals("importFitnotesDb"))
+        {
+            FitnessDatabaseHelper.importFitnotesDb = true;
         }
     }
 
