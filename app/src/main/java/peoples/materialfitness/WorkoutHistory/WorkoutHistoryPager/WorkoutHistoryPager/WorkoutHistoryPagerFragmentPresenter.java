@@ -9,10 +9,8 @@ import java.util.List;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Model.ModelDatabaseInteractor;
+import peoples.materialfitness.Model.WorkoutSession.CompleteWorkoutHistoryCache;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;
 import rx.android.schedulers.AndroidSchedulers;
@@ -27,9 +25,8 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
 
     public WorkoutHistoryPagerFragmentPresenter()
     {
-        String ordering = WorkoutSessionContract.COLUMN_NAME_DATE + " " + ModelDatabaseInteractor.Ordering.DESC.name();
-        new WorkoutSessionDatabaseInteractor()
-                .fetchAll(null, ordering)
+        CompleteWorkoutHistoryCache.getInstance()
+                .getAllWorkoutSessions()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(workoutSession -> !DateUtils.isToday(workoutSession.getWorkoutSessionDate()))

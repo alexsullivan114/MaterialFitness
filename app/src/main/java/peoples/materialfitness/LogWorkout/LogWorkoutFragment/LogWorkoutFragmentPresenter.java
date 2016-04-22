@@ -8,8 +8,8 @@ import org.parceler.Parcels;
 
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WorkoutSession.TodaysWorkoutHistoryCache;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
@@ -71,8 +71,8 @@ public class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWork
 
     protected void fetchPopulatedWorkoutSession()
     {
-        todaysWorkoutSubscription = new WorkoutSessionDatabaseInteractor()
-                .getTodaysWorkoutSession()
+        todaysWorkoutSubscription = TodaysWorkoutHistoryCache.getInstance()
+                .getTodaysWorkoutObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnCompleted(() -> {
