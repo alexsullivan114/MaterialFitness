@@ -131,4 +131,48 @@ public class AnimationUtils
     {
         v.animate().alpha(0).start();
     }
+
+    public static void fadeVisibilityChange(final View view, final int visibility)
+    {
+        view.animate().alpha(visibility == View.VISIBLE ? 1 : 0).setListener(new EndAnimatorListener(() -> {
+            view.animate().setListener(null);
+            view.setVisibility(visibility);
+        })).start();
+    }
+
+    public static class EndAnimatorListener implements Animator.AnimatorListener
+    {
+        private Runnable mEndRunnable;
+
+        public EndAnimatorListener(Runnable endRunnable)
+        {
+            mEndRunnable = endRunnable;
+        }
+        @Override
+        public void onAnimationStart(Animator animation)
+        {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation)
+        {
+            if (mEndRunnable != null)
+            {
+                mEndRunnable.run();
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation)
+        {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation)
+        {
+
+        }
+    }
 }

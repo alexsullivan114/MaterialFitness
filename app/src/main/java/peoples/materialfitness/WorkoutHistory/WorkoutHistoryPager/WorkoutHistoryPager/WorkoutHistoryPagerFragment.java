@@ -23,6 +23,7 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.AnimationUtils;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
 import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;
@@ -114,8 +115,8 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
         if (pager != null)
         {
             pager.setAdapter(new WorkoutHistoryPagerAdapter(getFragmentManager(), workoutSessions));
-            pager.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            AnimationUtils.fadeVisibilityChange(pager, View.VISIBLE);
+            AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
         }
     }
 
