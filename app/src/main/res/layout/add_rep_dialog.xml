@@ -12,12 +12,12 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/reps"
+            android:id="@+id/weight"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:inputType="number"
-            android:hint="@string/num_reps_hint"/>
+            android:hint="@string/weight_hint"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -26,12 +26,12 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/weight"
+            android:id="@+id/reps"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="number"
-            android:hint="@string/weight_hint"/>
+            android:hint="@string/num_reps_hint"/>
 
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>
