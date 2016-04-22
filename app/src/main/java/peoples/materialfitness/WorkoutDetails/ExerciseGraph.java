@@ -2,17 +2,13 @@ package peoples.materialfitness.WorkoutDetails;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.LineData;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
@@ -54,7 +50,8 @@ public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
         setDrawGridBackground(false);
         setDrawBorders(false);
         getLegend().setEnabled(false);
-
+        setNoDataTextDescription("");
+        setNoDataText("");
         setTouchEnabled(false);
     }
 
