@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -21,7 +23,7 @@ import rx.schedulers.Schedulers;
  */
 public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<WorkoutHistoryPagerFragmentInterface>
 {
-    private List<WorkoutSession> workoutSessions = Collections.emptyList();
+    private List<WorkoutSession> workoutSessions = new ArrayList<WorkoutSession>();
 
     public WorkoutHistoryPagerFragmentPresenter()
     {
@@ -32,9 +34,9 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
                 .filter(workoutSession -> !DateUtils.isToday(workoutSession.getWorkoutSessionDate()))
                 .toList()
                 .filter(workoutSessionList -> workoutSessionList.size() > 0)
+                .doOnCompleted(() -> fragmentInterface.setWorkoutSessions(workoutSessions))
                 .subscribe(workoutSessions -> {
                     WorkoutHistoryPagerFragmentPresenter.this.workoutSessions = workoutSessions;
-                    fragmentInterface.setWorkoutSessions(workoutSessions);
                     fragmentInterface.setTitle(getWorkoutSessionDateString(workoutSessions.get(0)));
                 });
 
