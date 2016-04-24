@@ -94,13 +94,18 @@ public class Exercise
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
 
         Exercise exercise = (Exercise) o;
 
-        if (!title.equals(exercise.title)) return false;
-        return muscleGroup.equals(exercise.muscleGroup);
+        return title.equals(exercise.title) && muscleGroup.equals(exercise.muscleGroup);
 
     }
 

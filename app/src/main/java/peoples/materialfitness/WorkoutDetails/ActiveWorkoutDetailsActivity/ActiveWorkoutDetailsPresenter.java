@@ -5,10 +5,9 @@ import android.os.Bundle;
 import com.google.common.base.Optional;
 
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Model.Exercise.ExerciseContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
-import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
@@ -84,7 +83,7 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
      */
     private void populateLastSessionFirstWeightSet()
     {
-        String whereClause = ExerciseContract._ID + " = ?";
+        String whereClause = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
         String[] args = new String[]{String.valueOf(mExerciseSession.getExercise().getId())};
 
         new ExerciseSessionDatabaseInteractor()
@@ -96,12 +95,12 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
                     // The first should be this exercise session, the second is the one we want.
                     String workoutWhereClause = WorkoutSessionContract._ID + " = ?";
                     String[] workoutArgs = new String[]{String.valueOf(session.getWorkoutSessionId())};
-                    String orderingString = WorkoutSessionContract.COLUMN_NAME_DATE + " " + ModelDatabaseInteractor.Ordering.DESC.toString();
-                    return new WorkoutSessionDatabaseInteractor().fetchWithArguments(workoutWhereClause,
-                                                                                     workoutArgs, null, null, null, orderingString, "2");
+                    return new WorkoutSessionDatabaseInteractor().fetchWithClause(workoutWhereClause, workoutArgs);
                 })
+                .toSortedList((workoutSession, workoutSession2) -> (int)(workoutSession2.getWorkoutSessionDate() - workoutSession.getWorkoutSessionDate()))
+                .filter(workoutSessions -> workoutSessions.size() > 1)
+                .map(workoutSessions -> workoutSessions.get(0))
                 .map(WorkoutSession::getExercises)
-                .takeLast(1)
                 .flatMap(Observable::from)
                 .filter(exerciseSession -> exerciseSession.getExercise().equals(mExerciseSession.getExercise()))
                 .map(ExerciseSession::getSets)
@@ -121,5 +120,24 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
         {
             activityInterface.hideBottomFab();
         }
+    }
+
+    public void deleteClicked()
+    {
+        new ExerciseSessionDatabaseInteractor()
+                .cascadeDelete(mExerciseSession)
+                .subscribeOn(Schedulers.io())
+                .toList() //to list so we get something even if there were no weight sets to delete.
+//                .flatMap(result -> {
+//                    // now update our workout session. We know this is happening today since we don't
+//                    // allow deleting historical workout sessions. For now at least.
+//                    new WorkoutSessionDatabaseInteractor()
+//                            .getTodaysWorkoutSession()
+//                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    activityInterface.contentUpdated(true);
+                    activityInterface.completed();
+                });
     }
 }

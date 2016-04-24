@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightSet.WeightSetContract;
 import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -58,6 +60,7 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
         return exerciseInteracor.uniqueSaveExercise(entity.getExercise())
                 .flatMap(exercise -> {
                     entity.getExercise().setId(exercise.getId());
+                    Log.i(TAG, "Saving exercise session with exercise: " + exercise.getTitle());
                     return save(entity);
                 })
                 .flatMap(exerciseSession -> {
@@ -74,16 +77,15 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
     }
 
     @Override
-    public void cascadeDelete(ExerciseSession entity)
+    public Observable<Boolean> cascadeDelete(final ExerciseSession entity)
     {
         // First delete ourselves
-        delete(entity);
-        // Now delete all of our sets.
-        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
-        for (WeightSet set : entity.getSets())
-        {
-            interactor.delete(set);
-        }
+        return delete(entity)
+                .flatMap(result -> Observable.from(entity.getSets()))
+                .flatMap(weightSet -> {
+                    WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
+                    return interactor.delete(weightSet);
+                });
     }
 
     @Override
@@ -105,12 +107,22 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
         });
     }
     @Override
-    public void delete(ExerciseSession entity)
+    public Observable<Boolean> delete(ExerciseSession entity)
     {
-        String WHERE_CLAUSE = ExerciseSessionContract._ID + " = ?";
-        String[] ARGS = new String[]{String.valueOf(entity.getId())};
-        mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
-                WHERE_CLAUSE, ARGS);
+        return Observable.create(new Observable.OnSubscribe<Boolean>()
+        {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber)
+            {
+                if (!subscriber.isUnsubscribed())
+                {
+                    String WHERE_CLAUSE = ExerciseSessionContract._ID + " = ?";
+                    String[] ARGS = new String[]{String.valueOf(entity.getId())};
+                    subscriber.onNext(mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME, WHERE_CLAUSE, ARGS) != 0);
+                    subscriber.onCompleted();
+                }
+            }
+        });
     }
 
     private Observable<ExerciseSession> getExerciseSessionFromCursor(Cursor cursor)

@@ -14,6 +14,8 @@ import rx.Observable;
  */
 public abstract class ModelDatabaseInteractor<T>
 {
+    protected final String TAG = getClass().getSimpleName();
+
     public static final int INVALID_ID = -1;
 
     public abstract Observable<T> fetchWithArguments(final String whereClause,
@@ -25,8 +27,8 @@ public abstract class ModelDatabaseInteractor<T>
                                      final String limit);
     public abstract Observable<T> save(T entity);
     public abstract Observable<T> cascadeSave(T entity);
-    public abstract void delete(T entity);
-    public abstract void cascadeDelete(T entity);
+    public abstract Observable<Boolean> delete(T entity);
+    public abstract Observable<Boolean> cascadeDelete(T entity);
 
     public Observable<T> fetchAll()
     {

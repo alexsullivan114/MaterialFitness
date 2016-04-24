@@ -13,4 +13,5 @@ public interface ActiveWorkoutDetailsActivityInterface extends WorkoutDetailsAct
     void contentUpdated(boolean didUpdate);
     void showBottomFab();
     void hideBottomFab();
+    void completed();
 }

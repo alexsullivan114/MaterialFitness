@@ -58,13 +58,19 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
     }
 
     @Override
-    public void delete(Exercise exercise)
+    public Observable<Boolean> delete(Exercise exercise)
     {
-        String whereClause = ExerciseContract._ID + " = ?";
-        String[] arguments = new String[]{String.valueOf(exercise.getId())};
+        return Observable.create(subscriber -> {
+                if (!subscriber.isUnsubscribed())
+                {
+                    String whereClause = ExerciseContract._ID + " = ?";
+                    String[] arguments = new String[]{String.valueOf(exercise.getId())};
 
-        mHelper.getDatabase().delete(ExerciseContract.TABLE_NAME,
-                whereClause, arguments);
+                    subscriber.onNext(mHelper.getDatabase().delete(ExerciseContract.TABLE_NAME,
+                                                 whereClause, arguments) != 0);
+                    subscriber.onCompleted();
+                }
+            });
     }
 
     /**
@@ -99,9 +105,9 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
     }
 
     @Override
-    public void cascadeDelete(Exercise entity)
+    public Observable<Boolean> cascadeDelete(Exercise entity)
     {
-        delete(entity);
+        return delete(entity);
     }
 
     @Override

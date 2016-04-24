@@ -19,17 +19,12 @@ import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action0;
-import rx.functions.Func1;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
 public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<WorkoutSession>
 {
-    private static final String TAG = WorkoutSessionDatabaseInteractor.class.getSimpleName();
-
     private final Context mContext;
     private final FitnessDatabaseHelper mHelper;
 
@@ -62,12 +57,18 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
     }
 
     @Override
-    public void delete(WorkoutSession entity)
+    public Observable<Boolean> delete(WorkoutSession entity)
     {
-        String WHERE_CLAUSE = WorkoutSessionContract._ID + " = ?";
-        String[] ARGS = new String[]{String.valueOf(entity.getId())};
-        mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
-                WHERE_CLAUSE, ARGS);
+        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+          if (!subscriber.isUnsubscribed())
+          {
+              String WHERE_CLAUSE = WorkoutSessionContract._ID + " = ?";
+              String[] ARGS = new String[]{String.valueOf(entity.getId())};
+              subscriber.onNext(mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+                                           WHERE_CLAUSE, ARGS) != 0);
+              subscriber.onCompleted();
+          }
+        });
     }
 
     public Observable<WorkoutSession> getTodaysWorkoutSession()
@@ -113,22 +114,22 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                         session.setWorkoutSessionId(entity.getId());
                         interactor.cascadeSave(session).subscribe();
                     }
-                    Log.d(TAG, "Saving workout session...");
+                    Log.i(TAG, "Saving workout session...");
                     return Observable.just(workoutSession);
                 });
     }
 
     @Override
-    public void cascadeDelete(WorkoutSession entity)
+    public Observable<Boolean> cascadeDelete(final WorkoutSession entity)
     {
         // First delete ourselves
-        delete(entity);
-        // Now delete all of our exercise sessions.
-        ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor();
-        for (ExerciseSession session : entity.getExercises())
-        {
-            interactor.delete(session);
-        }
+        return delete(entity)
+                .flatMap(result -> Observable.from(entity.getExercises()))
+                .flatMap(exerciseSession -> {
+                    // Now delete all of our exercise sessions.
+                    ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor();
+                    return interactor.delete(exerciseSession);
+                });
     }
 
     private Observable<WorkoutSession> getWorkoutSessionFromCursor(Cursor cursor)

@@ -43,6 +43,7 @@
     <string name="weight_set_label">Weight: </string>
     <string name="reps_set_label">Reps: </string>
     <string name="weight_units">%1$d %2$s</string>
+    <string name="delete_exercise_session">Delete exercise</string>
 
     <!-- Weight Units -->
     <string name="lbs">lbs</string>

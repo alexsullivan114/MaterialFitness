@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.Exercise.Exercise;
@@ -74,6 +75,7 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
 
             if (!subscriber.isUnsubscribed())
             {
+                Log.i(TAG, "Saving weight set...");
                 ContentValues contentValues = weightSet.getContentValues();
 
                 if (weightSet.getId() == INVALID_ID)
@@ -90,12 +92,18 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
     }
 
     @Override
-    public void delete(WeightSet entity)
+    public Observable<Boolean> delete(WeightSet entity)
     {
-        String WHERE_CLAUSE = WeightSetContract._ID + " = ?";
-        String[] ARGS = new String[]{String.valueOf(entity.getId())};
-        mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
-                WHERE_CLAUSE, ARGS);
+        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+            if (!subscriber.isUnsubscribed())
+            {
+                String WHERE_CLAUSE = WeightSetContract._ID + " = ?";
+                String[] ARGS = new String[]{String.valueOf(entity.getId())};
+                subscriber.onNext(mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+                                             WHERE_CLAUSE, ARGS) != 0);
+                subscriber.onCompleted();
+            }
+        });
     }
 
     @Override
@@ -105,9 +113,9 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
     }
 
     @Override
-    public void cascadeDelete(WeightSet entity)
+    public Observable<Boolean> cascadeDelete(WeightSet entity)
     {
-        // no-op
+        return delete(entity);
     }
 
     @Override

@@ -3,6 +3,7 @@ package peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -41,6 +42,19 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
     {
         super.onCreate(savedInstanceState);
         appBarLayout.addOnOffsetChangedListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        menu.add(R.string.delete_exercise_session)
+                .setIcon(R.drawable.ic_delete_white_24dp)
+                .setOnMenuItemClickListener(item -> {
+                    presenter.deleteClicked();
+                    return true;
+                });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @OnClick({R.id.middleFab, R.id.bottomFab})
@@ -146,5 +160,11 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
         {
             AnimationUtils.fadeOutView(bottomFab);
         }
+    }
+
+    @Override
+    public void completed()
+    {
+        finish();
     }
 }
