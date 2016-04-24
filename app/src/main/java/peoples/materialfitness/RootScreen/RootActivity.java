@@ -2,8 +2,10 @@ package peoples.materialfitness.RootScreen;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
@@ -14,12 +16,16 @@ import com.google.common.base.Optional;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import peoples.materialfitness.BuildConfig;
+import peoples.materialfitness.FitnotesImport.FitnotesImporterActivity;
 import peoples.materialfitness.Navigation.NavigationItem;
 import peoples.materialfitness.Navigation.RootDrawerController;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationUtils;
+import peoples.materialfitness.Util.Constants;
+import peoples.materialfitness.Util.PreferenceManager;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseActivity;
 
@@ -63,6 +69,13 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         }
 
         mDrawerController = new RootDrawerController(this, drawer, toolbar, savedNavItem);
+
+        if (BuildConfig.BUILD_TYPE.equals(Constants.IMPORT_FITNOTES_BUILD_TYPE)
+                && !PreferenceManager.getInstance().getHasBuiltFitnotesDb())
+        {
+            Intent intent = new Intent(this, FitnotesImporterActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

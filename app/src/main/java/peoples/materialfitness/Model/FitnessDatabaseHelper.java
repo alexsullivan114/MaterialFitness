@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import peoples.materialfitness.Model.WorkoutSession.FitnotesDeserializer;
+import peoples.materialfitness.Model.Fitnotes.FitnotesDeserializer;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionJsonDeserializer;
@@ -34,7 +34,6 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
     private static FitnessDatabaseHelper INSTANCE;
     // Flags for debugging/building DBs.
     public static boolean buildDebugDatabase = false;
-    public static boolean importFitnotesDb = false;
 
     private Context mContext;
     private SQLiteDatabase mDb;
@@ -80,43 +79,12 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper
             buildDebugDatabase();
             buildDebugDatabase = false;
         }
-        else if (importFitnotesDb)
-        {
-            importFitnotesDb();
-            importFitnotesDb = false;
-        }
-        // Run through and apply all updates that exist.
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
 
-    }
-
-    private void importFitnotesDb()
-    {
-        InputStream inputStream = mContext.getResources().openRawResource(R.raw.fitnotes_export);
-        BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-        WorkoutSessionDatabaseInteractor interactor = new WorkoutSessionDatabaseInteractor();
-        try
-        {
-            List<WorkoutSession> workoutSessions = FitnotesDeserializer.deserializeFitnotesCsv(r);
-            for (WorkoutSession workoutSession : workoutSessions)
-            {
-                interactor.cascadeSave(workoutSession).observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
-            }
-        } finally
-        {
-            try
-            {
-                inputStream.close();
-                r.close();
-            } catch (Exception e)
-            {
-                Log.e(TAG, "Failed to close streams");
-            }
-        }
     }
 
     private void buildDebugDatabase()

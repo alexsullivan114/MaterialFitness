@@ -56,7 +56,7 @@ public class ExerciseGraphPresenter extends BasePresenter
 
         for (Entry entry : entries)
         {
-            String formattedDate = DateUtils.getShortDateDisplaySTring(((WorkoutSession)entry.getData()).getWorkoutSessionDate());
+            String formattedDate = DateUtils.getShortDateDisplayString(((WorkoutSession)entry.getData()).getWorkoutSessionDate());
             returnList.add(formattedDate);
         }
 

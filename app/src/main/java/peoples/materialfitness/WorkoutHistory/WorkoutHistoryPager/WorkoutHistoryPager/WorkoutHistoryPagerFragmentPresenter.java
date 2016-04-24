@@ -5,7 +5,6 @@ import android.content.Context;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
@@ -15,7 +14,6 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -65,7 +63,7 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
 
     private String getWorkoutSessionDateString(WorkoutSession workoutSession)
     {
-        String dateString = DateUtils.getShortDateDisplaySTring(workoutSession.getWorkoutSessionDate());
+        String dateString = DateUtils.getShortDateDisplayString(workoutSession.getWorkoutSessionDate());
         return dateString;
     }
 

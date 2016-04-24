@@ -66,7 +66,7 @@ public class DateUtils
      * @param millisSinceEpoch
      * @return
      */
-    public static String getShortDateDisplaySTring(long millisSinceEpoch)
+    public static String getShortDateDisplayString(long millisSinceEpoch)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millisSinceEpoch);

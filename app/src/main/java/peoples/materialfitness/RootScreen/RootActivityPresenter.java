@@ -19,4 +19,9 @@ public class RootActivityPresenter extends BaseActivityPresenter<RootActivityInt
             return new RootActivityPresenter();
         }
     }
+
+    public RootActivityPresenter()
+    {
+
+    }
 }

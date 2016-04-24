@@ -3,6 +3,7 @@ package peoples.materialfitness.Util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.WeightUnit;
 
 
@@ -18,21 +19,21 @@ public class PreferenceManager
 {
     private static final String prefFileName = "MaterialFitnessPreferences";
     private static PreferenceManager instance;
-    private Context context;
     private SharedPreferences prefs;
 
     private static final String WEIGHT_UNIT_KEY = "weightUnitKey";
+    private static final String HAS_BUILT_FITNOTES_DB = "hasBuiltFitnotesDb";
 
-    private PreferenceManager(Context context)
+    private PreferenceManager()
     {
-        this.context = context.getApplicationContext();
-        this.prefs = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+        this.prefs = MaterialFitnessApplication.getApplication().getSharedPreferences(prefFileName,
+                Context.MODE_PRIVATE);
     }
-    public static PreferenceManager getInstance(Context context)
+    public static PreferenceManager getInstance()
     {
         if (instance == null)
         {
-            instance = new PreferenceManager(context);
+            instance = new PreferenceManager();
         }
         return instance;
     }
@@ -48,4 +49,13 @@ public class PreferenceManager
         return WeightUnit.fromDesciptor(weightUnitsDescriptor);
     }
 
+    public void setHasBuiltFitnotesDb(boolean value)
+    {
+        prefs.edit().putBoolean(HAS_BUILT_FITNOTES_DB, value).apply();
+    }
+
+    public boolean getHasBuiltFitnotesDb()
+    {
+        return prefs.getBoolean(HAS_BUILT_FITNOTES_DB, false);
+    }
 }

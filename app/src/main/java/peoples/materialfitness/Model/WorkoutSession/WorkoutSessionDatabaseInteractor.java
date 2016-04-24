@@ -19,6 +19,9 @@ import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
 import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action0;
+import rx.functions.Func1;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -33,7 +36,8 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
     public WorkoutSessionDatabaseInteractor()
     {
         mContext = MaterialFitnessApplication.getApplication();
-        mHelper = FitnessDatabaseHelper.getInstance(mContext);;
+        mHelper = FitnessDatabaseHelper.getInstance(mContext);
+        ;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                 }
 
                 entity.setId(mHelper.getDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
-                                                                        null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+                        null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
                 subscriber.onNext(entity);
                 subscriber.onCompleted();
             }
@@ -148,5 +152,18 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
         String orderingString = WorkoutSessionContract.COLUMN_NAME_DATE + " " + ordering.toString();
         String limitString = limit == 0 ? null : String.valueOf(limit);
         return fetchWithArguments(null, null, null, null, null, orderingString, limitString);
+    }
+
+    public Observable<WorkoutSession> cascadeSaveWorkoutSessions(final List<WorkoutSession> workoutSessions)
+    {
+        // TODO: I don't think we want to add these modifiers (doOnSubscribe and on terminate) since
+        // they're very likely to be overwritten forward up the chain.
+        return Observable.from(workoutSessions)
+                .flatMap(this::cascadeSave)
+                .doOnSubscribe(() -> mHelper.getDatabase().beginTransaction())
+                .doOnTerminate(() -> {
+                    mHelper.getDatabase().setTransactionSuccessful();
+                    mHelper.getDatabase().endTransaction();
+                });
     }
 }
