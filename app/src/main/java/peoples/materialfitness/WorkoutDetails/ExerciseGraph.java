@@ -3,6 +3,7 @@ package peoples.materialfitness.WorkoutDetails;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.LineData;
@@ -70,6 +71,6 @@ public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
     {
         lineData.setDrawValues(false);
         setData(lineData);
-        invalidate();
+        animateX(1350, Easing.EasingOption.EaseOutQuart);
     }
 }

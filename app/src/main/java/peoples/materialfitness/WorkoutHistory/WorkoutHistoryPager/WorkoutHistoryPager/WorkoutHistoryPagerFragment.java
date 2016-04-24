@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 
+import com.google.common.base.Optional;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
@@ -40,6 +42,8 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     ViewPager pager;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
+
+    private Optional<String> titleString = Optional.absent();
 
     public static WorkoutHistoryPagerFragment newInstance()
     {
@@ -123,7 +127,26 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     @Override
     public void setTitle(String title)
     {
-        ((BaseActivity)getActivity()).getSupportActionBar().setTitle(title);
+        if (getActivity() != null)
+        {
+            ((BaseActivity)getActivity()).getSupportActionBar().setTitle(title);
+        }
+        else
+        {
+            titleString = Optional.of(title);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        if (titleString.isPresent())
+        {
+            ((BaseActivity)getActivity()).getSupportActionBar().setTitle(titleString.get());
+            titleString = Optional.absent();
+        }
     }
 
     @Override
