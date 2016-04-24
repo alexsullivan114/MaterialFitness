@@ -41,13 +41,13 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
         String[] args = new String[]{String.valueOf(mExerciseSession.getExercise().getId())};
         new ExerciseSessionDatabaseInteractor().fetchWithClause(whereClause, args)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(exerciseSession -> {
                     String workoutSessionClause = WorkoutSessionContract._ID + " = ?";
                     String[] workoutArgs = new String[]{String.valueOf(exerciseSession.getWorkoutSessionId())};
                     return new WorkoutSessionDatabaseInteractor().fetchWithClause(workoutSessionClause, workoutArgs);
                 })
                 .toList()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(workoutSessions -> {
                     activityInterface.setChartData(workoutSessions, mExerciseSession.getExercise());
                 });

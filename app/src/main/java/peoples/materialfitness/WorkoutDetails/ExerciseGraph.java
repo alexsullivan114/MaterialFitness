@@ -70,5 +70,6 @@ public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
     {
         lineData.setDrawValues(false);
         setData(lineData);
+        invalidate();
     }
 }
