@@ -14,4 +14,5 @@ public interface ActiveWorkoutDetailsActivityInterface extends WorkoutDetailsAct
     void showBottomFab();
     void hideBottomFab();
     void completed();
+    void showDeleteConfirmationView();
 }

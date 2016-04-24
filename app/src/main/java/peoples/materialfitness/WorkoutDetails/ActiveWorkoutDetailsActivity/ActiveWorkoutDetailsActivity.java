@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -52,9 +53,23 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
                 .setOnMenuItemClickListener(item -> {
                     presenter.deleteClicked();
                     return true;
-                });
+                })
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        return super.onCreateOptionsMenu(menu);
+       return true;
+    }
+
+    @Override
+    public void showDeleteConfirmationView()
+    {
+        new MaterialDialog.Builder(this)
+                .positiveText(R.string.ok)
+                .title(R.string.are_you_sure)
+                .content(R.string.delete_exercise_session_sure)
+                .negativeText(R.string.cancel)
+                .onPositive((dialog, which) -> {
+                    presenter.deleteConfirmClicked();
+                }).show();
     }
 
     @OnClick({R.id.middleFab, R.id.bottomFab})

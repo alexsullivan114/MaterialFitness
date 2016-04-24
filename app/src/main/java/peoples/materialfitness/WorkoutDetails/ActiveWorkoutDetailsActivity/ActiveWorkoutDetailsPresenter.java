@@ -124,16 +124,15 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
 
     public void deleteClicked()
     {
+        activityInterface.showDeleteConfirmationView();
+    }
+
+    public void deleteConfirmClicked()
+    {
         new ExerciseSessionDatabaseInteractor()
                 .cascadeDelete(mExerciseSession)
                 .subscribeOn(Schedulers.io())
                 .toList() //to list so we get something even if there were no weight sets to delete.
-//                .flatMap(result -> {
-//                    // now update our workout session. We know this is happening today since we don't
-//                    // allow deleting historical workout sessions. For now at least.
-//                    new WorkoutSessionDatabaseInteractor()
-//                            .getTodaysWorkoutSession()
-//                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     activityInterface.contentUpdated(true);

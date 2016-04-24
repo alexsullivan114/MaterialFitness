@@ -9,6 +9,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="empty">Empty</string>
+    <string name="are_you_sure">Are you sure?</string>
     <!-- Text values for the muscle group enum -->
     <string name="muscle_group">Muscle group</string>
     <string name="shoulders">Shoulders</string>
@@ -44,6 +45,7 @@
     <string name="reps_set_label">Reps: </string>
     <string name="weight_units">%1$d %2$s</string>
     <string name="delete_exercise_session">Delete exercise</string>
+    <string name="delete_exercise_session_sure">Are you sure you want to delete this exercise? All associated sets will be deleted too!</string>
 
     <!-- Weight Units -->
     <string name="lbs">lbs</string>
