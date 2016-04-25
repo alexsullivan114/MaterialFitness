@@ -63,17 +63,39 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_workout_history, container, false);
         ButterKnife.bind(this, v);
 
-        pager.setAdapter(new WorkoutHistoryPagerAdapter(getFragmentManager(), presenter.getWorkoutSessions()));
+        setWorkoutSessions(presenter.getWorkoutSessions());
+        pager.setCurrentItem(presenter.getCurrentPosition());
+        if (presenter.getCurrentDateString().isPresent())
+        {
+            setTitle(presenter.getCurrentDateString().get());
+        }
+        else
+        {
+            setTitle(getResources().getString(R.string.workout_history_title));
+        }
+
         pager.addOnPageChangeListener(this);
 
-        ((BaseActivity)getActivity()).getSupportActionBar().setTitle(R.string.workout_history_title);
-
         return v;
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        EventBus.getDefault().register(presenter);
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        EventBus.getDefault().unregister(presenter);
     }
 
     @Override
@@ -81,15 +103,7 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     {
         super.onCreate(savedInstanceState);
 
-        EventBus.getDefault().register(presenter);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        EventBus.getDefault().unregister(presenter);
     }
 
     @Override
@@ -118,10 +132,18 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     {
         if (pager != null)
         {
-            pager.setAdapter(new WorkoutHistoryPagerAdapter(getFragmentManager(), workoutSessions));
-            AnimationUtils.fadeVisibilityChange(pager, View.VISIBLE);
-            AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
+            setupAdapter(workoutSessions);
+            if (workoutSessions.size() > 0)
+            {
+                AnimationUtils.fadeVisibilityChange(pager, View.VISIBLE);
+                AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
+            }
         }
+    }
+
+    private void setupAdapter(List<WorkoutSession> workoutSessions)
+    {
+        pager.setAdapter(new WorkoutHistoryPagerAdapter(getChildFragmentManager(), workoutSessions));
     }
 
     @Override

@@ -2,6 +2,7 @@ package peoples.materialfitness.View;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -15,19 +16,30 @@ import peoples.materialfitness.Core.PresenterFactory;
 public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Fragment
         implements BaseFragmentInterface
 {
+    public final String TAG = this.getClass().getSimpleName();
     private static final String BASE_TAG = BaseFragment.class.getSimpleName();
-    public String TAG = this.getClass().getSimpleName();;
+    private static final String PRESENTER_KEY_KEY = "presenterKeyKey";
+
     protected T presenter;
     private String presenterKey = TAG;
     private boolean isDestroyedBySystem;
 
-    public void onCreate(Bundle savedInstanceState)
+    public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        fetchPresenterKey(savedInstanceState);
         setPresenter(PresenterCache.getInstance().getPresenter(presenterKey, getPresenterFactory()));
         presenter.setFragment(this);
         presenter.setFragmentInterface(this);
         Log.d(TAG, "onCreate called");
+    }
+
+    private void fetchPresenterKey(@Nullable Bundle savedInstanceState)
+    {
+        if (savedInstanceState != null && savedInstanceState.containsKey(PRESENTER_KEY_KEY))
+        {
+            presenterKey = savedInstanceState.getString(PRESENTER_KEY_KEY);
+        }
     }
 
     /**
@@ -51,6 +63,7 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
+        outState.putString(PRESENTER_KEY_KEY, presenterKey);
         super.onSaveInstanceState(outState);
         isDestroyedBySystem = true;
         Log.d(TAG, "onSaveInstanceState called");

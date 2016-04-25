@@ -126,26 +126,34 @@ public class RootDrawerController implements
     {
         FragmentManager fragmentManager = mContainingActivity.getSupportFragmentManager();
 
+//        fragmentManager.beginTransaction().detach(currentNavItem.getFragmentForNavItem())
+//                .replace(R.id.main_fragment, navItem.getFragmentForNavItem(), navItem.getFragmentForNavItem().TAG)
+//                .attach(navItem.getFragmentForNavItem())
+//                .addToBackStack(null)
+//                .commit();
+//        .add(R.id.main_fragment, navItem.getFragmentForNavItem(), navItem.getFragmentForNavItem().TAG).commit();
+//        fragmentManager.beginTransaction().attach(navItem.getFragmentForNavItem()).commit();
+        currentNavItem = navItem;
+//
         BaseFragment fragmentToShow = navItem.getFragmentForNavItem();
         Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentToShow.TAG);
 
-        if (currentFragment != null)
+        if (currentFragment == null)
         {
-            fragmentManager.beginTransaction().remove(currentFragment).commit();
+
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
+
+            Log.d(TAG, "Added fragment with tag : " + fragmentToShow.TAG);
+
+            if (fragmentToShow.TAG == null)
+            {
+                Log.e(TAG, "Null tag.");
+            }
+
+            currentNavItem = navItem;
         }
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.main_fragment, fragmentToShow, fragmentToShow.TAG).commit();
-
-        Log.d(TAG, "Added fragment with tag : " + fragmentToShow.TAG);
-
-        if (fragmentToShow.TAG == null)
-        {
-            Log.e(TAG, "Null tag.");
-        }
-
-        currentNavItem = navItem;
     }
 
     /**

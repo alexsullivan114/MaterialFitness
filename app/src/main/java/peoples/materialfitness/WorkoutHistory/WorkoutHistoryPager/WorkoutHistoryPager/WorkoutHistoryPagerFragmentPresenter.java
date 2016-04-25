@@ -2,6 +2,8 @@ package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistor
 
 import android.content.Context;
 
+import com.google.common.base.Optional;
+
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import rx.schedulers.Schedulers;
 public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<WorkoutHistoryPagerFragmentInterface>
 {
     private List<WorkoutSession> workoutSessions = new ArrayList<WorkoutSession>();
+    private int currentPosition = 0;
+    private Optional<String> currentDateString = Optional.absent();
 
     public WorkoutHistoryPagerFragmentPresenter()
     {
@@ -35,6 +39,7 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
                 .doOnCompleted(() -> fragmentInterface.setWorkoutSessions(workoutSessions))
                 .subscribe(workoutSessions -> {
                     WorkoutHistoryPagerFragmentPresenter.this.workoutSessions = workoutSessions;
+                    currentDateString = Optional.of(getWorkoutSessionDateString(workoutSessions.get(0)));
                     fragmentInterface.setTitle(getWorkoutSessionDateString(workoutSessions.get(0)));
                 });
 
@@ -54,10 +59,24 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
         return workoutSessions;
     }
 
+    public int getCurrentPosition()
+    {
+        return currentPosition;
+    }
+
+    public Optional<String> getCurrentDateString()
+    {
+        return currentDateString;
+    }
+
     public void pageChanged(int newPagePosition)
     {
         WorkoutSession newWorkoutSession = workoutSessions.get(newPagePosition);
         String dateString = getWorkoutSessionDateString(newWorkoutSession);
+
+        currentPosition = newPagePosition;
+        currentDateString = Optional.of(dateString);
+
         fragmentInterface.setTitle(dateString);
     }
 
