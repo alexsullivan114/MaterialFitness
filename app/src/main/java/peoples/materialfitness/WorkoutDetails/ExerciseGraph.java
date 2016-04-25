@@ -71,6 +71,6 @@ public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
     {
         lineData.setDrawValues(false);
         setData(lineData);
-        animateX(1350, Easing.EasingOption.EaseOutQuart);
+        animateX(2000, Easing.EasingOption.EaseOutQuart);
     }
 }
