@@ -20,6 +20,8 @@ import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightSet.WeightSetContract;
 import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -81,6 +83,22 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
     {
         // First delete ourselves
         return delete(entity)
+                .flatMap(result -> {
+                    // Check our associated workout session to see if it has any exercise sessions left.
+                    final String WHERE = WorkoutSessionContract._ID + " = ?";
+                    final String[] ARGS = new String[]{String.valueOf(entity.getWorkoutSessionId())};
+                    return new WorkoutSessionDatabaseInteractor().fetchWithClause(WHERE, ARGS);
+                })
+                .flatMap(workoutSession -> {
+                    if (workoutSession.getExercises().size() == 0)
+                    {
+                        return new WorkoutSessionDatabaseInteractor().delete(workoutSession);
+                    }
+                    else
+                    {
+                        return Observable.just(true);
+                    }
+                })
                 .flatMap(result -> Observable.from(entity.getSets()))
                 .flatMap(weightSet -> {
                     WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();

@@ -75,6 +75,9 @@ public class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWork
                 .getTodaysWorkoutSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(() -> {
+                    mWorkoutSession = Optional.absent();
+                })
                 .doOnCompleted(() -> {
                     if (!mWorkoutSession.isPresent())
                     {
