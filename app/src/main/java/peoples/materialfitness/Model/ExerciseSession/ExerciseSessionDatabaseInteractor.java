@@ -84,7 +84,7 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
                 .flatMap(result -> Observable.from(entity.getSets()))
                 .flatMap(weightSet -> {
                     WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
-                    return interactor.delete(weightSet);
+                    return interactor.deleteWithPrCheck(weightSet, entity.getExercise());
                 });
     }
 

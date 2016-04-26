@@ -16,6 +16,7 @@ import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import rx.Observable;
+import rx.functions.Func2;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -92,7 +93,7 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
     }
 
     @Override
-    public Observable<Boolean> delete(WeightSet entity)
+    public Observable<Boolean> delete(final WeightSet entity)
     {
         return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
             if (!subscriber.isUnsubscribed())
@@ -100,10 +101,51 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
                 String WHERE_CLAUSE = WeightSetContract._ID + " = ?";
                 String[] ARGS = new String[]{String.valueOf(entity.getId())};
                 subscriber.onNext(mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
-                                             WHERE_CLAUSE, ARGS) != 0);
+                                                               WHERE_CLAUSE, ARGS) != 0);
                 subscriber.onCompleted();
             }
         });
+    }
+
+    public Observable<Boolean> deleteWithPrCheck(final WeightSet entity, final Exercise exercise)
+    {
+        return delete(entity)
+                .flatMap(result -> {
+                    if (entity.getIsPr())
+                    {
+                        return recalculatePrs(exercise);
+                    }
+                    else
+                    {
+                        return Observable.just(result);
+                    }
+                });
+    }
+
+    private Observable<Boolean> recalculatePrs(final Exercise exercise)
+    {
+        final String WHERE = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
+        final String[] ARGS = new String[]{String.valueOf(exercise.getId())};
+
+        return new ExerciseSessionDatabaseInteractor()
+                .fetchWithClause(WHERE, ARGS)
+                .map(ExerciseSession::getSets)
+                .flatMap(Observable::from)
+                .toSortedList(new Func2<WeightSet, WeightSet, Integer>()
+                {
+                    @Override
+                    public Integer call(WeightSet weightSet, WeightSet weightSet2)
+                    {
+                       return weightSet.getWeight() - weightSet2.getWeight();
+                    }
+                })
+                .map(weightSets -> {
+                    WeightSet pr = weightSets.get(weightSets.size() - 1);
+                    pr.setIsPr(true);
+                    return pr;
+                })
+                .flatMap(prSet -> new WeightSetDatabaseInteractor().save(prSet))
+                .map(savedPr -> savedPr.getId() != INVALID_ID);
     }
 
     @Override
