@@ -126,15 +126,8 @@ public class RootDrawerController implements
     {
         FragmentManager fragmentManager = mContainingActivity.getSupportFragmentManager();
 
-//        fragmentManager.beginTransaction().detach(currentNavItem.getFragmentForNavItem())
-//                .replace(R.id.main_fragment, navItem.getFragmentForNavItem(), navItem.getFragmentForNavItem().TAG)
-//                .attach(navItem.getFragmentForNavItem())
-//                .addToBackStack(null)
-//                .commit();
-//        .add(R.id.main_fragment, navItem.getFragmentForNavItem(), navItem.getFragmentForNavItem().TAG).commit();
-//        fragmentManager.beginTransaction().attach(navItem.getFragmentForNavItem()).commit();
         currentNavItem = navItem;
-//
+
         BaseFragment fragmentToShow = navItem.getFragmentForNavItem();
         Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentToShow.TAG);
 
