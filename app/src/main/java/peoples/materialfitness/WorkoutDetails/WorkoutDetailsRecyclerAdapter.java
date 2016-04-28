@@ -2,11 +2,11 @@ package peoples.materialfitness.WorkoutDetails;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -127,9 +127,6 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
                     traveledHorizontalDistance += Math.abs(originalTouchX - event.getRawX());
                     traveledVerticalDistance += Math.abs(originalTouchY - event.getRawY());
 
-                    Log.d(TAG, "Traveled Horizontal Distance: " + String.valueOf(traveledHorizontalDistance));
-                    Log.d(TAG, "Traveled Vertical Distance: " + String.valueOf(traveledVerticalDistance));
-
                     if (traveledVerticalDistance >= verticalThreshold && !isSwiping)
                     {
                         return false; // We're considering this a scroll up so bounce.
@@ -150,6 +147,11 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
                 }
                 case MotionEvent.ACTION_UP:
                 {
+                    view.animate()
+                            .x(originalXPosition)
+                            .setDuration(600)
+                            .setInterpolator(new OvershootInterpolator())
+                            .start();
                     topContainer.getParent().requestDisallowInterceptTouchEvent(false);
                 }
                 default:
