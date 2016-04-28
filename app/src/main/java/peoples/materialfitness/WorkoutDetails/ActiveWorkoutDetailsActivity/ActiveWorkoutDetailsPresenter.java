@@ -47,14 +47,15 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
         int reps = weightSetOptional.isPresent() ? weightSetOptional.get().getNumReps() : 0;
         int weight = weightSetOptional.isPresent() ? weightSetOptional.get().getWeight() : 0;
 
+        activityInterface.hideSetOptions();
         activityInterface.showAddSetDialog(reps, weight);
     }
 
     private Optional<WeightSet> getDefaultWeightSet()
     {
-        if (mExerciseSession.getSets().size() > 0)
+        if (exerciseSession.getSets().size() > 0)
         {
-            return Optional.of(mExerciseSession.getSets().get(mExerciseSession.getSets().size() - 1));
+            return Optional.of(exerciseSession.getSets().get(exerciseSession.getSets().size() - 1));
         }
         else
         {
@@ -65,12 +66,12 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
     public void addSet(int reps, int weight)
     {
         WeightSet set = new WeightSet(weight, reps);
-        set.setExerciseSessionId(mExerciseSession.getId());
+        set.setExerciseSessionId(exerciseSession.getId());
         new WeightSetDatabaseInteractor().save(set)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(weightSet -> {
-                    mExerciseSession.addSet(set);
+                    exerciseSession.addSet(set);
                     activityInterface.addSet(set);
                     activityInterface.contentUpdated(true);
                     // and finally repopulate our chart data.
@@ -84,7 +85,7 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
     private void populateLastSessionFirstWeightSet()
     {
         String whereClause = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
-        String[] args = new String[]{String.valueOf(mExerciseSession.getExercise().getId())};
+        String[] args = new String[]{String.valueOf(exerciseSession.getExercise().getId())};
 
         new ExerciseSessionDatabaseInteractor()
                 .fetchWithClause(whereClause, args)
@@ -102,7 +103,7 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
                 .map(workoutSessions -> workoutSessions.get(0))
                 .map(WorkoutSession::getExercises)
                 .flatMap(Observable::from)
-                .filter(exerciseSession -> exerciseSession.getExercise().equals(mExerciseSession.getExercise()))
+                .filter(exerciseSession -> exerciseSession.getExercise().equals(this.exerciseSession.getExercise()))
                 .map(ExerciseSession::getSets)
                 .filter(weightSets -> weightSets.size() > 0)
                 .subscribe(finalWeightSets -> {
@@ -130,7 +131,7 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
     public void deleteConfirmClicked()
     {
         new ExerciseSessionDatabaseInteractor()
-                .cascadeDelete(mExerciseSession)
+                .cascadeDelete(exerciseSession)
                 .subscribeOn(Schedulers.io())
                 .toList() //to list so we get something even if there were no weight sets to delete.
                 .observeOn(AndroidSchedulers.mainThread())

@@ -29,6 +29,7 @@ public abstract class ModelDatabaseInteractor<T>
     public abstract Observable<T> cascadeSave(T entity);
     public abstract Observable<Boolean> delete(T entity);
     public abstract Observable<Boolean> cascadeDelete(T entity);
+    public abstract Observable<T> fetchWithParentId(long parentId);
 
     public Observable<T> fetchAll()
     {

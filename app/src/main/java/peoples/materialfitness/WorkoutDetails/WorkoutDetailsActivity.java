@@ -15,6 +15,7 @@ import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
+import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -47,7 +48,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
 
         presenter.setBundle(getIntent().getExtras());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.mExerciseSession, this, allowSetTouchEvents()));
+        recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.exerciseSession, this, allowSetTouchEvents()));
     }
 
     @Override
@@ -61,6 +62,33 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     {
         chart.setExercise(exercise);
         chart.setWorkoutSessions(workoutSessionList);
+    }
+
+    @Override
+    public void refreshSets()
+    {
+        ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).setExerciseSession(presenter.exerciseSession);
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void removeSetAtPosition(int position)
+    {
+        ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).setExerciseSession(presenter.exerciseSession);
+        recyclerView.getAdapter().notifyItemRemoved(position);
+        recyclerView.getAdapter().notifyItemRangeChanged(position, presenter.exerciseSession.getSets().size() - 1);
+    }
+
+    @Override
+    public void contentUpdated(boolean didUpdate)
+    {
+        setResult(WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
+    }
+
+    @Override
+    public void hideSetOptions()
+    {
+        ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).hideSetOptions();
     }
 
     @Override

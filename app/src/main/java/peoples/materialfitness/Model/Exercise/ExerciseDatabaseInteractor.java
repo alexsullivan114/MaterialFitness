@@ -99,6 +99,12 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
     }
 
     @Override
+    public Observable<Exercise> fetchWithParentId(long parentId)
+    {
+        throw new RuntimeException("Cannot fetch an exercise with any parent id!");
+    }
+
+    @Override
     public Observable<Exercise> cascadeSave(Exercise entity)
     {
         return this.save(entity);

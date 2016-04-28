@@ -70,6 +70,14 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
                 });
     }
 
+    @Override
+    public Observable<WeightSet> fetchWithParentId(long parentId)
+    {
+        final String WHERE = WeightSetContract.COLUMN_NAME_EXERCISE_SESSION_ID + " = ? ";
+        final String[] ARGS = new String[]{String.valueOf(parentId)};
+        return fetchWithClause(WHERE, ARGS);
+    }
+
     private Observable<WeightSet> performWeightSetSave(final WeightSet weightSet)
     {
         return Observable.create(subscriber -> {
@@ -100,7 +108,7 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
             {
                 String WHERE_CLAUSE = WeightSetContract._ID + " = ?";
                 String[] ARGS = new String[]{String.valueOf(entity.getId())};
-                subscriber.onNext(mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+                subscriber.onNext(mHelper.getDatabase().delete(WeightSetContract.TABLE_NAME,
                                                                WHERE_CLAUSE, ARGS) != 0);
                 subscriber.onCompleted();
             }

@@ -13,4 +13,8 @@ public interface WorkoutDetailsActivityInterface extends BaseActivityInterface
 {
     void setTitle(String title);
     void setChartData(List<WorkoutSession> workoutSessionList, Exercise exercise);
+    void refreshSets();
+    void contentUpdated(boolean didUpdate);
+    void removeSetAtPosition(int position);
+    void hideSetOptions();
 }

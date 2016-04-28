@@ -132,6 +132,12 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                 });
     }
 
+    @Override
+    public Observable<WorkoutSession> fetchWithParentId(long parentId)
+    {
+        throw new RuntimeException("Cannot fetch a WorkoutSession with any parentId!");
+    }
+
     private Observable<WorkoutSession> getWorkoutSessionFromCursor(Cursor cursor)
     {
         ContentValues contentValues = new ContentValues();

@@ -10,7 +10,6 @@ public interface ActiveWorkoutDetailsActivityInterface extends WorkoutDetailsAct
 {
     void showAddSetDialog(int reps, int weight);
     void addSet(WeightSet set);
-    void contentUpdated(boolean didUpdate);
     void showBottomFab();
     void hideBottomFab();
     void completed();

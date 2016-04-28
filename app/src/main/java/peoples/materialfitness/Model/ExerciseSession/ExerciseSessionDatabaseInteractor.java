@@ -107,6 +107,15 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
     }
 
     @Override
+    public Observable<ExerciseSession> fetchWithParentId(long parentId)
+    {
+        final String WHERE = ExerciseSessionContract.COLUMN_NAME_WORKOUT_SESSION_ID + " = ?";
+        final String[] ARGS = new String[]{String.valueOf(parentId)};
+
+        return fetchWithClause(WHERE, ARGS);
+    }
+
+    @Override
     public Observable<ExerciseSession> save(ExerciseSession entity)
     {
         return Observable.create(subscriber -> {

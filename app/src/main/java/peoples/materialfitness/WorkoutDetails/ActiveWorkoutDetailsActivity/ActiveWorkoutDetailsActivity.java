@@ -19,7 +19,6 @@ import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
-import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 /**
  * Created by Alex Sullivan on 4/18/2016.
@@ -101,16 +100,10 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
     }
 
     @Override
-    public void contentUpdated(boolean didUpdate)
-    {
-        setResult(WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
-    }
-
-    @Override
     public void addSet(WeightSet set)
     {
         // Add our item.
-        int updatedItemPosition = presenter.mExerciseSession.getSets().size() - 1;
+        int updatedItemPosition = presenter.exerciseSession.getSets().size() - 1;
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 

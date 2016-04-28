@@ -28,7 +28,9 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
 {
     private static final String TAG = WorkoutDetailsRecyclerAdapter.class.getSimpleName();
 
-    private final ExerciseSession exerciseSession;
+    @NonNull
+    private ExerciseSession exerciseSession;
+    @NonNull
     private final SetInteractionCallback callback;
     private final boolean allowTouchEvents;
     private Optional<RepViewHolder> revealedViewHolder = Optional.absent();
@@ -40,6 +42,11 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         this.exerciseSession = exerciseSession;
         this.allowTouchEvents = allowTouchEvents;
         this.callback = callback;
+    }
+
+    public void setExerciseSession(final @NonNull ExerciseSession exerciseSession)
+    {
+        this.exerciseSession = exerciseSession;
     }
 
     @Override
@@ -71,6 +78,11 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         {
             holder.prImageView.setVisibility(View.GONE);
         }
+
+        if (holder.contentView.getX() != 0)
+        {
+            holder.contentView.setX(0);
+        }
     }
 
     @Override
@@ -79,7 +91,12 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         return exerciseSession.getSets().size();
     }
 
-    protected void viewholderTouched(RepViewHolder touchedHolder)
+    protected void viewholderTouched()
+    {
+        hideSetOptions();
+    }
+
+    public void hideSetOptions()
     {
         if (revealedViewHolder.isPresent())
         {
@@ -139,7 +156,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         @Override
         public void itemTouched(View v)
         {
-            viewholderTouched(this);
+            viewholderTouched();
         }
 
         @Override

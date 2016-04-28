@@ -8,6 +8,8 @@ import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import rx.android.schedulers.AndroidSchedulers;
@@ -18,7 +20,7 @@ import rx.schedulers.Schedulers;
  */
 public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> extends BaseActivityPresenter<T>
 {
-    public ExerciseSession mExerciseSession;
+    public ExerciseSession exerciseSession;
 
     public static final String EXTRA_EXERCISE_SESSION = "extraExercise";
 
@@ -29,8 +31,8 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
 
         if (bundle != null && bundle.containsKey(EXTRA_EXERCISE_SESSION))
         {
-            mExerciseSession = Parcels.unwrap(bundle.getParcelable(EXTRA_EXERCISE_SESSION));
-            activityInterface.setTitle(mExerciseSession.getExercise().getTitle());
+            exerciseSession = Parcels.unwrap(bundle.getParcelable(EXTRA_EXERCISE_SESSION));
+            activityInterface.setTitle(exerciseSession.getExercise().getTitle());
             populateChartData();
         }
     }
@@ -38,7 +40,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
     protected void populateChartData()
     {
         String whereClause = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
-        String[] args = new String[]{String.valueOf(mExerciseSession.getExercise().getId())};
+        String[] args = new String[]{String.valueOf(exerciseSession.getExercise().getId())};
         new ExerciseSessionDatabaseInteractor().fetchWithClause(whereClause, args)
                 .subscribeOn(Schedulers.io())
                 .flatMap(exerciseSession -> {
@@ -49,13 +51,26 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(workoutSessions -> {
-                    activityInterface.setChartData(workoutSessions, mExerciseSession.getExercise());
+                    activityInterface.setChartData(workoutSessions, exerciseSession.getExercise());
                 });
     }
 
     public void deleteSetButtonClicked(int position)
     {
+        WeightSet set = exerciseSession.getSets().get(position);
+        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
 
+        interactor.deleteWithPrCheck(set, exerciseSession.getExercise())
+                .subscribeOn(Schedulers.io())
+                .flatMap(result -> interactor.fetchWithParentId(exerciseSession.getId()))
+                .toList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(weightSets -> {
+                    exerciseSession.setSets(weightSets);
+
+                    activityInterface.contentUpdated(true);
+                    activityInterface.removeSetAtPosition(position);
+                });
     }
 
     public void editSetButtonClicked(int position)
