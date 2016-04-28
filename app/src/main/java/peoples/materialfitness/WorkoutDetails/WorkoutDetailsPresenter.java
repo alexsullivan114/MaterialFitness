@@ -52,4 +52,14 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                     activityInterface.setChartData(workoutSessions, mExerciseSession.getExercise());
                 });
     }
+
+    public void deleteSetButtonClicked(int position)
+    {
+
+    }
+
+    public void editSetButtonClicked(int position)
+    {
+
+    }
 }

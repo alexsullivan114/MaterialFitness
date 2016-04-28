@@ -9,12 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.common.base.Optional;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
@@ -28,13 +32,17 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     private static final String TAG = WorkoutDetailsRecyclerAdapter.class.getSimpleName();
 
     private final ExerciseSession exerciseSession;
+    private final SetInteractionCallback callback;
     private final boolean allowTouchEvents;
+    private Optional<RepViewHolder> revealedViewHolder = Optional.absent();
 
     public WorkoutDetailsRecyclerAdapter(final @NonNull ExerciseSession exerciseSession,
+                                         final @NonNull SetInteractionCallback callback,
                                          final boolean allowTouchEvents)
     {
         this.exerciseSession = exerciseSession;
         this.allowTouchEvents = allowTouchEvents;
+        this.callback = callback;
     }
 
     @Override
@@ -74,6 +82,21 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         return exerciseSession.getSets().size();
     }
 
+    protected void viewholderTouched(RepViewHolder touchedHolder)
+    {
+        if (revealedViewHolder.isPresent())
+        {
+            revealedViewHolder.get().hideOptions();
+            revealedViewHolder = Optional.absent();
+        }
+    }
+
+    public interface SetInteractionCallback
+    {
+        void deleteButtonClicked(int position);
+        void editButtonClicked(int position);
+    }
+
     protected final class RepViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener
     {
         @Bind(R.id.position) TextView positionTextView;
@@ -82,8 +105,8 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         @Bind(R.id.pr_image) ImageView prImageView;
         @Bind(R.id.contentView) LinearLayout contentView;
         @Bind(R.id.topContainer) FrameLayout topContainer;
-        @Bind(R.id.trashButton) ImageView trashButton;
-        @Bind(R.id.editButton) ImageView editButton;
+        @Bind(R.id.trashButton) ImageButton trashButton;
+        @Bind(R.id.editButton) ImageButton editButton;
 
         private float originalXPosition;
 
@@ -109,6 +132,18 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
             }
         }
 
+        @OnClick(R.id.trashButton)
+        protected void trashButtonClicked()
+        {
+            callback.deleteButtonClicked(getAdapterPosition());
+        }
+
+        @OnClick(R.id.editButton)
+        protected void editButtonClicked()
+        {
+            callback.editButtonClicked(getAdapterPosition());
+        }
+
         @Override
         public boolean onTouch(View view, MotionEvent event)
         {
@@ -123,6 +158,8 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
 
                     traveledHorizontalDistance = 0;
                     traveledVerticalDistance = 0;
+
+                    viewholderTouched(this);
 
                     break;
                 }
@@ -163,6 +200,11 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
                         x = -1 * (screenWidth - editButton.getX());
                     }
 
+                    if (x != 0)
+                    {
+                        revealedViewHolder = Optional.of(this);
+                    }
+
                     view.animate()
                             .x(x)
                             .setDuration(x != 0 ? 600 : 200)
@@ -174,6 +216,15 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
                     return false;
             }
             return true;
+        }
+
+        protected void hideOptions()
+        {
+            contentView.animate()
+                    .x(0)
+                    .setDuration(200)
+                    .setInterpolator(new FastOutLinearInInterpolator())
+                    .start();
         }
     }
 }

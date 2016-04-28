@@ -22,7 +22,7 @@ import peoples.materialfitness.View.BaseActivity;
 
 
 public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> extends BaseActivity<T>
-        implements WorkoutDetailsActivityInterface
+        implements WorkoutDetailsActivityInterface, WorkoutDetailsRecyclerAdapter.SetInteractionCallback
 {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -47,7 +47,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
 
         presenter.setBundle(getIntent().getExtras());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.mExerciseSession, allowSetTouchEvents()));
+        recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.mExerciseSession, this, allowSetTouchEvents()));
     }
 
     @Override
@@ -61,6 +61,18 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     {
         chart.setExercise(exercise);
         chart.setWorkoutSessions(workoutSessionList);
+    }
+
+    @Override
+    public void deleteButtonClicked(int position)
+    {
+        presenter.deleteSetButtonClicked(position);
+    }
+
+    @Override
+    public void editButtonClicked(int position)
+    {
+        presenter.editSetButtonClicked(position);
     }
 
     protected abstract boolean allowSetTouchEvents();
