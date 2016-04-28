@@ -1,6 +1,7 @@
 package peoples.materialfitness.WorkoutDetails;
 
 import android.support.annotation.NonNull;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.ScreenUtils;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -80,6 +82,8 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         @Bind(R.id.pr_image) ImageView prImageView;
         @Bind(R.id.contentView) LinearLayout contentView;
         @Bind(R.id.topContainer) FrameLayout topContainer;
+        @Bind(R.id.trashButton) ImageView trashButton;
+        @Bind(R.id.editButton) ImageView editButton;
 
         private float originalXPosition;
 
@@ -147,10 +151,22 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
                 }
                 case MotionEvent.ACTION_UP:
                 {
+                    float x = 0;
+
+                    if (view.getX() > trashButton.getX() + trashButton.getWidth())
+                    {
+                        x = trashButton.getX() + trashButton.getWidth();
+                    }
+                    else if (view.getX() + view.getWidth() < editButton.getX())
+                    {
+                        int screenWidth = ScreenUtils.getScreenWidth();
+                        x = -1 * (screenWidth - editButton.getX());
+                    }
+
                     view.animate()
-                            .x(originalXPosition)
-                            .setDuration(600)
-                            .setInterpolator(new OvershootInterpolator())
+                            .x(x)
+                            .setDuration(x != 0 ? 600 : 200)
+                            .setInterpolator(x != 0 ? new OvershootInterpolator() : new FastOutLinearInInterpolator())
                             .start();
                     topContainer.getParent().requestDisallowInterceptTouchEvent(false);
                 }
