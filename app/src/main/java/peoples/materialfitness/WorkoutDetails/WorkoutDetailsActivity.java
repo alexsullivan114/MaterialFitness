@@ -47,7 +47,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
 
         presenter.setBundle(getIntent().getExtras());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.mExerciseSession));
+        recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.mExerciseSession, allowSetTouchEvents()));
     }
 
     @Override
@@ -62,4 +62,6 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         chart.setExercise(exercise);
         chart.setWorkoutSessions(workoutSessionList);
     }
+
+    protected abstract boolean allowSetTouchEvents();
 }

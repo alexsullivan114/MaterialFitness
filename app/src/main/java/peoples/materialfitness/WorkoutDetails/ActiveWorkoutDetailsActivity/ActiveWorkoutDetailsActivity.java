@@ -182,4 +182,10 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
     {
         finish();
     }
+
+    @Override
+    protected boolean allowSetTouchEvents()
+    {
+        return true;
+    }
 }

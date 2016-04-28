@@ -24,4 +24,10 @@ public class HistoricalWorkoutDetailsActivity extends WorkoutDetailsActivity<His
         middleFab.setVisibility(View.GONE);
         bottomFab.setVisibility(View.GONE);
     }
+
+    @Override
+    protected boolean allowSetTouchEvents()
+    {
+        return false;
+    }
 }
