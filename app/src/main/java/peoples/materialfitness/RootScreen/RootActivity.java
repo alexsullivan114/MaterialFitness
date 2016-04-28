@@ -23,7 +23,7 @@ import peoples.materialfitness.Navigation.RootDrawerController;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.AnimationUtils;
+import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.Util.Constants;
 import peoples.materialfitness.Util.PreferenceManager;
 import peoples.materialfitness.Util.VersionUtils;

@@ -1,4 +1,4 @@
-package peoples.materialfitness.Util;
+package peoples.materialfitness.Util.AnimationHelpers;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

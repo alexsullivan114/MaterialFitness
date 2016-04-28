@@ -4,11 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +19,7 @@ import butterknife.OnClick;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.ScreenUtils;
+import peoples.materialfitness.Util.AnimationHelpers.SwipeToRevealItemTouchHelper;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -94,32 +91,27 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     public interface SetInteractionCallback
     {
         void deleteButtonClicked(int position);
+
         void editButtonClicked(int position);
     }
 
-    protected final class RepViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener
+    protected final class RepViewHolder extends RecyclerView.ViewHolder
+            implements SwipeToRevealItemTouchHelper.ItemInteractionCallback
     {
-        @Bind(R.id.position) TextView positionTextView;
-        @Bind(R.id.num_reps) TextView numRepsTextView;
-        @Bind(R.id.weight) TextView weightTextView;
-        @Bind(R.id.pr_image) ImageView prImageView;
-        @Bind(R.id.contentView) LinearLayout contentView;
-        @Bind(R.id.topContainer) FrameLayout topContainer;
-        @Bind(R.id.trashButton) ImageButton trashButton;
-        @Bind(R.id.editButton) ImageButton editButton;
-
-        private float originalXPosition;
-
-        private float originalTouchY;
-        private float originalTouchX;
-
-        final static int horizontalThreshold = 50;
-        final static int verticalThreshold = 100;
-
-        private int traveledHorizontalDistance = 0;
-        private int traveledVerticalDistance = 0;
-
-        private boolean isSwiping = false;
+        @Bind(R.id.position)
+        TextView positionTextView;
+        @Bind(R.id.num_reps)
+        TextView numRepsTextView;
+        @Bind(R.id.weight)
+        TextView weightTextView;
+        @Bind(R.id.pr_image)
+        ImageView prImageView;
+        @Bind(R.id.contentView)
+        LinearLayout contentView;
+        @Bind(R.id.trashButton)
+        ImageButton trashButton;
+        @Bind(R.id.editButton)
+        ImageButton editButton;
 
         public RepViewHolder(View itemView)
         {
@@ -128,7 +120,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
 
             if (allowTouchEvents)
             {
-                contentView.setOnTouchListener(this);
+                setSwipeHelper();
             }
         }
 
@@ -145,77 +137,25 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         }
 
         @Override
-        public boolean onTouch(View view, MotionEvent event)
+        public void itemTouched(View v)
         {
-            switch (event.getAction()) {
+            viewholderTouched(this);
+        }
 
-                case MotionEvent.ACTION_DOWN:
-                {
-                    originalTouchX = event.getRawX();
-                    originalTouchY = event.getRawY();
+        @Override
+        public void itemRevealed(View v)
+        {
+            revealedViewHolder = Optional.of(this);
+        }
 
-                    originalXPosition = view.getX();
-
-                    traveledHorizontalDistance = 0;
-                    traveledVerticalDistance = 0;
-
-                    viewholderTouched(this);
-
-                    break;
-                }
-                case MotionEvent.ACTION_MOVE:
-                {
-                    traveledHorizontalDistance += Math.abs(originalTouchX - event.getRawX());
-                    traveledVerticalDistance += Math.abs(originalTouchY - event.getRawY());
-
-                    if (traveledVerticalDistance >= verticalThreshold && !isSwiping)
-                    {
-                        return false; // We're considering this a scroll up so bounce.
-                    }
-
-                    if (traveledHorizontalDistance >= horizontalThreshold)
-                    {
-                        isSwiping = true;
-                        topContainer.getParent().requestDisallowInterceptTouchEvent(true);
-
-                        view.animate()
-                                .x(originalXPosition + (event.getRawX() - originalTouchX))
-                                .setDuration(0)
-                                .start();
-                    }
-
-                    break;
-                }
-                case MotionEvent.ACTION_UP:
-                {
-                    float x = 0;
-
-                    if (view.getX() > trashButton.getX() + trashButton.getWidth())
-                    {
-                        x = trashButton.getX() + trashButton.getWidth();
-                    }
-                    else if (view.getX() + view.getWidth() < editButton.getX())
-                    {
-                        int screenWidth = ScreenUtils.getScreenWidth();
-                        x = -1 * (screenWidth - editButton.getX());
-                    }
-
-                    if (x != 0)
-                    {
-                        revealedViewHolder = Optional.of(this);
-                    }
-
-                    view.animate()
-                            .x(x)
-                            .setDuration(x != 0 ? 600 : 200)
-                            .setInterpolator(x != 0 ? new OvershootInterpolator() : new FastOutLinearInInterpolator())
-                            .start();
-                    topContainer.getParent().requestDisallowInterceptTouchEvent(false);
-                }
-                default:
-                    return false;
-            }
-            return true;
+        private void setSwipeHelper()
+        {
+            SwipeToRevealItemTouchHelper helper =
+                    new SwipeToRevealItemTouchHelper(this,
+                                                     itemView,
+                                                     trashButton,
+                                                     editButton);
+            contentView.setOnTouchListener(helper);
         }
 
         protected void hideOptions()

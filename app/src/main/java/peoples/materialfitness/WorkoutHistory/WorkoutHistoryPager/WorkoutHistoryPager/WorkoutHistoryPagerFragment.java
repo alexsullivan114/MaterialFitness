@@ -25,7 +25,7 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.AnimationUtils;
+import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
 import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;
