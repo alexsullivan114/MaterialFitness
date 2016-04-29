@@ -98,4 +98,11 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
     {
 
     }
+
+    public void handleSavedExerciseSession(ExerciseSession savedExerciseSession)
+    {
+        exerciseSession = savedExerciseSession;
+        activityInterface.setTitle(exerciseSession.getExercise().getTitle());
+        populateChartData();
+    }
 }

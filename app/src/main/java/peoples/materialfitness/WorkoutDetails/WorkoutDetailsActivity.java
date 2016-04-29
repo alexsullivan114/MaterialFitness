@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,6 +40,10 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     protected @Bind(R.id.bottomFab)
     FloatingActionButton bottomFab;
 
+    private static final String IS_UPDATED_KEY = "isUpdatedKey";
+
+    private boolean contentUpdated = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -46,9 +52,32 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         setContentView(R.layout.activity_workout_details);
         ButterKnife.bind(this);
 
-        presenter.setBundle(getIntent().getExtras());
+        // TODO: Fix this up
+        if (savedInstanceState != null && savedInstanceState.containsKey(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION))
+        {
+            presenter.handleSavedExerciseSession(Parcels.unwrap(savedInstanceState.getParcelable(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION)));
+            if (savedInstanceState.containsKey(IS_UPDATED_KEY))
+            {
+                if (savedInstanceState.getBoolean(IS_UPDATED_KEY))
+                {
+                    setResult(WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
+                }
+            }
+        }
+        else
+        {
+            presenter.setBundle(getIntent().getExtras());
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.exerciseSession, this, allowSetTouchEvents()));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        outState.putParcelable(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(presenter.exerciseSession));
+        outState.putBoolean(IS_UPDATED_KEY, contentUpdated);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -88,6 +117,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     @Override
     public void contentUpdated(boolean didUpdate)
     {
+        contentUpdated = true;
         setResult(WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
     }
 
