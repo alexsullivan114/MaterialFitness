@@ -3,6 +3,8 @@ package peoples.materialfitness.Model.ExerciseSession;
 
 import android.content.ContentValues;
 
+import com.google.common.base.Optional;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -104,6 +106,21 @@ public class ExerciseSession
     public Long getId()
     {
         return this.id;
+    }
+
+    public Optional<WeightSet> getMaxWeightSet()
+    {
+        Optional<WeightSet> returnSet = Optional.absent();
+
+        for (WeightSet set : sets)
+        {
+            if (!returnSet.isPresent() || returnSet.get().getWeight() < set.getWeight())
+            {
+                returnSet = Optional.of(set);
+            }
+        }
+
+        return returnSet;
     }
 
     @Override

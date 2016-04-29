@@ -16,7 +16,6 @@ import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import rx.Observable;
-import rx.functions.Func2;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -139,14 +138,7 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
                 .fetchWithClause(WHERE, ARGS)
                 .map(ExerciseSession::getSets)
                 .flatMap(Observable::from)
-                .toSortedList(new Func2<WeightSet, WeightSet, Integer>()
-                {
-                    @Override
-                    public Integer call(WeightSet weightSet, WeightSet weightSet2)
-                    {
-                       return weightSet.getWeight() - weightSet2.getWeight();
-                    }
-                })
+                .toSortedList((weightSet, weightSet2) -> weightSet.getWeight() - weightSet2.getWeight())
                 .map(weightSets -> {
                     WeightSet pr = weightSets.get(weightSets.size() - 1);
                     pr.setIsPr(true);

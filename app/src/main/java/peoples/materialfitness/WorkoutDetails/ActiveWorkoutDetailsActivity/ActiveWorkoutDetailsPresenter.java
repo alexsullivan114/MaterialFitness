@@ -74,8 +74,13 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
                     exerciseSession.addSet(set);
                     activityInterface.addSet(set);
                     activityInterface.contentUpdated(true);
-                    // and finally repopulate our chart data.
-                    populateChartData();
+                    // and finally repopulate our chart data if this set is the max weight for
+                    // this session.
+                    Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
+                    if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(weightSet.getId()))
+                    {
+                        populateChartData();
+                    }
                 });
     }
 

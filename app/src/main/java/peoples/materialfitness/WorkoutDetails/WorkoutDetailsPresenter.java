@@ -2,6 +2,8 @@ package peoples.materialfitness.WorkoutDetails;
 
 import android.os.Bundle;
 
+import com.google.common.base.Optional;
+
 import org.parceler.Parcels;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
@@ -57,7 +59,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
 
     public void deleteSetButtonClicked(int position)
     {
-        WeightSet set = exerciseSession.getSets().get(position);
+        final WeightSet set = exerciseSession.getSets().get(position);
         WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
 
         interactor.deleteWithPrCheck(set, exerciseSession.getExercise())
@@ -66,6 +68,15 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(weightSets -> {
+                    Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
+
+                    // If we deleted our highest weight set for this exercise session we need to
+                    // refresh our chart.
+                    if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(set.getId()))
+                    {
+                        populateChartData();
+                    }
+
                     exerciseSession.setSets(weightSets);
 
                     activityInterface.contentUpdated(true);
