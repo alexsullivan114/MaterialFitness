@@ -3,6 +3,7 @@ package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -27,8 +28,8 @@ import peoples.materialfitness.Util.AnimationHelpers.HeightAnimator;
  */
 public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCardRecyclerAdapter.ExerciseCardViewHolder>
 {
-    private WorkoutSession mWorkoutSession;
-    private ExerciseCardAdapterInterface mCallback;
+    private WorkoutSession workoutSession;
+    private ExerciseCardAdapterInterface callback;
     private static final int SHOW_SPILLOVER_ANIMATION_DURATION = 600;
 
     private static final int NUM_DISPLAY_SETS = 5;
@@ -36,8 +37,8 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     public ExerciseCardRecyclerAdapter(WorkoutSession workoutSession,
                                        ExerciseCardAdapterInterface callback)
     {
-        mWorkoutSession = workoutSession;
-        mCallback = callback;
+        this.workoutSession = workoutSession;
+        this.callback = callback;
     }
 
     @Override
@@ -46,19 +47,23 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         CardView cardView = (CardView)inflater.inflate(R.layout.fragment_workout_card, parent, false);
 
-        ExerciseCardViewHolder viewHolder = new ExerciseCardViewHolder(cardView);
-
-        return viewHolder;
+        return new ExerciseCardViewHolder(cardView);
     }
 
     @Override
     public void onBindViewHolder(ExerciseCardViewHolder holder, int position)
     {
-        ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(position);
+        ExerciseSession exerciseSession = workoutSession.getExercises().get(position);
 
-        holder.mTitleView.setText(exerciseSession.getExercise().getTitle());
+        holder.titleView.setText(exerciseSession.getExercise().getTitle());
+        // Reset our height in case this view holder uses to be expanded.
+        ViewGroup.LayoutParams params = holder.repContainer.getLayoutParams();
+        params.height = ViewPager.LayoutParams.WRAP_CONTENT;
+        holder.repContainer.setLayoutParams(params);
+        // make sure to set our dropdown layout to GONE.
+        holder.dropDownLayout.setVisibility(View.GONE);
         // Clear our any old views.
-        holder.mRepContainer.removeAllViews();
+        holder.repContainer.removeAllViews();
         // Now loop through our weights and add each one to our container.
         for (int i = 0; i < exerciseSession.getSets().size(); i++)
         {
@@ -77,7 +82,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
             // +1 for zero indexing offset.
             if (i+1 == NUM_DISPLAY_SETS && !holder.isDropdownToggled)
             {
-                LinearLayout repContainer = holder.mRepContainer;
+                LinearLayout repContainer = holder.repContainer;
                 repContainer.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                 // Lock our view at a certain height.
                 ViewGroup.LayoutParams oldParams = repContainer.getLayoutParams();
@@ -90,17 +95,17 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     @Override
     public int getItemCount()
     {
-        return mWorkoutSession.getExercises().size();
+        return workoutSession.getExercises().size();
     }
 
     public void updateExerciseCard(ExerciseSession exerciseSession)
     {
-        if (!mWorkoutSession.containsExercise(exerciseSession.getExercise()))
+        if (!workoutSession.containsExercise(exerciseSession.getExercise()))
         {
-            mWorkoutSession.addExerciseSession(exerciseSession);
+            workoutSession.addExerciseSession(exerciseSession);
         }
 
-        notifyItemInserted(mWorkoutSession.getExercises().size() - 1);
+        notifyItemInserted(workoutSession.getExercises().size() - 1);
     }
 
     /**
@@ -111,7 +116,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     private void addWeightSetViewToHolder(ExerciseCardViewHolder holder, WeightSet weightSet)
     {
         LayoutInflater inflater = LayoutInflater.from(holder.mCardView.getContext());
-        LinearLayout setContainer = (LinearLayout)inflater.inflate(R.layout.workout_card_rep, holder.mRepContainer, false);
+        LinearLayout setContainer = (LinearLayout)inflater.inflate(R.layout.workout_card_rep, holder.repContainer, false);
 
         TextView repsTextView = (TextView)setContainer.findViewById(R.id.num_reps);
         TextView weightTextView = (TextView)setContainer.findViewById(R.id.weight);
@@ -129,7 +134,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
             imageView.setVisibility(View.VISIBLE);
         }
 
-        holder.mRepContainer.addView(setContainer);
+        holder.repContainer.addView(setContainer);
     }
 
     private void onDropdownClicked(ExerciseCardViewHolder viewHolder)
@@ -146,17 +151,17 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
      */
     private void animateSpilloverSetsToggle(ExerciseCardViewHolder viewHolder, boolean shouldExpand)
     {
-        ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
+        ExerciseSession exerciseSession = workoutSession.getExercises().get(viewHolder.getAdapterPosition());
         int spilloverSetsNum = exerciseSession.getSets().size() - NUM_DISPLAY_SETS;
         // Note: We know we have at least NUM_DISPLAY_SETS children here, which is why this is safe.
         // TODO: However, we're not really sure that the items in the recyclerview are this height.
         // They are right now but I'm sure that'll change.
-        View firstChild = viewHolder.mRepContainer.getChildAt(0);
+        View firstChild = viewHolder.repContainer.getChildAt(0);
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)firstChild.getLayoutParams();
 
         int totalHeight = firstChild.getHeight() + layoutParams.bottomMargin + layoutParams.topMargin + firstChild.getPaddingBottom();
         int heightOfSpilloverSets = totalHeight * spilloverSetsNum;
-        int heightOfContainer = viewHolder.mRepContainer.getHeight();
+        int heightOfContainer = viewHolder.repContainer.getHeight();
 
         int desiredHeight = 0;
         float startRotation = 0;
@@ -176,7 +181,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         }
 
         ObjectAnimator rotationAnimator = ObjectAnimator.ofFloat(viewHolder.dividerView, "rotation", startRotation, endRotation);
-        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.mRepContainer, desiredHeight);
+        HeightAnimator heightAnimator = new HeightAnimator(viewHolder.repContainer, desiredHeight);
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(heightAnimator, rotationAnimator);
@@ -193,7 +198,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
             @Override
             public void onAnimationEnd(Animator animation)
             {
-                mCallback.onSpilloverAnimationEnd();
+                callback.onSpilloverAnimationEnd();
             }
 
             @Override
@@ -213,8 +218,8 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
     private void onCardClicked(ExerciseCardViewHolder viewHolder)
     {
-        ExerciseSession exerciseSession = mWorkoutSession.getExercises().get(viewHolder.getAdapterPosition());
-        mCallback.onExerciseClicked(exerciseSession);
+        ExerciseSession exerciseSession = workoutSession.getExercises().get(viewHolder.getAdapterPosition());
+        callback.onExerciseClicked(exerciseSession);
     }
 
     /**
@@ -228,7 +233,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
     public void setWorkoutSession(WorkoutSession workoutSession)
     {
-        mWorkoutSession = workoutSession;
+        this.workoutSession = workoutSession;
         notifyDataSetChanged();
     }
 
@@ -237,8 +242,8 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     {
         CardView mCardView;
 
-        @Bind(R.id.exercise_title) TextView mTitleView;
-        @Bind(R.id.rep_container) LinearLayout mRepContainer;
+        @Bind(R.id.exercise_title) TextView titleView;
+        @Bind(R.id.rep_container) LinearLayout repContainer;
         @Bind(R.id.dropdown_layout) LinearLayout dropDownLayout;
         @Bind(R.id.dropdown_indicator) ImageView dividerView;
 
@@ -247,9 +252,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         public ExerciseCardViewHolder(CardView cardView)
         {
             super(cardView);
-
             mCardView = cardView;
-
             ButterKnife.bind(this, cardView);
         }
 
