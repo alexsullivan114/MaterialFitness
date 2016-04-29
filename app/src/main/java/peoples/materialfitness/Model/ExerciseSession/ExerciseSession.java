@@ -123,6 +123,21 @@ public class ExerciseSession
         return returnSet;
     }
 
+    public int getPrPosition()
+    {
+        for (int i = 0; i < sets.size(); i++)
+        {
+            WeightSet set = sets.get(i);
+
+            if (set.getIsPr())
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     @Override
     public String toString()
     {

@@ -15,6 +15,7 @@ public interface WorkoutDetailsActivityInterface extends BaseActivityInterface
     void setChartData(List<WorkoutSession> workoutSessionList, Exercise exercise);
     void refreshSets();
     void contentUpdated(boolean didUpdate);
+    void refreshSetAtPosition(int position);
     void removeSetAtPosition(int position);
     void hideSetOptions();
 }

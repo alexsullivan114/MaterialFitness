@@ -80,6 +80,12 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     }
 
     @Override
+    public void refreshSetAtPosition(int position)
+    {
+        recyclerView.getAdapter().notifyItemChanged(position);
+    }
+
+    @Override
     public void contentUpdated(boolean didUpdate)
     {
         setResult(WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);

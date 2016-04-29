@@ -78,6 +78,16 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                     }
 
                     exerciseSession.setSets(weightSets);
+                    // We deleted a PR. Need to check to see if we have a new PR.
+                    if (set.getIsPr())
+                    {
+                        int newPrPosition = exerciseSession.getPrPosition();
+
+                        if (newPrPosition != -1)
+                        {
+                            activityInterface.refreshSetAtPosition(newPrPosition);
+                        }
+                    }
 
                     activityInterface.contentUpdated(true);
                     activityInterface.removeSetAtPosition(position);
