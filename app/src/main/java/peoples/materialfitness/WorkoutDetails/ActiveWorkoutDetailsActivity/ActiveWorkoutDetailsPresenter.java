@@ -86,6 +86,8 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
 
     /**
      * Look into the database to fetch our last weight set for this exercise type.
+     *
+     * TODO: This should be in the weight set database code
      */
     private void populateLastSessionFirstWeightSet()
     {

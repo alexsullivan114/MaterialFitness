@@ -102,4 +102,44 @@ public class WeightSet
 
         return weightSet;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        WeightSet weightSet = (WeightSet) o;
+
+        if (id != weightSet.id)
+        {
+            return false;
+        }
+        if (weight != weightSet.weight)
+        {
+            return false;
+        }
+        if (numReps != weightSet.numReps)
+        {
+            return false;
+        }
+        return exerciseSessionId == weightSet.exerciseSessionId;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + weight;
+        result = 31 * result + numReps;
+        result = 31 * result + (int) (exerciseSessionId ^ (exerciseSessionId >>> 32));
+        return result;
+    }
 }

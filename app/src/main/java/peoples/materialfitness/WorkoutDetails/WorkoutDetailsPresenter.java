@@ -23,7 +23,7 @@ import rx.schedulers.Schedulers;
 public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> extends BaseActivityPresenter<T>
 {
     public ExerciseSession exerciseSession;
-
+    private Optional<WeightSet> editingSet = Optional.absent();
     public static final String EXTRA_EXERCISE_SESSION = "extraExercise";
 
     @Override
@@ -96,7 +96,9 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
 
     public void editSetButtonClicked(int position)
     {
-
+        WeightSet weightSet = exerciseSession.getSets().get(position);
+        activityInterface.showEditWeightSetDialog(weightSet.getWeight(), weightSet.getNumReps());
+        editingSet = Optional.of(weightSet);
     }
 
     public void handleSavedExerciseSession(ExerciseSession savedExerciseSession)
@@ -104,5 +106,61 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
         exerciseSession = savedExerciseSession;
         activityInterface.setTitle(exerciseSession.getExercise().getTitle());
         populateChartData();
+    }
+
+    public void editSet(final int weight, final int reps)
+    {
+        if (editingSet.isPresent())
+        {
+            WeightSet weightSet = editingSet.get();
+            weightSet.setWeight(weight);
+            weightSet.setNumReps(reps);
+
+            editingSet = Optional.absent();
+
+            final int setPosition = exerciseSession.getSets().indexOf(weightSet);
+            final int oldPrPosition = exerciseSession.getPrPosition();
+
+            WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
+
+            interactor.save(weightSet)
+                    .subscribeOn(Schedulers.io())
+                    .flatMap(result -> interactor.fetchWithParentId(exerciseSession.getId()))
+                    .toList()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(sets -> {
+                        exerciseSession.setSets(sets);
+                        activityInterface.contentUpdated(true);
+
+                        Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
+
+                        // If we edited our highest weight set for this exercise session we need to
+                        // refresh our chart.
+                        if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(weightSet.getId()))
+                        {
+                            populateChartData();
+                        }
+
+                        if (oldPrPosition != exerciseSession.getPrPosition())
+                        {
+                            if (oldPrPosition != -1)
+                            {
+                                activityInterface.refreshSetAtPosition(oldPrPosition);
+                            }
+
+                            if (exerciseSession.getPrPosition() != -1)
+                            {
+                                activityInterface.refreshSetAtPosition(exerciseSession.getPrPosition());
+                            }
+                        }
+
+                        activityInterface.refreshSetAtPosition(setPosition);
+                    });
+        }
+    }
+
+    public void abandonEditing()
+    {
+        editingSet = Optional.absent();
     }
 }

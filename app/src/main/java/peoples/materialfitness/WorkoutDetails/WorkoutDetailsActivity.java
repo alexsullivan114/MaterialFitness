@@ -6,6 +6,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.parceler.Parcels;
 
@@ -125,6 +130,38 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     public void hideSetOptions()
     {
         ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).hideSetOptions();
+    }
+
+    @Override
+    public void showEditWeightSetDialog(int weight, int reps)
+    {
+            MaterialDialog dialog = new MaterialDialog.Builder(this)
+                    .title(R.string.edit_set)
+                    .customView(R.layout.add_rep_dialog, false)
+                    .positiveText(R.string.ok)
+                    .negativeText(R.string.cancel)
+                    .onPositive((dialog1, which) -> {
+                        View customView = dialog1.getCustomView();
+                        EditText repsText = (EditText) customView.findViewById(R.id.reps);
+                        EditText weightText = (EditText) customView.findViewById(R.id.weight);
+                        int repsInt = Integer.parseInt(repsText.getText().toString());
+                        int weightInt = Integer.parseInt(weightText.getText().toString());
+                        presenter.editSet(weightInt, repsInt);
+                    })
+                    .onNegative((dialog1, which) -> {
+                        presenter.abandonEditing();
+                    })
+                    .build();
+
+            EditText repEditText = (EditText) dialog.findViewById(R.id.reps);
+            EditText weightEditText = (EditText) dialog.findViewById(R.id.weight);
+
+            repEditText.append(String.valueOf(reps));
+            weightEditText.append(String.valueOf(weight));
+
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+            dialog.show();
     }
 
     @Override
