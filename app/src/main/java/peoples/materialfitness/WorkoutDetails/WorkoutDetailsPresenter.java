@@ -123,7 +123,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
 
             WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
 
-            interactor.save(weightSet)
+            interactor.edit(weightSet, exerciseSession.getExercise())
                     .subscribeOn(Schedulers.io())
                     .flatMap(result -> interactor.fetchWithParentId(exerciseSession.getId()))
                     .toList()

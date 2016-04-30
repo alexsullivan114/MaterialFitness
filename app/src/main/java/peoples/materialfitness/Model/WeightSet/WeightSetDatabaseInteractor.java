@@ -37,6 +37,20 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
         return fetchWithClause(null, null);
     }
 
+    /**
+     * Edits the provided weight set - assumed values have been updated and ID is still the same.
+     * @param weightSet The (already ID'd) weightset to update
+     * @return The newly saved weightset
+     */
+    public Observable<Boolean> edit(final WeightSet weightSet, final Exercise exercise)
+    {
+        // Reset our PR flag - we'll need to recalculate it anyways.
+        weightSet.setIsPr(false);
+
+        return performWeightSetSave(weightSet)
+                .flatMap(savedWeightset -> recalculatePrs(exercise));
+    }
+
     @Override
     public Observable<WeightSet> save(WeightSet entity)
     {
