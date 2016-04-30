@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <RelativeLayout
+        <android.support.design.widget.CoordinatorLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -28,12 +29,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                app:layout_anchor="@id/main_fragment"
+                app:layout_anchorGravity="bottom|right|end"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:src="@drawable/ic_add_24dp"/>
 
-        </RelativeLayout>
+        </android.support.design.widget.CoordinatorLayout>
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
