@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.common.base.Optional;
 
@@ -42,6 +43,8 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     ViewPager pager;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
+    @Bind(R.id.workouts_will_appear_textview)
+    TextView emptyTextView;
 
     private Optional<String> titleString = Optional.absent();
 
@@ -137,6 +140,11 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
             {
                 AnimationUtils.fadeVisibilityChange(pager, View.VISIBLE);
                 AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
+            }
+            else
+            {
+                AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
+                AnimationUtils.fadeVisibilityChange(emptyTextView, View.VISIBLE);
             }
         }
     }

@@ -55,5 +55,6 @@
     <!-- workout history screen -->
     <string name="calendar_menu_item_tooltip">Select a date</string>
     <string name="workout_history_title">Workout History</string>
+    <string name="workouts_will_appear">Historical Workouts Will Appear Here</string>
 
 </resources>
