@@ -126,7 +126,7 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
                 view.animate()
                         .x(x)
                         .setDuration(x != 0 ? 600 : 200)
-                        .setInterpolator(x != 0 ? new OvershootInterpolator() : new FastOutLinearInInterpolator())
+                        .setInterpolator(x != 0 ? new OvershootInterpolator(1.0f) : new FastOutLinearInInterpolator())
                         .start();
 
                 recyclerviewDirectChild.getParent().requestDisallowInterceptTouchEvent(false);
