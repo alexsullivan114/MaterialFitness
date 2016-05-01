@@ -110,7 +110,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     {
         ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).setExerciseSession(presenter.exerciseSession);
         recyclerView.getAdapter().notifyItemRemoved(position);
-        recyclerView.getAdapter().notifyItemRangeChanged(position, presenter.exerciseSession.getSets().size() - 1);
+        recyclerView.getAdapter().notifyItemRangeChanged(position, presenter.exerciseSession.getSets().size());
     }
 
     @Override
