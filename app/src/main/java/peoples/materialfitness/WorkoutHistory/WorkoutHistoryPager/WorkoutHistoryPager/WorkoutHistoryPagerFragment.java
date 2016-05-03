@@ -141,12 +141,15 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
                 AnimationUtils.fadeVisibilityChange(pager, View.VISIBLE);
                 AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
             }
-            else
-            {
-                AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
-                AnimationUtils.fadeVisibilityChange(emptyTextView, View.VISIBLE);
-            }
         }
+    }
+
+    @Override
+    public void showEmptyTextView()
+    {
+        AnimationUtils.fadeVisibilityChange(pager, View.GONE);
+        AnimationUtils.fadeVisibilityChange(progressBar, View.GONE);
+        AnimationUtils.fadeVisibilityChange(emptyTextView, View.VISIBLE);
     }
 
     private void setupAdapter(List<WorkoutSession> workoutSessions)

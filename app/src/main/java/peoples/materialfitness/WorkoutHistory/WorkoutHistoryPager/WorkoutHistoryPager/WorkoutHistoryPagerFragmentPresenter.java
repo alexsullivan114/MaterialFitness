@@ -32,11 +32,20 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
         CompleteWorkoutHistoryCache.getInstance()
                 .getAllWorkoutSessions()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .filter(workoutSession -> !DateUtils.isToday(workoutSession.getWorkoutSessionDate()))
                 .toList()
                 .filter(workoutSessionList -> workoutSessionList.size() > 0)
-                .doOnCompleted(() -> fragmentInterface.setWorkoutSessions(workoutSessions))
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnCompleted(() -> {
+                    if (workoutSessions.size() == 0)
+                    {
+                        fragmentInterface.showEmptyTextView();
+                    }
+                    else
+                    {
+                        fragmentInterface.setWorkoutSessions(workoutSessions);
+                    }
+                })
                 .subscribe(workoutSessions -> {
                     WorkoutHistoryPagerFragmentPresenter.this.workoutSessions = workoutSessions;
                     currentDateString = Optional.of(getWorkoutSessionDateString(workoutSessions.get(0)));

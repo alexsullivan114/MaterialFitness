@@ -15,4 +15,5 @@ public interface WorkoutHistoryPagerFragmentInterface extends BaseFragmentInterf
     void openDatePickerDialog();
     void hideFab();
     void scrollToIndex(int index);
+    void showEmptyTextView();
 }
