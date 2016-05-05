@@ -28,7 +28,7 @@
         <activity android:name=".FitnotesImport.FitnotesImporterActivity"/>
         <activity
             android:name=".WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
 
     </application>
 
