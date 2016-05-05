@@ -1,6 +1,7 @@
-package peoples.materialfitness.WorkoutDetails;
+package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,13 +31,13 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
 
     @NonNull
     private ExerciseSession exerciseSession;
-    @NonNull
+    @Nullable
     private final SetInteractionCallback callback;
     private final boolean allowTouchEvents;
     private Optional<RepViewHolder> revealedViewHolder = Optional.absent();
 
     public WorkoutDetailsRecyclerAdapter(final @NonNull ExerciseSession exerciseSession,
-                                         final @NonNull SetInteractionCallback callback,
+                                         final @Nullable SetInteractionCallback callback,
                                          final boolean allowTouchEvents)
     {
         this.exerciseSession = exerciseSession;

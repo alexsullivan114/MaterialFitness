@@ -10,7 +10,7 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.WorkoutDetails.HistoricalWorkoutDetailsActivity.HistoricalWorkoutDetailsActivity;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 /**

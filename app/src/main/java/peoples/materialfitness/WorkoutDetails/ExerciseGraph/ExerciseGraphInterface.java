@@ -1,7 +1,8 @@
-package peoples.materialfitness.WorkoutDetails;
+package peoples.materialfitness.WorkoutDetails.ExerciseGraph;
 
 import com.github.mikephil.charting.data.LineData;
 
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.View.BaseViewInterface;
 
 /**
@@ -10,4 +11,5 @@ import peoples.materialfitness.View.BaseViewInterface;
 public interface ExerciseGraphInterface extends BaseViewInterface
 {
     void setChartData(LineData lineData);
+    void showHistoricalExerciseSessionDialog(ExerciseSession exerciseSession, long exerciseSessionDate);
 }

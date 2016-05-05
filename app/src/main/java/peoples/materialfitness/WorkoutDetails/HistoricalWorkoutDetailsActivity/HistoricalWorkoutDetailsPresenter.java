@@ -1,7 +1,7 @@
 package peoples.materialfitness.WorkoutDetails.HistoricalWorkoutDetailsActivity;
 
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 
 /**
  * Created by Alex Sullivan on 4/18/2016.

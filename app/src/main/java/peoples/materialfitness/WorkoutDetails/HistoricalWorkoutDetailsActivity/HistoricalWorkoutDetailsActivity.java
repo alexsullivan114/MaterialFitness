@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsActivity;
 
 /**
  * Created by Alex Sullivan on 4/18/2016.

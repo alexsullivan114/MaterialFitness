@@ -13,7 +13,7 @@ import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

@@ -1,4 +1,4 @@
-package peoples.materialfitness.WorkoutDetails;
+package peoples.materialfitness.WorkoutDetails.ExerciseGraph;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,20 +6,28 @@ import android.util.AttributeSet;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.List;
 
 import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 
 /**
  * Created by Alex Sullivan on 4/11/2016.
  */
-public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
+public class ExerciseGraph extends LineChart
+        implements ExerciseGraphInterface,
+                   OnChartValueSelectedListener
 {
     private ExerciseGraphPresenter presenter = new ExerciseGraphPresenter(this);
+
+    private InteractionCallback callback;
 
     public ExerciseGraph(Context context)
     {
@@ -39,6 +47,11 @@ public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
         styleChart();
     }
 
+    public void setCallback(InteractionCallback callback)
+    {
+        this.callback = callback;
+    }
+
     private void styleChart()
     {
         int defaultBackgroundColor = getResources().getColor(R.color.default_background);
@@ -53,7 +66,27 @@ public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
         getLegend().setEnabled(false);
         setNoDataTextDescription("");
         setNoDataText("");
-        setTouchEnabled(false);
+        setOnChartValueSelectedListener(this);
+    }
+
+    @Override
+    public void onValueSelected(Entry e, int dataSetIndex, Highlight h)
+    {
+        WorkoutSession associatedSession = (WorkoutSession)e.getData();
+        presenter.workoutSessionSelected(associatedSession);
+    }
+
+    @Override
+    public void onNothingSelected()
+    {
+
+    }
+
+    @Override
+    public void showHistoricalExerciseSessionDialog(ExerciseSession exerciseSession,
+                                                    long exerciseSessionDate)
+    {
+        callback.showHistoricalExerciseSessionDialog(exerciseSession, exerciseSessionDate);
     }
 
     public void setWorkoutSessions(List<WorkoutSession> workoutSessions)
@@ -72,5 +105,10 @@ public class ExerciseGraph extends LineChart implements ExerciseGraphInterface
         lineData.setDrawValues(false);
         setData(lineData);
         animateX(2000, Easing.EasingOption.EaseOutQuart);
+    }
+
+    public interface InteractionCallback
+    {
+        void showHistoricalExerciseSessionDialog(ExerciseSession exerciseSession, long exerciseSessionDate);
     }
 }

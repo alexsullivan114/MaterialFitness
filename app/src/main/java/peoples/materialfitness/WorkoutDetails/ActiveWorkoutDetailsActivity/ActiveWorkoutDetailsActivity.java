@@ -18,7 +18,7 @@ import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsActivity;
 
 /**
  * Created by Alex Sullivan on 4/18/2016.

@@ -57,4 +57,7 @@
     <string name="workout_history_title">Workout History</string>
     <string name="workouts_will_appear">Historical Workouts Will Appear Here</string>
 
+    <!-- workout details popup -->
+    <string name="date_exercise_title">%1$s %2$s</string>
+
 </resources>

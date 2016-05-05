@@ -1,4 +1,4 @@
-package peoples.materialfitness.WorkoutDetails;
+package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
 import java.util.List;
 

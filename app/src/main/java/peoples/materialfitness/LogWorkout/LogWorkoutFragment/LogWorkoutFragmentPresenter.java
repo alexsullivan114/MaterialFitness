@@ -12,7 +12,7 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsPresenter;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;

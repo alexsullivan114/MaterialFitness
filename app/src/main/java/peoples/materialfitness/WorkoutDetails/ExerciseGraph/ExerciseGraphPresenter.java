@@ -1,4 +1,4 @@
-package peoples.materialfitness.WorkoutDetails;
+package peoples.materialfitness.WorkoutDetails.ExerciseGraph;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -35,6 +35,18 @@ public class ExerciseGraphPresenter extends BasePresenter
         calculateChartData();
     }
 
+    public void workoutSessionSelected(WorkoutSession workoutSession)
+    {
+        for (ExerciseSession exerciseSession : workoutSession.getExercises())
+        {
+            if (exerciseSession.getExercise().equals(exercise))
+            {
+                viewInterface.showHistoricalExerciseSessionDialog(exerciseSession, workoutSession.getWorkoutSessionDate());
+                break;
+            }
+        }
+    }
+
     public void setExercise(Exercise exercise)
     {
         this.exercise = exercise;
@@ -46,6 +58,7 @@ public class ExerciseGraphPresenter extends BasePresenter
         List<Entry> entries = calculateChartEntries();
         List<String> xValues = getXLabelValuesFromEntries(entries);
         LineDataSet lineDataSet = new LineDataSet(entries, "Weight, yo");
+        lineDataSet.setDrawHighlightIndicators(false);
         LineData lineData = new LineData(xValues, Collections.singletonList(lineDataSet));
         viewInterface.setChartData(lineData);
     }

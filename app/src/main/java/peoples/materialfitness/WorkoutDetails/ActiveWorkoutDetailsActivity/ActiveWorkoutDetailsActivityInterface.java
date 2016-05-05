@@ -1,7 +1,7 @@
 package peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity;
 
 import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivityInterface;
+import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsActivityInterface;
 
 /**
  * Created by Alex Sullivan on 4/18/2016.

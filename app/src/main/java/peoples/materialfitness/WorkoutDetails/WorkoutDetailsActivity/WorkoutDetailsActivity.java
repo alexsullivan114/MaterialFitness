@@ -1,5 +1,6 @@
-package peoples.materialfitness.WorkoutDetails;
+package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,9 +20,12 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
+import peoples.materialfitness.WorkoutDetails.ExerciseGraph.ExerciseGraph;
+import peoples.materialfitness.WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 /**
@@ -30,7 +34,9 @@ import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 
 
 public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> extends BaseActivity<T>
-        implements WorkoutDetailsActivityInterface, WorkoutDetailsRecyclerAdapter.SetInteractionCallback
+        implements WorkoutDetailsActivityInterface,
+                   WorkoutDetailsRecyclerAdapter.SetInteractionCallback,
+                   ExerciseGraph.InteractionCallback
 {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -73,6 +79,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         {
             presenter.setBundle(getIntent().getExtras());
         }
+        chart.setCallback(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.exerciseSession, this, allowSetTouchEvents()));
     }
@@ -83,6 +90,13 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         outState.putParcelable(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION, Parcels.wrap(presenter.exerciseSession));
         outState.putBoolean(IS_UPDATED_KEY, contentUpdated);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void showHistoricalExerciseSessionDialog(ExerciseSession exerciseSession, long exerciseSessionDate)
+    {
+        Intent intent = PastWorkoutDialogActivity.getIntent(exerciseSessionDate, exerciseSession, this);
+        startActivity(intent);
     }
 
     @Override
