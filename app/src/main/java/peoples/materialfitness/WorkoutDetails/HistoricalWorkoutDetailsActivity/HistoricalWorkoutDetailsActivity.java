@@ -26,6 +26,12 @@ public class HistoricalWorkoutDetailsActivity extends WorkoutDetailsActivity<His
     }
 
     @Override
+    protected int getFabVisibility()
+    {
+        return View.GONE;
+    }
+
+    @Override
     protected boolean allowSetTouchEvents()
     {
         return false;

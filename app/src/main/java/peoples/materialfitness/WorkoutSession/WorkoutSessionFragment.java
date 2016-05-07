@@ -3,11 +3,14 @@ package peoples.materialfitness.WorkoutSession;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -30,6 +33,8 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     protected TextView recyclerEmptyView;
     @Bind(R.id.recyclerView)
     protected RecyclerView recyclerView;
+    @Bind(R.id.root_view)
+    protected RelativeLayout rootView;
 
     @Nullable
     @Override
@@ -58,9 +63,9 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
         });
 
         if (presenter.getWorkoutSession().isPresent() &&
-                ((WorkoutSession)presenter.getWorkoutSession().get()).getExercises().size() > 0)
+                ((WorkoutSession) presenter.getWorkoutSession().get()).getExercises().size() > 0)
         {
-            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(((WorkoutSession)presenter.getWorkoutSession().get()), this));
+            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(((WorkoutSession) presenter.getWorkoutSession().get()), this));
             recyclerEmptyView.setVisibility(View.GONE);
         }
 
@@ -79,7 +84,7 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
         recyclerEmptyView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
 
-        ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
+        ((ExerciseCardRecyclerAdapter) recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
     }
 
     @Override
@@ -87,11 +92,11 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     {
         if (recyclerView.getAdapter() != null)
         {
-            ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).setWorkoutSession(workoutSession);
+            ((ExerciseCardRecyclerAdapter) recyclerView.getAdapter()).setWorkoutSession(workoutSession);
         }
         else
         {
-            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(((WorkoutSession)presenter.getWorkoutSession().get()), this));
+            recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(((WorkoutSession) presenter.getWorkoutSession().get()), this));
             recyclerEmptyView.setVisibility(View.GONE);
         }
     }
@@ -99,7 +104,13 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     @Override
     public void startWorkoutDetailsActivity(Intent startingIntent, int workoutDetailsRequestCode)
     {
-        startActivityForResult(startingIntent, workoutDetailsRequestCode);
+        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this.getActivity(), getSharedElements()).toBundle();
+        startActivityForResult(startingIntent, workoutDetailsRequestCode, bundle);
+    }
+
+    protected Pair<View, String>[] getSharedElements()
+    {
+        return null;
     }
 
     /**

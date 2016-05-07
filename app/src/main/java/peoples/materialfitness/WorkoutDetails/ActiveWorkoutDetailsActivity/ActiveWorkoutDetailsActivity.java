@@ -171,6 +171,12 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
     }
 
     @Override
+    protected int getFabVisibility()
+    {
+        return View.VISIBLE;
+    }
+
+    @Override
     public void completed()
     {
         finish();

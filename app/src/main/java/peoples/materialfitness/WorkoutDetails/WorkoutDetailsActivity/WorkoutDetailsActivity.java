@@ -1,5 +1,6 @@
 package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -7,6 +8,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -23,6 +28,8 @@ import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
+import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.WorkoutDetails.ExerciseGraph.ExerciseGraph;
 import peoples.materialfitness.WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity;
@@ -44,11 +51,13 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     ExerciseGraph chart;
     @Bind(R.id.recyclerView)
     protected RecyclerView recyclerView;
-    protected @Bind(R.id.middleFab)
+    protected
+    @Bind(R.id.middleFab)
     FloatingActionButton middleFab;
     @Bind(R.id.appBar)
     protected AppBarLayout appBarLayout;
-    protected @Bind(R.id.bottomFab)
+    protected
+    @Bind(R.id.bottomFab)
     FloatingActionButton bottomFab;
 
     private static final String IS_UPDATED_KEY = "isUpdatedKey";
@@ -59,9 +68,9 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_workout_details);
         ButterKnife.bind(this);
+        setTransitions();
 
         // TODO: Fix this up
         if (savedInstanceState != null && savedInstanceState.containsKey(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION))
@@ -115,14 +124,14 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     @Override
     public void refreshSets()
     {
-        ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).setExerciseSession(presenter.exerciseSession);
+        ((WorkoutDetailsRecyclerAdapter) recyclerView.getAdapter()).setExerciseSession(presenter.exerciseSession);
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void removeSetAtPosition(int position)
     {
-        ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).setExerciseSession(presenter.exerciseSession);
+        ((WorkoutDetailsRecyclerAdapter) recyclerView.getAdapter()).setExerciseSession(presenter.exerciseSession);
         recyclerView.getAdapter().notifyItemRemoved(position);
         recyclerView.getAdapter().notifyItemRangeChanged(position, presenter.exerciseSession.getSets().size());
     }
@@ -143,39 +152,39 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     @Override
     public void hideSetOptions()
     {
-        ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).hideSetOptions();
+        ((WorkoutDetailsRecyclerAdapter) recyclerView.getAdapter()).hideSetOptions();
     }
 
     @Override
     public void showEditWeightSetDialog(int weight, int reps)
     {
-            MaterialDialog dialog = new MaterialDialog.Builder(this)
-                    .title(R.string.edit_set)
-                    .customView(R.layout.add_rep_dialog, false)
-                    .positiveText(R.string.ok)
-                    .negativeText(R.string.cancel)
-                    .onPositive((dialog1, which) -> {
-                        View customView = dialog1.getCustomView();
-                        EditText repsText = (EditText) customView.findViewById(R.id.reps);
-                        EditText weightText = (EditText) customView.findViewById(R.id.weight);
-                        int repsInt = Integer.parseInt(repsText.getText().toString());
-                        int weightInt = Integer.parseInt(weightText.getText().toString());
-                        presenter.editSet(weightInt, repsInt);
-                    })
-                    .onNegative((dialog1, which) -> {
-                        presenter.abandonEditing();
-                    })
-                    .build();
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title(R.string.edit_set)
+                .customView(R.layout.add_rep_dialog, false)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .onPositive((dialog1, which) -> {
+                    View customView = dialog1.getCustomView();
+                    EditText repsText = (EditText) customView.findViewById(R.id.reps);
+                    EditText weightText = (EditText) customView.findViewById(R.id.weight);
+                    int repsInt = Integer.parseInt(repsText.getText().toString());
+                    int weightInt = Integer.parseInt(weightText.getText().toString());
+                    presenter.editSet(weightInt, repsInt);
+                })
+                .onNegative((dialog1, which) -> {
+                    presenter.abandonEditing();
+                })
+                .build();
 
-            EditText repEditText = (EditText) dialog.findViewById(R.id.reps);
-            EditText weightEditText = (EditText) dialog.findViewById(R.id.weight);
+        EditText repEditText = (EditText) dialog.findViewById(R.id.reps);
+        EditText weightEditText = (EditText) dialog.findViewById(R.id.weight);
 
-            repEditText.append(String.valueOf(reps));
-            weightEditText.append(String.valueOf(weight));
+        repEditText.append(String.valueOf(reps));
+        weightEditText.append(String.valueOf(weight));
 
-            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-            dialog.show();
+        dialog.show();
     }
 
     @Override
@@ -190,5 +199,110 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         presenter.editSetButtonClicked(position);
     }
 
+    @SuppressLint("NewApi")
+    private void setEnterTransition()
+    {
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            Slide slide = new Slide(Gravity.BOTTOM);
+            slide.addTarget(recyclerView);
+            slide.addListener(new Transition.TransitionListener()
+            {
+                @Override
+                public void onTransitionStart(Transition transition)
+                {
+                    appBarLayout.setVisibility(View.INVISIBLE);
+                    middleFab.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onTransitionEnd(Transition transition)
+                {
+                    AnimationUtils.circularRevealView(
+                            appBarLayout, null, getResources().getInteger(android.R.integer.config_mediumAnimTime));
+                    if (getFabVisibility() == View.VISIBLE)
+                    {
+                        middleFab.show();
+                    }
+                }
+
+                @Override
+                public void onTransitionCancel(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionPause(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionResume(Transition transition)
+                {
+
+                }
+            });
+            getWindow().setEnterTransition(slide);
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void setExitTransition()
+    {
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            Slide slideBottom = new Slide(Gravity.BOTTOM);
+            slideBottom.addTarget(recyclerView);
+            Slide slideTop = new Slide(Gravity.TOP);
+            slideTop.addTarget(appBarLayout);
+
+            TransitionSet transitionSet = new TransitionSet();
+            transitionSet.addTransition(slideBottom);
+            transitionSet.addTransition(slideTop);
+            transitionSet.addListener(new Transition.TransitionListener()
+            {
+                @Override
+                public void onTransitionStart(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionEnd(Transition transition)
+                {
+                    middleFab.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onTransitionCancel(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionPause(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionResume(Transition transition)
+                {
+
+                }
+            });
+            getWindow().setReturnTransition(transitionSet);
+        }
+    }
+
+    private void setTransitions()
+    {
+        setEnterTransition();
+        setExitTransition();
+    }
+
     protected abstract boolean allowSetTouchEvents();
+    protected abstract int getFabVisibility();
 }

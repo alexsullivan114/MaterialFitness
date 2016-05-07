@@ -1,5 +1,7 @@
 package peoples.materialfitness.Navigation;
 
+import android.support.design.widget.FloatingActionButton;
+
 /**
  * Created by Alex Sullivan on 12/25/15.
  *
@@ -9,4 +11,5 @@ public interface RootFabDisplay
 {
     void hideFab();
     void showFab();
+    FloatingActionButton getFab();
 }

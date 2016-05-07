@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Core.PresenterCache;
@@ -59,6 +61,7 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
         super.setContentView(layoutId);
         setToolbar();
         Log.d(TAG, "setContentView called");
+        setViewTreeObserver();
     }
 
     @Override
@@ -94,6 +97,33 @@ public abstract class BaseActivity<T extends BaseActivityPresenter> extends AppC
                 return super.onOptionsItemSelected(item);
             }
         }
+    }
+
+    private void setViewTreeObserver()
+    {
+        try
+        {
+            final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
+                    .findViewById(android.R.id.content)).getChildAt(0);
+            viewGroup.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener()
+            {
+                @Override
+                public boolean onPreDraw()
+                {
+                    viewGroup.getViewTreeObserver().removeOnPreDrawListener(this);
+                    viewDrawn();
+                    return true;
+                }
+            });
+        }
+        catch (NullPointerException e)
+        {
+            Log.e(TAG, "Failed to fetch root view of activity. Did you forget to call setContentView?");
+        }
+    }
+
+    protected void viewDrawn()
+    {
     }
 
     protected boolean showBackInToolbar()

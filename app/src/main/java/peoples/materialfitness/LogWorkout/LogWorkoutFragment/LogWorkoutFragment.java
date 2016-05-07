@@ -20,12 +20,12 @@ import peoples.materialfitness.WorkoutSession.WorkoutSessionFragment;
 
 /**
  * Created by Alex Sullivan on 4/11/2016.
- *
+ * <p>
  * This is the fragment that actually handles allowing a user to add an exercise session.
  */
 public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmentPresenter> implements
-        RootFabOnClick,
-        LogWorkoutFragmentInterface
+                                                                                            RootFabOnClick,
+                                                                                            LogWorkoutFragmentInterface
 {
 
     public static LogWorkoutFragment newInstance()
@@ -71,7 +71,7 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
             getView().post(this::onViewVisible);
         }
 
-        ((BaseActivity)getActivity()).getSupportActionBar().setTitle(R.string.todays_workout);
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.todays_workout);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
     {
         if (getActivity() != null)
         {
-            new Handler().postDelayed(((RootFabDisplay)getActivity())::showFab, 500);
+            new Handler().postDelayed(((RootFabDisplay) getActivity())::showFab, 500);
         }
     }
 
@@ -123,14 +123,14 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
     protected void onPositiveScroll()
     {
         super.onPositiveScroll();
-        ((RootFabDisplay)getActivity()).showFab();
+        ((RootFabDisplay) getActivity()).showFab();
     }
 
     @Override
     protected void onNegativeScroll()
     {
         super.onNegativeScroll();
-        ((RootFabDisplay)getActivity()).hideFab();
+        ((RootFabDisplay) getActivity()).hideFab();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
     {
         if (!recyclerView.canScrollVertically(-1))
         {
-            ((RootFabDisplay)getActivity()).showFab();
+            ((RootFabDisplay) getActivity()).showFab();
         }
     }
 }

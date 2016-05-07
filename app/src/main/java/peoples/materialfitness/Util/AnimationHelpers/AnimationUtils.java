@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.transition.Transition;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 
@@ -51,11 +53,18 @@ public class AnimationUtils
         getCircularRevealAnimator(v, listenerAdapter).start();
     }
 
+    public static void circularRevealView(final View v, AnimatorListenerAdapter listenerAdapter, int animDuration)
+    {
+
+        getCircularRevealAnimator(v, listenerAdapter, animDuration).start();
+    }
+
     public static void circularHideView(View v, AnimatorListenerAdapter listenerAdapter)
     {
         getCircularHideAnimator(v, listenerAdapter).start();
     }
 
+    @SuppressLint("NewApi")
     public static Animator getCircularHideAnimator(View v, AnimatorListenerAdapter listenerAdapter)
     {
         // get the center for the clipping circle
@@ -90,6 +99,15 @@ public class AnimationUtils
 
     public static Animator getCircularRevealAnimator(View v, AnimatorListenerAdapter listenerAdapter)
     {
+        int animDuration = v.getResources().getInteger(
+                android.R.integer.config_shortAnimTime);
+
+        return getCircularRevealAnimator(v, listenerAdapter, animDuration);
+    }
+
+    @SuppressLint("NewApi")
+    public static Animator getCircularRevealAnimator(View v, AnimatorListenerAdapter listenerAdapter, int animDuration)
+    {
         // get the center for the clipping circle
         int cx = v.getWidth() / 2;
         int cy = v.getHeight() / 2;
@@ -101,8 +119,6 @@ public class AnimationUtils
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(v, cx, cy, 0, finalRadius);
 
-        int animDuration = v.getResources().getInteger(
-                android.R.integer.config_shortAnimTime);
         anim.setDuration(animDuration);
         anim.addListener(new AnimatorListenerAdapter()
         {
@@ -173,6 +189,56 @@ public class AnimationUtils
         public void onAnimationRepeat(Animator animation)
         {
 
+        }
+    }
+
+    @SuppressLint("NewApi")
+    public static class EndTransitionListener
+    {
+        private Runnable runnable;
+
+        public EndTransitionListener(Runnable runnable)
+        {
+            this.runnable = runnable;
+        }
+
+        public Transition.TransitionListener getEndListener()
+        {
+            return new Transition.TransitionListener()
+            {
+                @Override
+                public void onTransitionStart(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionEnd(Transition transition)
+                {
+                    if (runnable != null)
+                    {
+                        runnable.run();
+                    }
+                }
+
+                @Override
+                public void onTransitionCancel(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionPause(Transition transition)
+                {
+
+                }
+
+                @Override
+                public void onTransitionResume(Transition transition)
+                {
+
+                }
+            };
         }
     }
 }
