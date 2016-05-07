@@ -3,8 +3,11 @@ package peoples.materialfitness.Util.AnimationHelpers;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.support.annotation.ColorInt;
 import android.transition.Transition;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -240,5 +243,12 @@ public class AnimationUtils
                 }
             };
         }
+    }
+
+    public static Animator viewBackgroundColorAnimator(final View view, @ColorInt int startingColor, @ColorInt int endingColor)
+    {
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), startingColor, endingColor);
+        colorAnimation.addUpdateListener(animator -> view.setBackgroundColor((int) animator.getAnimatedValue()));
+        return colorAnimation;
     }
 }

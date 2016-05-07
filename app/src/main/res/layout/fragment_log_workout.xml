@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     android:id="@+id/root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -10,15 +10,24 @@
         android:id="@+id/recycler_empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textAppearance="@style/TextAppearance.DarkerGray.20"
-        android:text="@string/log_a_workout"/>
+        android:layout_gravity="center"
+        android:text="@string/log_a_workout"
+        android:textAppearance="@style/TextAppearance.DarkerGray.20"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_marginLeft="@dimen/card_horizontal_margin"
-        android:layout_marginRight="@dimen/card_horizontal_margin"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/card_horizontal_margin"
+        android:layout_marginRight="@dimen/card_horizontal_margin"/>
 
-</RelativeLayout>
+    <View
+        android:id="@+id/placeholder_circle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/dark_circle_view"
+        android:transitionName="@string/placeholder_shared_element_name"
+        android:visibility="invisible"/>
+
+</FrameLayout>

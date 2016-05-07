@@ -2,9 +2,9 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -17,7 +17,6 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             android:theme="@style/ToolBarStyle"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
@@ -45,6 +44,15 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+    <View
+        android:id="@+id/placeholder_circle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/placeholder_circle_vertical_margin"
+        app:layout_anchor="@id/appBar"
+        app:layout_anchorGravity="top|center"
+        android:background="@drawable/dark_circle_view"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

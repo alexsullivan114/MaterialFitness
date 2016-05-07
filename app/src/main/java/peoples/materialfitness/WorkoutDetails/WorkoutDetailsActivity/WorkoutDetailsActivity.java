@@ -1,5 +1,7 @@
 package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.transition.Transition;
 import android.transition.TransitionSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.widget.EditText;
 
@@ -28,7 +31,6 @@ import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.WorkoutDetails.ExerciseGraph.ExerciseGraph;
@@ -59,6 +61,8 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     protected
     @Bind(R.id.bottomFab)
     FloatingActionButton bottomFab;
+    @Bind(R.id.placeholder_circle)
+    View placeholderCircle;
 
     private static final String IS_UPDATED_KEY = "isUpdatedKey";
 
@@ -206,6 +210,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         {
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(recyclerView);
+            slide.setDuration(50);
             slide.addListener(new Transition.TransitionListener()
             {
                 @Override
@@ -218,8 +223,27 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
                 @Override
                 public void onTransitionEnd(Transition transition)
                 {
-                    AnimationUtils.circularRevealView(
-                            appBarLayout, null, getResources().getInteger(android.R.integer.config_mediumAnimTime));
+                    // get the center for the clipping circle
+                    int cx = placeholderCircle.getRight() - placeholderCircle.getWidth() / 2;
+                    int cy = placeholderCircle.getTop() + placeholderCircle.getHeight()/ 2;
+
+                    // get the final radius for the clipping circle
+                    int finalRadius = Math.max(appBarLayout.getWidth(), appBarLayout.getHeight());
+
+                    // create the animator for this view (the start radius is zero)
+                    Animator anim =
+                            ViewAnimationUtils.createCircularReveal(appBarLayout, cx, cy, 0, finalRadius);
+                    anim.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+                    anim.addListener(new AnimatorListenerAdapter()
+                    {
+                        @Override
+                        public void onAnimationStart(Animator animation)
+                        {
+                            appBarLayout.setVisibility(View.VISIBLE);
+                            placeholderCircle.setVisibility(View.GONE);
+                        }
+                    });
+                    anim.start();
                     if (getFabVisibility() == View.VISIBLE)
                     {
                         middleFab.show();

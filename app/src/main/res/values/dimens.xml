@@ -13,4 +13,5 @@
     <dimen name="create_exercise_vertical_margin">10dp</dimen>
 
     <dimen name="nav_drawer_width">300dp</dimen>
+    <dimen name="placeholder_circle_vertical_margin">100dp</dimen>
 </resources>
