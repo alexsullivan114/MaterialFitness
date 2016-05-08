@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,8 +34,6 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     protected RecyclerView recyclerView;
     @Bind(R.id.root_view)
     protected FrameLayout rootView;
-    @Bind(R.id.placeholder_circle)
-    View placeholderCircle;
 
     @Nullable
     @Override
@@ -64,23 +61,15 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
             }
         });
 
-        return v;
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
         if (presenter.getWorkoutSession().isPresent() &&
                 ((WorkoutSession) presenter.getWorkoutSession().get()).getExercises().size() > 0)
         {
             recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(((WorkoutSession) presenter.getWorkoutSession().get()), this));
             recyclerView.setVisibility(View.VISIBLE);
             recyclerEmptyView.setVisibility(View.GONE);
-            placeholderCircle.setVisibility(View.INVISIBLE);
-            placeholderCircle.setTranslationY(getPlaceholderVerticalTranslationDistance() * -1);
         }
+
+        return v;
     }
 
     @Override
@@ -117,20 +106,6 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     {
         Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(WorkoutSessionFragment.this.getActivity()).toBundle();
         startActivityForResult(startingIntent, workoutDetailsRequestCode, bundle);
-    }
-
-    private float getPlaceholderVerticalTranslationDistance()
-    {
-        View toolbar = getActivity().findViewById(R.id.toolbar);
-        float startingYCoordinate = placeholderCircle.getTop();
-        float rootViewYCoordinate = toolbar.getTop();
-        float placeholderTopMargin = getResources().getDimensionPixelSize(R.dimen.placeholder_circle_vertical_margin);
-        return rootViewYCoordinate - startingYCoordinate - +toolbar.getHeight() + placeholderTopMargin;
-    }
-
-    protected Pair<View, String>[] getSharedElements()
-    {
-        return null;
     }
 
     /**

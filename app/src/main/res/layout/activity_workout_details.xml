@@ -45,15 +45,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <View
-        android:id="@+id/placeholder_circle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="@dimen/placeholder_circle_vertical_margin"
-        app:layout_anchor="@id/appBar"
-        app:layout_anchorGravity="top|center"
-        android:background="@drawable/dark_circle_view"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

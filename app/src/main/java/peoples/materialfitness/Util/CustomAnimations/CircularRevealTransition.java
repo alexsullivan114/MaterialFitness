@@ -36,6 +36,10 @@ public class CircularRevealTransition extends Transition
         this.startingPositionCenteringView = startingPositionCenteringView;
     }
 
+    public CircularRevealTransition()
+    {
+    }
+
     @Override
     public void captureStartValues(TransitionValues transitionValues)
     {
@@ -70,7 +74,12 @@ public class CircularRevealTransition extends Transition
             cy = startingPositionCenteringView.getTop() + startingPositionCenteringView.getHeight()/ 2;
         }
 
-        transitionValues.values.put(PROPNAME_END_RADIUS, Math.max(view.getWidth(), view.getHeight()));
+        cx = 0;//ScreenUtils.getScreenWidth();
+        cy = 0;
+
+        int radius = (int)Math.sqrt(view.getWidth() * view.getWidth() + view.getHeight() * view.getHeight());
+
+        transitionValues.values.put(PROPNAME_END_RADIUS, radius);
         transitionValues.values.put(PROPNAME_CX, cx);
         transitionValues.values.put(PROPNAME_CY,cy);
     }

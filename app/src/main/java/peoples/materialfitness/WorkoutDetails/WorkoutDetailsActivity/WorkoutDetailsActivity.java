@@ -60,8 +60,6 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     protected
     @Bind(R.id.bottomFab)
     FloatingActionButton bottomFab;
-    @Bind(R.id.placeholder_circle)
-    View placeholderCircle;
 
     private static final String IS_UPDATED_KEY = "isUpdatedKey";
 
@@ -210,7 +208,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.recyclerView);
 
-            CircularRevealTransition revealTransition = new CircularRevealTransition(placeholderCircle);
+            CircularRevealTransition revealTransition = new CircularRevealTransition();
             revealTransition.addTarget(R.id.appBar);
 
             TransitionSet set = new TransitionSet();
@@ -224,7 +222,6 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
                 public void onTransitionStart(Transition transition)
                 {
                     middleFab.setVisibility(View.INVISIBLE);
-                    placeholderCircle.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -254,38 +251,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
             TransitionSet transitionSet = new TransitionSet();
             transitionSet.addTransition(slideBottom);
             transitionSet.addTransition(slideTop);
-            transitionSet.addListener(new Transition.TransitionListener()
-            {
-                @Override
-                public void onTransitionStart(Transition transition)
-                {
 
-                }
-
-                @Override
-                public void onTransitionEnd(Transition transition)
-                {
-                    middleFab.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onTransitionCancel(Transition transition)
-                {
-
-                }
-
-                @Override
-                public void onTransitionPause(Transition transition)
-                {
-
-                }
-
-                @Override
-                public void onTransitionResume(Transition transition)
-                {
-
-                }
-            });
             getWindow().setReturnTransition(transitionSet);
         }
     }

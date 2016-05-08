@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.common.base.Optional;
 
@@ -106,9 +107,12 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     @Override
     public void hideFab()
     {
-        if (fab.isShown())
+        if (fab.isShown() || fab.getVisibility() == View.VISIBLE)
         {
-            fab.post(() -> fab.hide());
+            fab.post(() -> {
+                fab.hide();
+                fab.setVisibility(View.GONE);
+            });
         }
     }
 
@@ -121,9 +125,12 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
     @Override
     public void showFab()
     {
-        if (!fab.isShown())
+        if (!fab.isShown() || fab.getVisibility() != View.VISIBLE )
         {
-            fab.post(() -> fab.show());
+            fab.post(() -> {
+                fab.show();
+                fab.setVisibility(View.VISIBLE);
+            });
         }
     }
 
