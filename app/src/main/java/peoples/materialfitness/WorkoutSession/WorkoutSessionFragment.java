@@ -1,9 +1,5 @@
 package peoples.materialfitness.WorkoutSession;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +19,6 @@ import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecycle
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.View.BaseFragment;
 
 /**
@@ -120,26 +115,8 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     @Override
     public void startWorkoutDetailsActivity(Intent startingIntent, int workoutDetailsRequestCode)
     {
-        Animator circularHideAnimator = AnimationUtils.getCircularHideAnimator(recyclerView, null);
-        Animator circularRevealAnimator = AnimationUtils.getCircularRevealAnimator(placeholderCircle, null);
-        AnimatorSet revealPlaceholderSet = new AnimatorSet();
-        revealPlaceholderSet.playTogether(circularHideAnimator, circularRevealAnimator);
-        revealPlaceholderSet.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
-
-        Animator verticalTranslationAnimator = ObjectAnimator.ofFloat(placeholderCircle, View.TRANSLATION_Y, getPlaceholderVerticalTranslationDistance());
-        AnimatorSet finalSet = new AnimatorSet();
-        finalSet.playSequentially(revealPlaceholderSet, verticalTranslationAnimator);
-        finalSet.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
-        finalSet.addListener(new AnimatorListenerAdapter()
-        {
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(WorkoutSessionFragment.this.getActivity()).toBundle();
-                startActivityForResult(startingIntent, workoutDetailsRequestCode, bundle);
-            }
-        });
-        finalSet.start();
+        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(WorkoutSessionFragment.this.getActivity()).toBundle();
+        startActivityForResult(startingIntent, workoutDetailsRequestCode, bundle);
     }
 
     private float getPlaceholderVerticalTranslationDistance()
