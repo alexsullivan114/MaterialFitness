@@ -1,4 +1,4 @@
-package peoples.materialfitness.Util.AnimationHelpers;
+package peoples.materialfitness.Util.CustomAnimations;
 
 import android.animation.ValueAnimator;
 import android.view.View;

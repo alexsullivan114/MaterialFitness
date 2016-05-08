@@ -21,7 +21,7 @@ import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.AnimationHelpers.HeightAnimator;
+import peoples.materialfitness.Util.CustomAnimations.HeightAnimator;
 
 /**
  * Created by Alex Sullivan on 1/24/16.

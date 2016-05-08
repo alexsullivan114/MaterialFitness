@@ -1,7 +1,5 @@
 package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.transition.Transition;
 import android.transition.TransitionSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.widget.EditText;
 
@@ -31,6 +28,8 @@ import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;
+import peoples.materialfitness.Util.CustomAnimations.CircularRevealTransition;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.WorkoutDetails.ExerciseGraph.ExerciseGraph;
@@ -209,66 +208,36 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         if (VersionUtils.isLollipopOrGreater())
         {
             Slide slide = new Slide(Gravity.BOTTOM);
-            slide.addTarget(recyclerView);
-            slide.setDuration(50);
-            slide.addListener(new Transition.TransitionListener()
+            slide.addTarget(R.id.recyclerView);
+
+            CircularRevealTransition revealTransition = new CircularRevealTransition(placeholderCircle);
+            revealTransition.addTarget(R.id.appBar);
+
+            TransitionSet set = new TransitionSet();
+            set.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
+            set.addTransition(revealTransition);
+            set.addTransition(slide);
+            set.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            set.addListener(new TransitionListenerAdapter()
             {
                 @Override
                 public void onTransitionStart(Transition transition)
                 {
-                    appBarLayout.setVisibility(View.INVISIBLE);
                     middleFab.setVisibility(View.INVISIBLE);
+                    placeholderCircle.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onTransitionEnd(Transition transition)
                 {
-                    // get the center for the clipping circle
-                    int cx = placeholderCircle.getRight() - placeholderCircle.getWidth() / 2;
-                    int cy = placeholderCircle.getTop() + placeholderCircle.getHeight()/ 2;
-
-                    // get the final radius for the clipping circle
-                    int finalRadius = Math.max(appBarLayout.getWidth(), appBarLayout.getHeight());
-
-                    // create the animator for this view (the start radius is zero)
-                    Animator anim =
-                            ViewAnimationUtils.createCircularReveal(appBarLayout, cx, cy, 0, finalRadius);
-                    anim.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-                    anim.addListener(new AnimatorListenerAdapter()
-                    {
-                        @Override
-                        public void onAnimationStart(Animator animation)
-                        {
-                            appBarLayout.setVisibility(View.VISIBLE);
-                            placeholderCircle.setVisibility(View.GONE);
-                        }
-                    });
-                    anim.start();
                     if (getFabVisibility() == View.VISIBLE)
                     {
                         middleFab.show();
                     }
                 }
-
-                @Override
-                public void onTransitionCancel(Transition transition)
-                {
-
-                }
-
-                @Override
-                public void onTransitionPause(Transition transition)
-                {
-
-                }
-
-                @Override
-                public void onTransitionResume(Transition transition)
-                {
-
-                }
             });
-            getWindow().setEnterTransition(slide);
+
+            getWindow().setEnterTransition(set);
         }
     }
 
