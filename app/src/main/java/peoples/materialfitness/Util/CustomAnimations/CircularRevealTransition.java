@@ -18,15 +18,13 @@ public class CircularRevealTransition extends Transition
     private static final String PROPNAME_CX = "com.peoples.materialfitness:circularreveal:cx";
     private static final String PROPNAME_CY = "com.peoples.materialfitness:circularreveal:cy";
 
-    private float endRadius = -1;
     private float startingCx = -1;
     private float startingCy = -1;
 
     private View startingPositionCenteringView;
 
-    public CircularRevealTransition(float endRadius, float startingCx, float startingCy)
+    public CircularRevealTransition(float startingCx, float startingCy)
     {
-        this.endRadius = endRadius;
         this.startingCx = startingCx;
         this.startingCy = startingCy;
     }
@@ -45,8 +43,6 @@ public class CircularRevealTransition extends Transition
     {
         View view = transitionValues.view;
 
-
-        transitionValues.values.put(PROPNAME_END_RADIUS, this.endRadius);
         transitionValues.values.put(PROPNAME_CX, this.startingCx);
         transitionValues.values.put(PROPNAME_CY, this.startingCy);
      }
@@ -73,9 +69,6 @@ public class CircularRevealTransition extends Transition
             cx = startingPositionCenteringView.getRight() - startingPositionCenteringView.getWidth() / 2;
             cy = startingPositionCenteringView.getTop() + startingPositionCenteringView.getHeight()/ 2;
         }
-
-        cx = 0;//ScreenUtils.getScreenWidth();
-        cy = 0;
 
         int radius = (int)Math.sqrt(view.getWidth() * view.getWidth() + view.getHeight() * view.getHeight());
 

@@ -208,7 +208,9 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.recyclerView);
 
-            CircularRevealTransition revealTransition = new CircularRevealTransition();
+            int cx = 0;
+            int cy = 0;
+            CircularRevealTransition revealTransition = new CircularRevealTransition(cx, cy);
             revealTransition.addTarget(R.id.appBar);
 
             TransitionSet set = new TransitionSet();
