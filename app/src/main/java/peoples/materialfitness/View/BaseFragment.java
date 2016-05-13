@@ -87,6 +87,11 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
 
         presenter.onContextAvailable(getActivity());
         Log.d(TAG, "onActivityCreated called");
+
+        if (presenter.getTitle() != null)
+        {
+            ((BaseActivity)getActivity()).getSupportActionBar().setTitle(presenter.getTitle());
+        }
     }
 
     private void setPresenter(T presenter)

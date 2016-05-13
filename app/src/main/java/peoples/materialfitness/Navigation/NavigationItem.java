@@ -12,28 +12,17 @@ import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistory
  */
 public enum NavigationItem
 {
-    // ALS 12/25/2015: MURRY CHRISTMAS! Also just refactored this - if I understand enums correctly,
-    // which I almost certainly don't, these guys will be created on app start, and they're static
-    // and final, so I thiiiiink these guys will be in memory 5ever. Bad for memory management, and
-    // app start time, yes.
-    // Good for speed switching back and forth? YOU KNOW IT!
-    // Maybe revisit this later.
+    // ALS 12/25/2015: MURRY CHRISTMAS!.
 
-    NAV_ITEM_LOG_WORKOUT(LogWorkoutFragment.newInstance(), 0),
-    NAV_ITEM_WORKOUT_HISTORY(WorkoutHistoryPagerFragment.newInstance(), 1);
+    NAV_ITEM_LOG_WORKOUT(0),
+    NAV_ITEM_WORKOUT_HISTORY(1),
+    NAV_ITEM_SETTINGS(2);
 
-    private final BaseFragment fragment;
     private final int position;
 
-    NavigationItem(BaseFragment fragment, int position)
+    NavigationItem(int position)
     {
-        this.fragment = fragment;
         this.position = position;
-    }
-
-    public BaseFragment getFragmentForNavItem()
-    {
-        return this.fragment;
     }
 
     public int getPosition()
@@ -49,6 +38,8 @@ public enum NavigationItem
                 return NAV_ITEM_LOG_WORKOUT;
             case R.id.workout_history:
                 return NAV_ITEM_WORKOUT_HISTORY;
+            case R.id.settings:
+                return NAV_ITEM_SETTINGS;
             default:
                 return NAV_ITEM_LOG_WORKOUT;
         }

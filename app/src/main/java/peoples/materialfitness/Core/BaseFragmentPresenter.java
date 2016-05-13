@@ -30,4 +30,9 @@ public abstract class BaseFragmentPresenter<T extends BaseFragmentInterface> ext
     {
         this.context = context;
     }
+
+    public String getTitle()
+    {
+        return null;
+    }
 }

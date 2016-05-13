@@ -23,6 +23,9 @@ public class PreferenceManager
 
     private static final String WEIGHT_UNIT_KEY = "weightUnitKey";
     private static final String HAS_BUILT_FITNOTES_DB = "hasBuiltFitnotesDb";
+    private static final String PRIMARY_COLOR_KEY = "primaryColorKey";
+    private static final String PRIMARY_DARK_COLOR_KEY = "primaryDarkColorKey";
+    private static final String ACCENT_COLOR_KEY = "accentColorKey";
 
     private PreferenceManager()
     {

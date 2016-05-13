@@ -29,6 +29,9 @@
         <activity
             android:name=".WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+        <activity
+            android:name=".Settings.SettingsActivity"
+            android:label="@string/settings"/>
 
     </application>
 

@@ -1,5 +1,6 @@
 package peoples.materialfitness.Navigation;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -15,9 +16,12 @@ import android.view.View;
 
 import com.google.common.base.Optional;
 
+import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragment;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Settings.SettingsActivity;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
+import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryPager.WorkoutHistoryPagerFragment;
 
 /**
  * Created by Alex Sullivan on 11/8/2015.
@@ -122,13 +126,13 @@ public class RootDrawerController implements
         mDrawerToggle.onOptionsItemSelected(item);
     }
 
-    public void showNavigationItem(NavigationItem navItem)
+    private void showFragmentForNavItem(NavigationItem navItem)
     {
         FragmentManager fragmentManager = mContainingActivity.getSupportFragmentManager();
 
         currentNavItem = navItem;
 
-        BaseFragment fragmentToShow = navItem.getFragmentForNavItem();
+        BaseFragment fragmentToShow = getFragmentForNavItem(navItem);
         Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentToShow.TAG);
 
         if (currentFragment == null)
@@ -149,6 +153,55 @@ public class RootDrawerController implements
         }
     }
 
+    public void showNavigationItem(NavigationItem navItem)
+    {
+        if (shouldShowFragmentForNavItem(navItem))
+        {
+            showFragmentForNavItem(navItem);
+        }
+        else
+        {
+            Intent intent = getIntentForNavItem(navItem);
+            mContainingActivity.startActivity(intent);
+            // Settings has a custom animation.
+            if (navItem == NavigationItem.NAV_ITEM_SETTINGS)
+            {
+                mContainingActivity.overridePendingTransition(R.anim.slide_up, R.anim.activity_fade_out);
+            }
+        }
+    }
+
+    private Intent getIntentForNavItem(NavigationItem navItem)
+    {
+        switch (navItem)
+        {
+            case NAV_ITEM_SETTINGS: return SettingsActivity.getStartingIntent(mContainingActivity);
+        }
+
+        throw new RuntimeException("No intent for nav item: " + navItem.toString());
+    }
+
+    private BaseFragment getFragmentForNavItem(NavigationItem navItem)
+    {
+        switch (navItem)
+        {
+            case NAV_ITEM_LOG_WORKOUT: return LogWorkoutFragment.newInstance();
+            case NAV_ITEM_WORKOUT_HISTORY: return WorkoutHistoryPagerFragment.newInstance();
+        }
+
+        throw new RuntimeException("No fragment for nav item: " + navItem.toString());
+    }
+
+    private boolean shouldShowFragmentForNavItem(NavigationItem navigationItem)
+    {
+        switch (navigationItem)
+        {
+            case NAV_ITEM_LOG_WORKOUT: return true;
+            case NAV_ITEM_WORKOUT_HISTORY: return true;
+            default: return false;
+        }
+    }
+
     /**
      * Method to notify whatever fragment is currently being displayed that the fab has been clicked.
      * @param fab Fab that's been clicked
@@ -156,7 +209,7 @@ public class RootDrawerController implements
     @Override
     public void onFabClicked(FloatingActionButton fab)
     {
-        BaseFragment currentFragment = currentNavItem.getFragmentForNavItem();
+        BaseFragment currentFragment = getFragmentForNavItem(currentNavItem);
 
         if (currentFragment instanceof RootFabOnClick)
         {
