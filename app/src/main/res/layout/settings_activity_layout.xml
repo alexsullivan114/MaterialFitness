@@ -4,22 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="@dimen/activity_horizontal_margin"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Accent.14"
-        android:layout_marginBottom="10dp"
-        android:text="General Settings"/>
+    <include layout="@layout/toolbar"/>
 
     <TextView
+        android:id="@+id/appearance_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DarkerGray.20"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:textAppearance="@style/TextAppearance.DarkestGray.20"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        tools:text="Foo"/>
+        android:text="@string/customize_appearance" />
 
 </LinearLayout>

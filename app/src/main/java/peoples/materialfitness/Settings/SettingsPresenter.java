@@ -19,4 +19,9 @@ public class SettingsPresenter extends BaseActivityPresenter<SettingsViewInterfa
             return new SettingsPresenter();
         }
     }
+
+    public void appearanceSettingClicked()
+    {
+        activityInterface.startCustomColorActivity();
+    }
 }

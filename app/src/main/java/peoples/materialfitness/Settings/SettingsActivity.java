@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
@@ -11,7 +12,7 @@ import peoples.materialfitness.View.BaseActivity;
 /**
  * Created by Alex Sullivan on 5/12/2016.
  */
-public class SettingsActivity extends BaseActivity<SettingsPresenter>
+public class SettingsActivity extends BaseActivity<SettingsPresenter> implements SettingsViewInterface
 {
     @Override
     protected PresenterFactory<SettingsPresenter> getPresenterFactory()
@@ -36,5 +37,17 @@ public class SettingsActivity extends BaseActivity<SettingsPresenter>
     {
         super.finish();
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
+    }
+
+    @OnClick(R.id.appearance_setting)
+    public void appearanceSettingClicked()
+    {
+        presenter.appearanceSettingClicked();
+    }
+
+    @Override
+    public void startCustomColorActivity()
+    {
+
     }
 }

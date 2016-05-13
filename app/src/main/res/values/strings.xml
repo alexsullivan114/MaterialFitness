@@ -64,5 +64,6 @@
     <!-- settings screen -->
     <string name="settings">Settings</string>
     <string name="general_settings">General Settings</string>
+    <string name="customize_appearance">Customize Appearance</string>
 
 </resources>

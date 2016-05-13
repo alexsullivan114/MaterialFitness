@@ -8,4 +8,5 @@ import peoples.materialfitness.View.BaseFragmentInterface;
  */
 public interface SettingsViewInterface extends BaseActivityInterface
 {
+    void startCustomColorActivity();
 }
