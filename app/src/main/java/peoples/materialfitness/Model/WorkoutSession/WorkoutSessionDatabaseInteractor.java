@@ -17,6 +17,7 @@ import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInte
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
+import peoples.materialfitness.Schedule.ScheduleDay;
 import peoples.materialfitness.Util.DateUtils;
 import rx.Observable;
 
@@ -32,7 +33,6 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
     {
         mContext = MaterialFitnessApplication.getApplication();
         mHelper = FitnessDatabaseHelper.getInstance(mContext);
-        ;
     }
 
     @Override
@@ -96,8 +96,10 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                                                          final String orderBy,
                                                          final String limit)
     {
+        final String adjustedWhere = getScheduleExclusiveWhere(whereClause);
+
         return FitnessDatabaseUtils.getCursorObservable(WorkoutSessionContract.TABLE_NAME,
-                whereClause, args, groupBy, columns, having, orderBy, limit, mContext)
+                adjustedWhere, args, groupBy, columns, having, orderBy, limit, mContext)
                 .flatMap(this::getWorkoutSessionFromCursor);
     }
 
@@ -172,5 +174,28 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                     mHelper.getDatabase().setTransactionSuccessful();
                     mHelper.getDatabase().endTransaction();
                 });
+    }
+
+    private String getScheduleExclusiveWhere(String originalWhere)
+    {
+        String updatedClause = originalWhere == null || originalWhere.isEmpty() ? "" : originalWhere + " AND ";
+        updatedClause = updatedClause + WorkoutSessionContract._ID + " NOT IN " + "(";
+        ScheduleDay[] values = ScheduleDay.values();
+
+        for (int i = 0; i < values.length; i++)
+        {
+            ScheduleDay scheduleDay = values[i];
+
+            updatedClause = updatedClause + String.valueOf(scheduleDay.getWorkoutSessionId());
+
+            if (i != values.length - 1)
+            {
+                updatedClause = updatedClause + ",";
+            }
+        }
+
+        updatedClause = updatedClause + ")";
+
+        return updatedClause;
     }
 }

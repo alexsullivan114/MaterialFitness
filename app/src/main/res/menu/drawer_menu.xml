@@ -10,5 +10,9 @@
             android:id="@+id/workout_history"
             android:icon="@drawable/barbell"
             android:title="@string/workout_history" />
+        <item
+            android:id="@+id/workout_schedule"
+            android:icon="@drawable/ic_schedule_black_36dp"
+            android:title="@string/schedule" />
     </group>
 </menu>

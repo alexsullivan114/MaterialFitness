@@ -10,4 +10,20 @@
     <color name="darkest_gray">#545454</color>
     <color name="default_background">#EEEEEE</color>
     <color name="black">#212121</color>
+
+    <color name="monday_schedule_color">#08415C</color>
+    <color name="tuesday_schedule_color">#0392CE</color>
+    <color name="wednesday_schedule_color">#66B032</color>
+    <color name="thursday_schedule_color">#86CB92</color>
+    <color name="friday_schedule_color">#71B48D</color>
+    <color name="saturday_schedule_color">#508991</color>
+    <color name="sunday_schedule_color">#233252</color>
+
+    <color name="monday_schedule_color_pressed">#04212f</color>
+    <color name="tuesday_schedule_color_pressed">#026e9c</color>
+    <color name="wednesday_schedule_color_pressed">#4f8726</color>
+    <color name="thursday_schedule_color_pressed">#62bc71</color>
+    <color name="friday_schedule_color_pressed">#539d72</color>
+    <color name="saturday_schedule_color_pressed">#3e6a70</color>
+    <color name="sunday_schedule_color_pressed">#141c2e</color>
 </resources>

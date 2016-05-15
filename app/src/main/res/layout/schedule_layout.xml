@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/monday_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/monday_background"
+        android:textAppearance="@style/TextAppearance.White.20"
+        android:text="@string/monday"/>
+
+    <TextView
+        android:id="@+id/tuesday_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/tuesday_background"
+        android:textAppearance="@style/TextAppearance.White.20"
+        android:text="@string/tuesday"/>
+
+    <TextView
+        android:id="@+id/wednesday_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/wednesday_background"
+        android:textAppearance="@style/TextAppearance.White.20"
+        android:text="@string/wednesday"/>
+
+    <TextView
+        android:id="@+id/thursday_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/thursday_background"
+        android:textAppearance="@style/TextAppearance.White.20"
+        android:text="@string/thursday"/>
+
+    <TextView
+        android:id="@+id/friday_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/friday_background"
+        android:textAppearance="@style/TextAppearance.White.20"
+        android:text="@string/friday"/>
+
+    <TextView
+        android:id="@+id/saturday_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/saturday_background"
+        android:textAppearance="@style/TextAppearance.White.20"
+        android:text="@string/saturday"/>
+
+    <TextView
+        android:id="@+id/sunday_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/sunday_background"
+        android:textAppearance="@style/TextAppearance.White.20"
+        android:text="@string/sunday"/>
+
+</LinearLayout>

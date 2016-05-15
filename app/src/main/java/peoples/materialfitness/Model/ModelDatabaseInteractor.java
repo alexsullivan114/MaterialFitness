@@ -11,6 +11,8 @@ import rx.Observable;
  * also ultra super duper sick of writing SQLite so I'm giving them a shot. In order to reduce
  * the eventual (inevitable) pain of switching ORMs or switching back to SQLite, I'm using this
  * layer.
+ *
+ * Hey look at that I was right! Switched from using an ORM to straight SQL.
  */
 public abstract class ModelDatabaseInteractor<T>
 {

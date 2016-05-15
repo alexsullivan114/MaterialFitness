@@ -4,6 +4,7 @@ import android.view.MenuItem;
 
 import peoples.materialfitness.LogWorkout.LogWorkoutFragment.LogWorkoutFragment;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Schedule.ScheduleFragment;
 import peoples.materialfitness.View.BaseFragment;
 import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryPager.WorkoutHistoryPagerFragment;
 
@@ -20,7 +21,8 @@ public enum NavigationItem
     // Maybe revisit this later.
 
     NAV_ITEM_LOG_WORKOUT(LogWorkoutFragment.newInstance(), 0),
-    NAV_ITEM_WORKOUT_HISTORY(WorkoutHistoryPagerFragment.newInstance(), 1);
+    NAV_ITEM_WORKOUT_HISTORY(WorkoutHistoryPagerFragment.newInstance(), 1),
+    NAV_ITEM_SCHEDULE(ScheduleFragment.newInstance(), 2);
 
     private final BaseFragment fragment;
     private final int position;
@@ -49,6 +51,8 @@ public enum NavigationItem
                 return NAV_ITEM_LOG_WORKOUT;
             case R.id.workout_history:
                 return NAV_ITEM_WORKOUT_HISTORY;
+            case R.id.workout_schedule:
+                return NAV_ITEM_SCHEDULE;
             default:
                 return NAV_ITEM_LOG_WORKOUT;
         }
