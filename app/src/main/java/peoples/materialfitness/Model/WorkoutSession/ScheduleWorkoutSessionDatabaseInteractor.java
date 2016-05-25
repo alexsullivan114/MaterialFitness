@@ -1,10 +1,8 @@
 package peoples.materialfitness.Model.WorkoutSession;
 
-import java.util.List;
-
+import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Schedule.ScheduleDay;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by Alex Sullivan on 5/15/2016.
@@ -29,6 +27,14 @@ public class ScheduleWorkoutSessionDatabaseInteractor extends WorkoutSessionData
                         return Observable.from(workoutSessions);
                     }
                 });
+    }
+
+    @Override
+    public Observable<WorkoutSession> fetchWithArguments(String whereClause, String[] args, String groupBy, String[] columns, String having, String orderBy, String limit)
+    {
+        return FitnessDatabaseUtils.getCursorObservable(WorkoutSessionContract.TABLE_NAME,
+                                                        whereClause, args, groupBy, columns, having, orderBy, limit, context)
+                .flatMap(this::getWorkoutSessionFromCursor);
     }
 
     private WorkoutSession createScheduleWorkoutSession(ScheduleDay scheduleDay)

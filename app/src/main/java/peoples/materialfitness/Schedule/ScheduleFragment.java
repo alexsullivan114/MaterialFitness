@@ -18,7 +18,7 @@ import peoples.materialfitness.View.BaseFragment;
 /**
  * Created by Alex Sullivan on 5/14/2016.
  */
-public class ScheduleFragment extends BaseFragment<SchedulePresenter>
+public class ScheduleFragment extends BaseFragment<SchedulePresenter> implements ScheduleViewInterface
 {
     @Bind(R.id.monday_view)
     TextView mondayView;

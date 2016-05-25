@@ -26,13 +26,13 @@ import rx.Observable;
  */
 public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<WorkoutSession>
 {
-    private final Context mContext;
-    private final FitnessDatabaseHelper mHelper;
+    protected final Context context;
+    private final FitnessDatabaseHelper helper;
 
     public WorkoutSessionDatabaseInteractor()
     {
-        mContext = MaterialFitnessApplication.getApplication();
-        mHelper = FitnessDatabaseHelper.getInstance(mContext);
+        context = MaterialFitnessApplication.getApplication();
+        helper = FitnessDatabaseHelper.getInstance(context);
     }
 
     @Override
@@ -48,8 +48,8 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                     contentValues.remove(BaseColumns._ID);
                 }
 
-                entity.setId(mHelper.getDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
-                        null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+                entity.setId(helper.getDatabase().insertWithOnConflict(WorkoutSessionContract.TABLE_NAME,
+                                                                       null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
                 subscriber.onNext(entity);
                 subscriber.onCompleted();
             }
@@ -64,8 +64,8 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
           {
               String WHERE_CLAUSE = WorkoutSessionContract._ID + " = ?";
               String[] ARGS = new String[]{String.valueOf(entity.getId())};
-              subscriber.onNext(mHelper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
-                                           WHERE_CLAUSE, ARGS) != 0);
+              subscriber.onNext(helper.getDatabase().delete(ExerciseSessionContract.TABLE_NAME,
+                                                            WHERE_CLAUSE, ARGS) != 0);
               subscriber.onCompleted();
           }
         });
@@ -99,7 +99,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
         final String adjustedWhere = getScheduleExclusiveWhere(whereClause);
 
         return FitnessDatabaseUtils.getCursorObservable(WorkoutSessionContract.TABLE_NAME,
-                adjustedWhere, args, groupBy, columns, having, orderBy, limit, mContext)
+                                                        adjustedWhere, args, groupBy, columns, having, orderBy, limit, context)
                 .flatMap(this::getWorkoutSessionFromCursor);
     }
 
@@ -140,7 +140,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
         throw new RuntimeException("Cannot fetch a WorkoutSession with any parentId!");
     }
 
-    private Observable<WorkoutSession> getWorkoutSessionFromCursor(Cursor cursor)
+    protected Observable<WorkoutSession> getWorkoutSessionFromCursor(Cursor cursor)
     {
         ContentValues contentValues = new ContentValues();
         DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
@@ -169,10 +169,10 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
         // they're very likely to be overwritten forward up the chain.
         return Observable.from(workoutSessions)
                 .flatMap(this::cascadeSave)
-                .doOnSubscribe(() -> mHelper.getDatabase().beginTransaction())
+                .doOnSubscribe(() -> helper.getDatabase().beginTransaction())
                 .doOnTerminate(() -> {
-                    mHelper.getDatabase().setTransactionSuccessful();
-                    mHelper.getDatabase().endTransaction();
+                    helper.getDatabase().setTransactionSuccessful();
+                    helper.getDatabase().endTransaction();
                 });
     }
 

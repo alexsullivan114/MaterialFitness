@@ -1,7 +1,6 @@
 package peoples.materialfitness.Schedule;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
-import peoples.materialfitness.Core.BasePresenter;
 import peoples.materialfitness.Core.PresenterFactory;
 
 /**
@@ -12,7 +11,7 @@ public class SchedulePresenter extends BaseFragmentPresenter<ScheduleViewInterfa
     public static class SchedulePresenterFactory implements PresenterFactory<SchedulePresenter>
     {
         @Override
-        public peoples.materialfitness.Schedule.SchedulePresenter createPresenter()
+        public SchedulePresenter createPresenter()
         {
             return new SchedulePresenter();
         }
