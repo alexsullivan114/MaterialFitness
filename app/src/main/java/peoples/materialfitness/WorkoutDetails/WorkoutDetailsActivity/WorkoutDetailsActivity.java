@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionSet;
@@ -249,10 +250,14 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
             slideBottom.addTarget(recyclerView);
             Slide slideTop = new Slide(Gravity.TOP);
             slideTop.addTarget(appBarLayout);
+            Fade fade = new Fade(Fade.OUT);
+            fade.excludeTarget(android.R.id.navigationBarBackground, true);
+            fade.excludeTarget(android.R.id.statusBarBackground, true);
 
             TransitionSet transitionSet = new TransitionSet();
             transitionSet.addTransition(slideBottom);
             transitionSet.addTransition(slideTop);
+            transitionSet.addTransition(fade);
 
             getWindow().setReturnTransition(transitionSet);
         }
