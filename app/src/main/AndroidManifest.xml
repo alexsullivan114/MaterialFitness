@@ -6,7 +6,7 @@
         android:name=".Core.MaterialFitnessApplication"
         android:allowBackup="false"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
 
         <activity
             android:name=".RootScreen.RootActivity"
@@ -18,17 +18,11 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity
-            android:name=".WorkoutDetails.HistoricalWorkoutDetailsActivity.HistoricalWorkoutDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity"/>
+        <activity android:name=".WorkoutDetails.HistoricalWorkoutDetailsActivity.HistoricalWorkoutDetailsActivity"/>
         <activity android:name=".FitnotesImport.FitnotesImporterActivity"/>
-        <activity
-            android:name=".WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+        <activity android:name=".WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity"/>
+        <activity android:name=".Schedule.ScheduleDay.ScheduleDayActivity"/>
 
     </application>
 

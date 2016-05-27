@@ -17,7 +17,7 @@ import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInte
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
-import peoples.materialfitness.Schedule.ScheduleDay;
+import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.Util.DateUtils;
 import rx.Observable;
 

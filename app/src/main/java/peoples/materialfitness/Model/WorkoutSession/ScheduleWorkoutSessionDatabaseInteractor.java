@@ -1,7 +1,7 @@
 package peoples.materialfitness.Model.WorkoutSession;
 
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
-import peoples.materialfitness.Schedule.ScheduleDay;
+import peoples.materialfitness.Model.ScheduleDay;
 import rx.Observable;
 
 /**

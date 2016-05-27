@@ -1,4 +1,0 @@
-<transitionManager xmlns:android="http://schemas.android.com/apk/res/android">
-    <transition android:fromScene="@layout/nav_header_log_workout"
-                android:toScene="@layout/nav_header_log_workout" />
-</transitionManager>

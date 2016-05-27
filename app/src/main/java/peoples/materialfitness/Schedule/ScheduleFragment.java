@@ -1,7 +1,13 @@
 package peoples.materialfitness.Schedule;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +17,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Schedule.ScheduleDay.ScheduleDayActivity;
+import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseFragment;
 
 /**
@@ -69,22 +78,58 @@ public class ScheduleFragment extends BaseFragment<SchedulePresenter> implements
     @OnClick({R.id.monday_view, R.id.tuesday_view, R.id.wednesday_view, R.id.thursday_view, R.id.friday_view, R.id.saturday_view, R.id.sunday_view})
     public void onClick(View view)
     {
+        ScheduleDay day = null;
+
         switch (view.getId())
         {
             case R.id.monday_view:
+                day = ScheduleDay.MONDAY;
                 break;
             case R.id.tuesday_view:
+                day = ScheduleDay.TUESDAY;
                 break;
             case R.id.wednesday_view:
+                day = ScheduleDay.WEDNESDAY;
                 break;
             case R.id.thursday_view:
+                day = ScheduleDay.THURSDAY;
                 break;
             case R.id.friday_view:
+                day = ScheduleDay.FRIDAY;
                 break;
             case R.id.saturday_view:
+                day = ScheduleDay.SATURDAY;
                 break;
             case R.id.sunday_view:
+                day = ScheduleDay.SUNDAY;
                 break;
         }
+
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            presenter.dayClicked(day, view);
+        }
+        else
+        {
+            presenter.dayClicked(day);
+        }
+    }
+
+    @Override
+    public void startScheduleDayActivity(ScheduleDay scheduleDay)
+    {
+        Intent startingIntent = ScheduleDayActivity.getStartingIntent(getActivity(), scheduleDay);
+        startActivity(startingIntent);
+    }
+
+    @Override
+    @SuppressLint("NewApi")
+    public void startScheduleDayActivity(ScheduleDay scheduleDay, View transitioningView)
+    {
+        String transitionName = transitioningView.getTransitionName();
+
+        Intent startingIntent = ScheduleDayActivity.getStartingIntent(getActivity(), scheduleDay, transitionName);
+        Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), transitioningView, transitionName).toBundle();
+        startActivity(startingIntent, options);
     }
 }
