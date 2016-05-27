@@ -16,6 +16,7 @@ import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;
+import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseActivity;
 
 /**
@@ -67,9 +68,26 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
 
         getSupportActionBar().setTitle(scheduleDay.getDisplayName());
 
-        if (getIntent().hasExtra(TRANSITION_NAME_EXTRA))
+        // Handle our entering transition if we're not restoring ourselves.
+        if (getIntent().hasExtra(TRANSITION_NAME_EXTRA) && savedInstanceState == null)
         {
             setupTransition();
+        }
+
+        restoreInstanceState(savedInstanceState);
+    }
+
+    private void restoreInstanceState(Bundle savedInstanceState)
+    {
+        if (savedInstanceState != null)
+        {
+            toolbarMask.setAlpha(0.0f);
+            toolbar.setBackgroundColor(getResources().getColor(scheduleDay.getColorResInt()));
+
+            if (VersionUtils.isLollipopOrGreater())
+            {
+                getWindow().setStatusBarColor(getResources().getColor(scheduleDay.getPressedColorRes()));
+            }
         }
     }
 
@@ -99,7 +117,7 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
             {
                 toolbar.setAlpha(1.0f);
                 AnimationUtils.fadeOutView(toolbarMask);
-                getWindow().setStatusBarColor(getColor(scheduleDay.getPressedColorRes()));
+                getWindow().setStatusBarColor(getResources().getColor(scheduleDay.getPressedColorRes()));
             }
         });
 
