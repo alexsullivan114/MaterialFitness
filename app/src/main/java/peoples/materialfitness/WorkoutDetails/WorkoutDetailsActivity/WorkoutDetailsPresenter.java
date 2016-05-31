@@ -57,7 +57,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                 });
     }
 
-    public void deleteSetButtonClicked(int position)
+    void deleteSetButtonClicked(int position)
     {
         final WeightSet set = exerciseSession.getSets().get(position);
         WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
@@ -94,21 +94,21 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                 });
     }
 
-    public void editSetButtonClicked(int position)
+    void editSetButtonClicked(int position)
     {
         WeightSet weightSet = exerciseSession.getSets().get(position);
         activityInterface.showEditWeightSetDialog(weightSet.getWeight(), weightSet.getNumReps());
         editingSet = Optional.of(weightSet);
     }
 
-    public void handleSavedExerciseSession(ExerciseSession savedExerciseSession)
+    void handleSavedExerciseSession(ExerciseSession savedExerciseSession)
     {
         exerciseSession = savedExerciseSession;
         activityInterface.setTitle(exerciseSession.getExercise().getTitle());
         populateChartData();
     }
 
-    public void editSet(final int weight, final int reps)
+    void editSet(final int weight, final int reps)
     {
         if (editingSet.isPresent())
         {
@@ -159,7 +159,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
         }
     }
 
-    public void abandonEditing()
+    void abandonEditing()
     {
         editingSet = Optional.absent();
     }
