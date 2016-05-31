@@ -1,6 +1,7 @@
 package peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.common.base.Optional;
 
@@ -16,16 +17,17 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseIntera
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 4/18/2016.
  */
-public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkoutDetailsActivityInterface>
+class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkoutDetailsActivityInterface>
 {
     private Optional<WeightSet> lastSessionsFirstWeightSet = Optional.absent();
 
-    public static class ActiveWorkoutDetailsPresenterFactory implements PresenterFactory<ActiveWorkoutDetailsPresenter>
+    static class ActiveWorkoutDetailsPresenterFactory implements PresenterFactory<ActiveWorkoutDetailsPresenter>
     {
         @Override
         public ActiveWorkoutDetailsPresenter createPresenter()
@@ -41,7 +43,7 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
         populateLastSessionFirstWeightSet();
     }
 
-    public void fabClicked()
+    void fabClicked()
     {
         Optional<WeightSet> weightSetOptional = getDefaultWeightSet();
         int reps = weightSetOptional.isPresent() ? weightSetOptional.get().getNumReps() : 0;
@@ -63,7 +65,7 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
         }
     }
 
-    public void addSet(int reps, int weight)
+    void addSet(int reps, int weight)
     {
         WeightSet set = new WeightSet(weight, reps);
         set.setExerciseSessionId(exerciseSession.getId());
@@ -87,38 +89,19 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
     /**
      * Look into the database to fetch our last weight set for this exercise type.
      *
-     * TODO: This should be in the weight set database code
      */
     private void populateLastSessionFirstWeightSet()
     {
-        String whereClause = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
-        String[] args = new String[]{String.valueOf(exerciseSession.getExercise().getId())};
-
         new ExerciseSessionDatabaseInteractor()
-                .fetchWithClause(whereClause, args)
+                .getPreviousExerciseSession(exerciseSession.getExercise())
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .flatMap(session -> {
-                    // Fetch the most recent two workout sessions that have this exercise session.
-                    // The first should be this exercise session, the second is the one we want.
-                    String workoutWhereClause = WorkoutSessionContract._ID + " = ?";
-                    String[] workoutArgs = new String[]{String.valueOf(session.getWorkoutSessionId())};
-                    return new WorkoutSessionDatabaseInteractor().fetchWithClause(workoutWhereClause, workoutArgs);
-                })
-                .toSortedList((workoutSession, workoutSession2) -> (int)(workoutSession2.getWorkoutSessionDate() - workoutSession.getWorkoutSessionDate()))
-                .filter(workoutSessions -> workoutSessions.size() > 1)
-                .map(workoutSessions -> workoutSessions.get(0))
-                .map(WorkoutSession::getExercises)
-                .flatMap(Observable::from)
-                .filter(exerciseSession -> exerciseSession.getExercise().equals(this.exerciseSession.getExercise()))
-                .map(ExerciseSession::getSets)
-                .filter(weightSets -> weightSets.size() > 0)
-                .subscribe(finalWeightSets -> {
-                    lastSessionsFirstWeightSet = Optional.of(finalWeightSets.get(0));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(exerciseSession1 -> {
+                    lastSessionsFirstWeightSet = Optional.of(exerciseSession1.getSets().get(0));
                 });
     }
 
-    public void appBarOffsetChanged(int totalAppBarHeight, int newOffset)
+    void appBarOffsetChanged(int totalAppBarHeight, int newOffset)
     {
         if (Math.abs(newOffset) >= totalAppBarHeight)
         {
@@ -130,12 +113,12 @@ public class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<Activ
         }
     }
 
-    public void deleteClicked()
+    void deleteClicked()
     {
         activityInterface.showDeleteConfirmationView();
     }
 
-    public void deleteConfirmClicked()
+    void deleteConfirmClicked()
     {
         new ExerciseSessionDatabaseInteractor()
                 .cascadeDelete(exerciseSession)

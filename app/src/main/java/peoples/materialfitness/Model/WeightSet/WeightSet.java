@@ -142,4 +142,15 @@ public class WeightSet
         result = 31 * result + (int) (exerciseSessionId ^ (exerciseSessionId >>> 32));
         return result;
     }
+
+    @Override
+    public String toString()
+    {
+        return "WeightSet{" +
+                "exerciseSessionId=" + exerciseSessionId +
+                ", weight=" + weight +
+                ", numReps=" + numReps +
+                ", isPr=" + isPr +
+                '}';
+    }
 }

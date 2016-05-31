@@ -20,10 +20,13 @@ import peoples.materialfitness.Model.ModelDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightSet.WeightSetContract;
 import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
+import peoples.materialfitness.Util.DateUtils;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -172,5 +175,26 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
 
         return Observable.zip(setsObservable, exerciseObservable,
                 (weightSetList, exercise) -> ExerciseSession.getExerciseSession(contentValues, exercise, weightSetList));
+    }
+
+    public Observable<ExerciseSession> getPreviousExerciseSession(Exercise exercise)
+    {
+        final String WHERE_CLAUSE = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
+        final String[] WHERE_ARGS = new String[]{String.valueOf(exercise.getId())};
+        final WorkoutSessionDatabaseInteractor workoutSessionDatabaseInteractor = new WorkoutSessionDatabaseInteractor();
+
+        return fetchWithClause(WHERE_CLAUSE, WHERE_ARGS)
+                .flatMap(exerciseSession -> workoutSessionDatabaseInteractor.fetchWithId(exerciseSession.getWorkoutSessionId()))
+                .filter(workoutSession -> !DateUtils.isToday(workoutSession.getWorkoutSessionDate()))
+                .toSortedList((workoutSession, workoutSession2) -> {
+                    long lhs = workoutSession.getWorkoutSessionDate();
+                    long rhs = workoutSession2.getWorkoutSessionDate();
+                    return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
+                })
+                .flatMap((Func1<List<WorkoutSession>, Observable<WorkoutSession>>) Observable::from)
+                .takeLast(1)
+                .map(WorkoutSession::getExercises)
+                .flatMap(Observable::from)
+                .filter(exerciseSession1 -> exerciseSession1.getExercise().equals(exercise));
     }
 }

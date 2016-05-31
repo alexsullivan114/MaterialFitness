@@ -173,4 +173,12 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                     mHelper.getDatabase().endTransaction();
                 });
     }
+
+    public Observable<WorkoutSession> fetchWithId(long id)
+    {
+        final String WHERE_CLAUSE = WorkoutSessionContract._ID + " = ?";
+        final String[] WHERE_ARGS = new String[]{String.valueOf(id)};
+
+        return fetchWithClause(WHERE_CLAUSE, WHERE_ARGS);
+    }
 }

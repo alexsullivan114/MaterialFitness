@@ -13,6 +13,7 @@ import java.util.List;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.MuscleGroup.MuscleGroup;
+import peoples.materialfitness.Util.DateUtils;
 
 /**
  * Created by Alex Sullivan on 10/4/2015.
@@ -178,5 +179,11 @@ public class WorkoutSession
         workoutSession.setExercises(exercises);
 
         return workoutSession;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Date: " + DateUtils.getShortDateDisplayString(workoutSessionDate);
     }
 }
