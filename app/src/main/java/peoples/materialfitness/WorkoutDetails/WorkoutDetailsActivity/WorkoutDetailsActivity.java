@@ -209,15 +209,30 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.recyclerView);
 
-            int cx = 0;
-            int cy = 0;
-            CircularRevealTransition revealTransition = new CircularRevealTransition(cx, cy);
+            Fade chartFade = new Fade(Fade.IN);
+            chartFade.addTarget(R.id.appBar);
+
+            CircularRevealTransition revealTransition = new CircularRevealTransition(0, 0);
             revealTransition.addTarget(R.id.appBar);
+
+            Fade recyclerFade = new Fade(Fade.IN);
+            recyclerFade.addTarget(R.id.recyclerView);
+            recyclerFade.setStartDelay(150);
+
+            TransitionSet chartRevealTransition = new TransitionSet();
+            chartRevealTransition.setOrdering(TransitionSet.ORDERING_TOGETHER);
+            chartRevealTransition.addTransition(revealTransition);
+            chartRevealTransition.addTransition(chartFade);
+
+            TransitionSet recyclerTransition = new TransitionSet();
+            recyclerTransition.setOrdering(TransitionSet.ORDERING_TOGETHER);
+            recyclerTransition.addTransition(slide);
+            recyclerTransition.addTransition(recyclerFade);
 
             TransitionSet set = new TransitionSet();
             set.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
-            set.addTransition(revealTransition);
-            set.addTransition(slide);
+            set.addTransition(chartRevealTransition);
+            set.addTransition(recyclerTransition);
             set.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
             set.addListener(new TransitionListenerAdapter()
             {
