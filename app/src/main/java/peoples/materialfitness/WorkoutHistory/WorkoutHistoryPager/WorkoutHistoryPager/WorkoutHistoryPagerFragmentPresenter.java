@@ -11,6 +11,8 @@ import java.util.List;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.CompleteWorkoutHistoryCache;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Util.DateUtils;
@@ -33,6 +35,7 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
                 .getAllWorkoutSessions()
                 .subscribeOn(Schedulers.io())
                 .filter(workoutSession -> !DateUtils.isToday(workoutSession.getWorkoutSessionDate()))
+                .filter(WorkoutSession::hasSets)
                 .toList()
                 .filter(workoutSessionList -> workoutSessionList.size() > 0)
                 .observeOn(AndroidSchedulers.mainThread())

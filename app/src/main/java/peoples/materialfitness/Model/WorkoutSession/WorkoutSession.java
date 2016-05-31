@@ -186,4 +186,25 @@ public class WorkoutSession
     {
         return "Date: " + DateUtils.getShortDateDisplayString(workoutSessionDate);
     }
+
+    public boolean hasSets()
+    {
+        if (getExercises() == null || getExercises().isEmpty())
+        {
+            return false;
+        }
+
+        boolean hasSet = false;
+
+        for (ExerciseSession exerciseSession : getExercises())
+        {
+            if (exerciseSession.getSets() != null && !exerciseSession.getSets().isEmpty())
+            {
+                hasSet = true;
+                break;
+            }
+        }
+
+        return hasSet;
+    }
 }
