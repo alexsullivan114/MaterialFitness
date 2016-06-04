@@ -1,12 +1,14 @@
 package peoples.materialfitness.Schedule.ScheduleDay;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.view.View;
 
 import butterknife.Bind;
@@ -16,6 +18,7 @@ import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;
+import peoples.materialfitness.Util.CustomAnimations.StatusBarColorTransition;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseActivity;
 
@@ -91,20 +94,40 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         }
     }
 
-    @SuppressLint("NewApi")
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupTransition()
+    {
+        setupEnterTransition();
+//        setupReenterTransition();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupEnterTransition()
     {
         Intent startingIntent = getIntent();
 
         String transitionName = startingIntent.getStringExtra(TRANSITION_NAME_EXTRA);
         @ColorInt int backgroundColor = getResources().getColor(scheduleDay.getColorResInt());
+        @ColorInt int darkScheduleColor = getResources().getColor(scheduleDay.getPressedColorRes());
+        @ColorInt int statusBarColor = getWindow().getStatusBarColor();
 
         toolbar.setBackgroundColor(backgroundColor);
         toolbar.setAlpha(0.0f);
         toolbarMask.setTransitionName(transitionName);
         toolbarMask.setBackgroundColor(backgroundColor);
 
-        getWindow().getEnterTransition().addListener(new TransitionListenerAdapter()
+        Transition sharedElementTransition = getWindow().getEnterTransition();
+        Transition statusBarColorTransition = new StatusBarColorTransition(statusBarColor, darkScheduleColor, getWindow());
+
+        TransitionSet set = new TransitionSet();
+        set.addTransition(sharedElementTransition);
+        set.addTransition(statusBarColorTransition);
+
+        getWindow().setEnterTransition(set);
+
+        sharedElementTransition.excludeTarget(android.R.id.navigationBarBackground, true);
+        sharedElementTransition.excludeTarget(android.R.id.statusBarBackground, true);
+        sharedElementTransition.addListener(new TransitionListenerAdapter()
         {
             @Override
             public void onTransitionStart(Transition transition)
@@ -121,9 +144,7 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
             }
         });
 
-        getWindow().getEnterTransition().excludeTarget(android.R.id.navigationBarBackground, true);
-
-        getWindow().getReturnTransition().addListener(new TransitionListenerAdapter()
+        sharedElementTransition.addListener(new TransitionListenerAdapter()
         {
             @Override
             public void onTransitionStart(Transition transition)
@@ -133,4 +154,19 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
             }
         });
     }
+//
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    private void setupReenterTransition()
+//    {
+//        @ColorInt int primaryDarkColor = getResources().getColor(R.color.colorPrimaryDark);
+//
+//        Transition sharedElementTransition = getWindow().getEnterTransition();
+//        Transition statusBarColorTransition = new StatusBarColorTransition(getWindow().getStatusBarColor(), primaryDarkColor, getWindow());
+//
+//        TransitionSet set = new TransitionSet();
+//        set.addTransition(sharedElementTransition);
+//        set.addTransition(statusBarColorTransition);
+//
+//        getWindow().setReturnTransition(set);
+//    }
 }

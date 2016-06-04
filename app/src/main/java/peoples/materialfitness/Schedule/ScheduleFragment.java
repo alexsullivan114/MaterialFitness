@@ -1,13 +1,14 @@
 package peoples.materialfitness.Schedule;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Schedule.ScheduleDay.ScheduleDayActivity;
+import peoples.materialfitness.Util.CustomAnimations.StatusBarColorTransition;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseFragment;
 
@@ -123,7 +125,7 @@ public class ScheduleFragment extends BaseFragment<SchedulePresenter> implements
     }
 
     @Override
-    @SuppressLint("NewApi")
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void startScheduleDayActivity(ScheduleDay scheduleDay, View transitioningView)
     {
         String transitionName = transitioningView.getTransitionName();
@@ -131,5 +133,23 @@ public class ScheduleFragment extends BaseFragment<SchedulePresenter> implements
         Intent startingIntent = ScheduleDayActivity.getStartingIntent(getActivity(), scheduleDay, transitionName);
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), transitioningView, transitionName).toBundle();
         startActivity(startingIntent, options);
+
+        setupReturnTransition(scheduleDay);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupReturnTransition(ScheduleDay scheduleDay)
+    {
+        @ColorInt int returningStatusBarColor = getResources().getColor(scheduleDay.getPressedColorRes());
+        @ColorInt int normalStatusBarColor = getResources().getColor(R.color.colorPrimaryDark);
+
+        StatusBarColorTransition transition = new StatusBarColorTransition(returningStatusBarColor, normalStatusBarColor, getActivity().getWindow());
+        Transition sharedElementTransition = getActivity().getWindow().getReenterTransition();
+
+        TransitionSet transitionSet = new TransitionSet();
+        transitionSet.addTransition(transition);
+        transitionSet.addTransition(sharedElementTransition);
+
+        getActivity().getWindow().setReenterTransition(transitionSet);
     }
 }

@@ -191,10 +191,11 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
                     long rhs = workoutSession2.getWorkoutSessionDate();
                     return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
                 })
-                .flatMap((Func1<List<WorkoutSession>, Observable<WorkoutSession>>) Observable::from)
-                .takeLast(1)
+                .flatMap(Observable::from)
                 .map(WorkoutSession::getExercises)
                 .flatMap(Observable::from)
-                .filter(exerciseSession1 -> exerciseSession1.getExercise().equals(exercise));
+                .filter(exerciseSession -> exerciseSession.getSets() != null && exerciseSession.getSets().size() > 0)
+                .filter(exerciseSession1 -> exerciseSession1.getExercise().equals(exercise))
+                .takeLast(1);
     }
 }

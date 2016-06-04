@@ -165,8 +165,6 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
 
     public Observable<WorkoutSession> cascadeSaveWorkoutSessions(final List<WorkoutSession> workoutSessions)
     {
-        // TODO: I don't think we want to add these modifiers (doOnSubscribe and on terminate) since
-        // they're very likely to be overwritten forward up the chain.
         return Observable.from(workoutSessions)
                 .flatMap(this::cascadeSave)
                 .doOnSubscribe(() -> helper.getDatabase().beginTransaction())

@@ -41,8 +41,6 @@ public class CircularRevealTransition extends Transition
     @Override
     public void captureStartValues(TransitionValues transitionValues)
     {
-        View view = transitionValues.view;
-
         transitionValues.values.put(PROPNAME_CX, this.startingCx);
         transitionValues.values.put(PROPNAME_CY, this.startingCy);
      }
