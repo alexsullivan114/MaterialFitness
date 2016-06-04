@@ -94,11 +94,22 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         }
     }
 
+    @Override
+    public void finish()
+    {
+        super.finish();
+
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupTransition()
     {
         setupEnterTransition();
-//        setupReenterTransition();
+        setupReturnTransition();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -154,19 +165,23 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
             }
         });
     }
-//
-//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//    private void setupReenterTransition()
-//    {
-//        @ColorInt int primaryDarkColor = getResources().getColor(R.color.colorPrimaryDark);
-//
-//        Transition sharedElementTransition = getWindow().getEnterTransition();
-//        Transition statusBarColorTransition = new StatusBarColorTransition(getWindow().getStatusBarColor(), primaryDarkColor, getWindow());
-//
-//        TransitionSet set = new TransitionSet();
-//        set.addTransition(sharedElementTransition);
-//        set.addTransition(statusBarColorTransition);
-//
-//        getWindow().setReturnTransition(set);
-//    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupReturnTransition()
+    {
+        TransitionSet transitionSet = new TransitionSet();
+        Transition transition = getWindow().getReturnTransition();
+
+        transitionSet.addTransition(transition);
+        transitionSet.addListener(new TransitionListenerAdapter()
+        {
+            @Override
+            public void onTransitionEnd(Transition transition)
+            {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+        });
+
+        getWindow().setReturnTransition(transitionSet);
+    }
 }

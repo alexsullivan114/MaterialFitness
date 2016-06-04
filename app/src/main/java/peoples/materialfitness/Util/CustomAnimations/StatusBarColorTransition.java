@@ -18,10 +18,17 @@ import android.view.Window;
  * Created by Alex Sullivan on 5/31/2016.
  *
  * TODO: Generalize this to ColorAnimator and have the status bar version extend that'n.
+ *
+ * TODO: This transition isn't great since it only goes one way - start color -> end color. When we
+ * do a return transition this looks bad. We can get the current status bar color pretty easily, but
+ * I'm not sure how we'd go about getting the desired end color...
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class StatusBarColorTransition extends Transition
 {
+    private static final String START_COLOR = "startColorTransitionExtraMaterialFitness";
+    private static final String END_COLOR = "endColorTransitionExtraMaterialFitness";
+
     @ColorInt
     private final int startingColor;
 
@@ -41,18 +48,39 @@ public class StatusBarColorTransition extends Transition
     @Override
     public void captureStartValues(TransitionValues transitionValues)
     {
+        @ColorInt int statusBarColor = sceneWindow.getStatusBarColor();
 
+        if (statusBarColor == startingColor)
+        {
+            transitionValues.values.put(START_COLOR, startingColor);
+        }
+        else
+        {
+            transitionValues.values.put(START_COLOR, endingColor);
+        }
     }
 
     @Override
     public void captureEndValues(TransitionValues transitionValues)
     {
+        @ColorInt int statusBarColor = sceneWindow.getStatusBarColor();
 
+        if (statusBarColor == startingColor)
+        {
+            transitionValues.values.put(END_COLOR, endingColor);
+        }
+        else
+        {
+            transitionValues.values.put(END_COLOR, startingColor);
+        }
     }
 
     @Override
     public Animator createAnimator(ViewGroup sceneRoot, TransitionValues startValues, TransitionValues endValues)
     {
+        @ColorInt int startingColor = (int)startValues.values.get(START_COLOR);
+        @ColorInt int endingColor = (int)endValues.values.get(END_COLOR);
+
         ValueAnimator animator = ObjectAnimator.ofArgb(startingColor, endingColor);
         animator.addUpdateListener(animation -> sceneWindow.setStatusBarColor((Integer)animation.getAnimatedValue()));
         return animator;

@@ -133,23 +133,5 @@ public class ScheduleFragment extends BaseFragment<SchedulePresenter> implements
         Intent startingIntent = ScheduleDayActivity.getStartingIntent(getActivity(), scheduleDay, transitionName);
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), transitioningView, transitionName).toBundle();
         startActivity(startingIntent, options);
-
-        setupReturnTransition(scheduleDay);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupReturnTransition(ScheduleDay scheduleDay)
-    {
-        @ColorInt int returningStatusBarColor = getResources().getColor(scheduleDay.getPressedColorRes());
-        @ColorInt int normalStatusBarColor = getResources().getColor(R.color.colorPrimaryDark);
-
-        StatusBarColorTransition transition = new StatusBarColorTransition(returningStatusBarColor, normalStatusBarColor, getActivity().getWindow());
-        Transition sharedElementTransition = getActivity().getWindow().getReenterTransition();
-
-        TransitionSet transitionSet = new TransitionSet();
-        transitionSet.addTransition(transition);
-        transitionSet.addTransition(sharedElementTransition);
-
-        getActivity().getWindow().setReenterTransition(transitionSet);
     }
 }
