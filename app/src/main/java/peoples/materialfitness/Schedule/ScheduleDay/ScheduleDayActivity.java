@@ -6,15 +6,23 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionSet;
 import android.view.View;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ScheduleDay;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;
@@ -26,7 +34,7 @@ import peoples.materialfitness.View.BaseActivity;
  * Created by Alex Sullivan
  */
 public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
-        implements ScheduleDayInterface
+        implements ScheduleDayInterface, ExerciseCardRecyclerAdapter.ExerciseCardAdapterInterface
 {
     private static final String SCHEDULE_DAY_EXTRA = "scheduleDayExtra";
     private static final String TRANSITION_NAME_EXTRA = "transitionNameExtra";
@@ -35,6 +43,12 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     Toolbar toolbar;
     @Bind(R.id.toolbar_mask)
     View toolbarMask;
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @Bind(R.id.recycler_empty_view)
+    TextView recyclerEmptyView;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
     private ScheduleDay scheduleDay;
 
@@ -67,7 +81,10 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         setContentView(R.layout.activity_schedule_day);
         ButterKnife.bind(this);
 
-        scheduleDay = (ScheduleDay)getIntent().getSerializableExtra(SCHEDULE_DAY_EXTRA);
+        scheduleDay = (ScheduleDay) getIntent().getSerializableExtra(SCHEDULE_DAY_EXTRA);
+        presenter.setScheduleDay(scheduleDay);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         getSupportActionBar().setTitle(scheduleDay.getDisplayName());
 
@@ -92,6 +109,49 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
                 getWindow().setStatusBarColor(getResources().getColor(scheduleDay.getPressedColorRes()));
             }
         }
+    }
+
+    private String getEmptyString()
+    {
+        String scheduleDayString = getResources().getString(scheduleDay.getDisplayName());
+        String formattedString = getResources().getString(R.string.schedule_empty, scheduleDayString);
+
+        return formattedString;
+    }
+
+    @OnClick(R.id.fab)
+    protected void addExerciseClicked()
+    {
+        presenter.addExerciseClicked();
+    }
+
+    @Override
+    public void displayWorkoutSession(WorkoutSession workoutSession)
+    {
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerEmptyView.setVisibility(View.GONE);
+        ExerciseCardRecyclerAdapter adapter = new ExerciseCardRecyclerAdapter(workoutSession, this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onExerciseClicked(ExerciseSession session)
+    {
+        // no-op.
+    }
+
+    @Override
+    public void onSpilloverAnimationEnd()
+    {
+        // no-op.
+    }
+
+    @Override
+    public void showEmptyScreen()
+    {
+        recyclerView.setVisibility(View.GONE);
+        recyclerEmptyView.setVisibility(View.VISIBLE);
+        recyclerEmptyView.setText(getEmptyString());
     }
 
     @Override

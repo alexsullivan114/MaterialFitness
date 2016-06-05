@@ -24,6 +24,7 @@ import peoples.materialfitness.R;
 import peoples.materialfitness.Schedule.ScheduleDay.ScheduleDayActivity;
 import peoples.materialfitness.Util.CustomAnimations.StatusBarColorTransition;
 import peoples.materialfitness.Util.VersionUtils;
+import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
 
 /**
@@ -66,6 +67,7 @@ public class ScheduleFragment extends BaseFragment<SchedulePresenter> implements
         ButterKnife.bind(this, v);
 
         ((RootFabDisplay) getActivity()).hideFab();
+        ((BaseActivity)getActivity()).getSupportActionBar().setTitle(R.string.schedule);
 
         return v;
     }
