@@ -76,17 +76,17 @@ public class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWork
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> {
-                    mWorkoutSession = Optional.absent();
+                    workoutSession = Optional.absent();
                 })
                 .doOnCompleted(() -> {
-                    if (!mWorkoutSession.isPresent())
+                    if (!workoutSession.isPresent())
                     {
-                        mWorkoutSession = Optional.of(new WorkoutSession(DateUtils.getTodaysDate().getTime()));
+                        workoutSession = Optional.of(new WorkoutSession(DateUtils.getTodaysDate().getTime()));
                     }
-                    fragmentInterface.updateWorkoutList(mWorkoutSession.get());
+                    fragmentInterface.updateWorkoutList(workoutSession.get());
                 })
                 .subscribe(session -> {
-                    mWorkoutSession = Optional.of(session);
+                    workoutSession = Optional.of(session);
                 });
     }
 }

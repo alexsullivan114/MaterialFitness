@@ -19,7 +19,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.LogWorkout.LogWorkoutDialog.AddExerciseDialog;
 import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
+import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
@@ -34,10 +36,15 @@ import peoples.materialfitness.View.BaseActivity;
  * Created by Alex Sullivan
  */
 public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
-        implements ScheduleDayInterface, ExerciseCardRecyclerAdapter.ExerciseCardAdapterInterface
+        implements ScheduleDayInterface,
+                   ExerciseCardRecyclerAdapter.ExerciseCardAdapterInterface,
+                   AddExerciseDialog.OnExerciseLoggedCallback
 {
     private static final String SCHEDULE_DAY_EXTRA = "scheduleDayExtra";
     private static final String TRANSITION_NAME_EXTRA = "transitionNameExtra";
+
+    private boolean hasFinishedEnterTransition = false;
+    private boolean showFab = false;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -119,6 +126,13 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         return formattedString;
     }
 
+    @Override
+    public void setWorkoutSession(WorkoutSession workoutSession)
+    {
+        ExerciseCardRecyclerAdapter adapter = new ExerciseCardRecyclerAdapter(workoutSession, this);
+        recyclerView.setAdapter(adapter);
+    }
+
     @OnClick(R.id.fab)
     protected void addExerciseClicked()
     {
@@ -130,8 +144,6 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerEmptyView.setVisibility(View.GONE);
-        ExerciseCardRecyclerAdapter adapter = new ExerciseCardRecyclerAdapter(workoutSession, this);
-        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -155,13 +167,36 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     }
 
     @Override
-    public void finish()
+    public void showAddExerciseDialog()
     {
-        super.finish();
+        new AddExerciseDialog(this, this)
+                .show();
+    }
 
-        if (VersionUtils.isLollipopOrGreater())
+    @Override
+    public void onExerciseLogged(Exercise exercise)
+    {
+        presenter.exerciseLogged(exercise);
+    }
+
+    @Override
+    public void updateExerciseCard(ExerciseSession exerciseSession)
+    {
+        recyclerEmptyView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        ((ExerciseCardRecyclerAdapter) recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
+    }
+
+    @Override
+    public void showFab()
+    {
+        if (!VersionUtils.isLollipopOrGreater() || hasFinishedEnterTransition)
         {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            fab.show();
+        }
+        else if (!hasFinishedEnterTransition)
+        {
+            showFab = true;
         }
     }
 
@@ -212,6 +247,11 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
                 toolbar.setAlpha(1.0f);
                 AnimationUtils.fadeOutView(toolbarMask);
                 getWindow().setStatusBarColor(getResources().getColor(scheduleDay.getPressedColorRes()));
+
+                if (showFab)
+                {
+                    fab.show();
+                }
             }
         });
 

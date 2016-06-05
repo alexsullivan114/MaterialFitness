@@ -28,7 +28,7 @@ import peoples.materialfitness.R;
  * hooking everything back up we'd just keep the logic in here for now. If this starts to get
  * unwieldy in the future we can split everything back out.
  */
-public class LogWorkoutDialog extends MaterialDialog implements
+public class AddExerciseDialog extends MaterialDialog implements
         MaterialDialog.SingleButtonCallback, AdapterView.OnItemClickListener
 {
     private TextInputLayout mExerciseTitleLayout;
@@ -37,7 +37,7 @@ public class LogWorkoutDialog extends MaterialDialog implements
     private Context mContext;
     private OnExerciseLoggedCallback mCallback;
 
-    public LogWorkoutDialog(Context context, OnExerciseLoggedCallback callback)
+    public AddExerciseDialog(Context context, OnExerciseLoggedCallback callback)
     {
         super(new MaterialDialog.Builder(context)
                 .title(R.string.log_exercise)

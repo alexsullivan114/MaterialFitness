@@ -10,7 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.LogWorkout.LogWorkoutDialog.LogWorkoutDialog;
+import peoples.materialfitness.LogWorkout.LogWorkoutDialog.AddExerciseDialog;
+import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.Navigation.RootFabOnClick;
@@ -23,9 +24,9 @@ import peoples.materialfitness.WorkoutSession.WorkoutSessionFragment;
  * <p>
  * This is the fragment that actually handles allowing a user to add an exercise session.
  */
-public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmentPresenter> implements
-                                                                                            RootFabOnClick,
-                                                                                            LogWorkoutFragmentInterface
+public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmentPresenter>
+        implements
+        RootFabOnClick, LogWorkoutFragmentInterface, AddExerciseDialog.OnExerciseLoggedCallback
 {
 
     public static LogWorkoutFragment newInstance()
@@ -91,11 +92,19 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
         }
     }
 
+    // TODO: I don't think the presenter should be the callback. The activity should kind of
+    // control the interaction of one of its sub views, ya know?
     @Override
     public void showAddWorkoutDialog()
     {
-        LogWorkoutDialog dialog = new LogWorkoutDialog(getActivity(), presenter);
+        AddExerciseDialog dialog = new AddExerciseDialog(getActivity(), this);
         dialog.show();
+    }
+
+    @Override
+    public void onExerciseLogged(Exercise exercise)
+    {
+        presenter.onExerciseLogged(exercise);
     }
 
     @Override
