@@ -80,7 +80,7 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
     {
         super.updateWorkoutList(workoutSession);
 
-        if (workoutSession.getExercises().size() == 0)
+        if (workoutSession.getExerciseSessions().size() == 0)
         {
             recyclerEmptyView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);

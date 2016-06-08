@@ -3,8 +3,6 @@ package peoples.materialfitness.Model.Fitnotes;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
@@ -67,7 +65,7 @@ public class FitnotesDeserializer
                             {
                                 if (!currentExerciseSession.getExercise().equals(exercise))
                                 {
-                                    for (ExerciseSession exerciseSession : currentWorkoutSession.getExercises())
+                                    for (ExerciseSession exerciseSession : currentWorkoutSession.getExerciseSessions())
                                     {
                                         if (exerciseSession.getExercise().equals(exercise))
                                         {

@@ -37,7 +37,7 @@ public class ExerciseGraphPresenter extends BasePresenter
 
     public void workoutSessionSelected(WorkoutSession workoutSession)
     {
-        for (ExerciseSession exerciseSession : workoutSession.getExercises())
+        for (ExerciseSession exerciseSession : workoutSession.getExerciseSessions())
         {
             if (exerciseSession.getExercise().equals(exercise))
             {
@@ -103,7 +103,7 @@ public class ExerciseGraphPresenter extends BasePresenter
             WorkoutSession workoutSession = workoutSessions.get(i);
             // Loop through all of our exercise sessions associated with this workout session
             // to find the exercise
-            for (ExerciseSession exerciseSession : workoutSession.getExercises())
+            for (ExerciseSession exerciseSession : workoutSession.getExerciseSessions())
             {
                 if (exerciseSession.getExercise().equals(exercise))
                 {

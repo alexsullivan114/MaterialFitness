@@ -10,17 +10,21 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.AddExerciseDialog;
-import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ScheduleDay;
@@ -37,14 +41,13 @@ import peoples.materialfitness.View.BaseActivity;
  */
 public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         implements ScheduleDayInterface,
-                   ExerciseCardRecyclerAdapter.ExerciseCardAdapterInterface,
                    AddExerciseDialog.OnExerciseLoggedCallback
 {
     private static final String SCHEDULE_DAY_EXTRA = "scheduleDayExtra";
     private static final String TRANSITION_NAME_EXTRA = "transitionNameExtra";
 
     private boolean hasFinishedEnterTransition = false;
-    private boolean showFab = false;
+    private List<Runnable> viewRunnable = new ArrayList<>();
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -129,7 +132,7 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     @Override
     public void setWorkoutSession(WorkoutSession workoutSession)
     {
-        ExerciseCardRecyclerAdapter adapter = new ExerciseCardRecyclerAdapter(workoutSession, this);
+        ScheduleDayRecyclerAdapter adapter = new ScheduleDayRecyclerAdapter(workoutSession.getExerciseList());
         recyclerView.setAdapter(adapter);
     }
 
@@ -142,28 +145,22 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     @Override
     public void displayWorkoutSession(WorkoutSession workoutSession)
     {
-        recyclerView.setVisibility(View.VISIBLE);
-        recyclerEmptyView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onExerciseClicked(ExerciseSession session)
-    {
-        // no-op.
-    }
-
-    @Override
-    public void onSpilloverAnimationEnd()
-    {
-        // no-op.
+        Log.d(TAG, "Called display workout session...");
+        executeViewCodeAfterTransition(() -> {
+            Log.d(TAG, "Fading recycler view in...");
+            AnimationUtils.fadeVisibilityChange(recyclerView, View.VISIBLE);
+            AnimationUtils.fadeVisibilityChange(recyclerEmptyView, View.GONE);
+        });
     }
 
     @Override
     public void showEmptyScreen()
     {
-        recyclerView.setVisibility(View.GONE);
-        recyclerEmptyView.setVisibility(View.VISIBLE);
-        recyclerEmptyView.setText(getEmptyString());
+        executeViewCodeAfterTransition(() -> {
+            recyclerView.setVisibility(View.GONE);
+            recyclerEmptyView.setVisibility(View.VISIBLE);
+            recyclerEmptyView.setText(getEmptyString());
+        });
     }
 
     @Override
@@ -184,19 +181,24 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     {
         recyclerEmptyView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
-        ((ExerciseCardRecyclerAdapter) recyclerView.getAdapter()).updateExerciseCard(exerciseSession);
+        ((ScheduleDayRecyclerAdapter) recyclerView.getAdapter()).addExercise(exerciseSession.getExercise());
     }
 
     @Override
     public void showFab()
     {
+        executeViewCodeAfterTransition(() -> fab.show());
+    }
+
+    private void executeViewCodeAfterTransition(Runnable runnable)
+    {
         if (!VersionUtils.isLollipopOrGreater() || hasFinishedEnterTransition)
         {
-            fab.show();
+            runnable.run();
         }
-        else if (!hasFinishedEnterTransition)
+        else
         {
-            showFab = true;
+            viewRunnable.add(runnable);
         }
     }
 
@@ -224,10 +226,14 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
 
         Transition sharedElementTransition = getWindow().getEnterTransition();
         Transition statusBarColorTransition = new StatusBarColorTransition(statusBarColor, darkScheduleColor, getWindow());
+        Transition fade = new Fade(Fade.IN);
+        fade.addTarget(R.id.recycler_empty_view);
+        fade.addTarget(R.id.recyclerView);
 
         TransitionSet set = new TransitionSet();
         set.addTransition(sharedElementTransition);
         set.addTransition(statusBarColorTransition);
+        set.addTransition(fade);
 
         getWindow().setEnterTransition(set);
 
@@ -238,19 +244,28 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
             @Override
             public void onTransitionStart(Transition transition)
             {
+                Log.d(TAG, "onTransitionStart: ");
                 toolbar.setAlpha(0.0f);
             }
 
             @Override
             public void onTransitionEnd(Transition transition)
             {
+                Log.d(TAG, "onTransitionEnd: ");
                 toolbar.setAlpha(1.0f);
                 AnimationUtils.fadeOutView(toolbarMask);
                 getWindow().setStatusBarColor(getResources().getColor(scheduleDay.getPressedColorRes()));
 
-                if (showFab)
+                hasFinishedEnterTransition = true;
+
+                if (viewRunnable != null)
                 {
-                    fab.show();
+                    for (Runnable runnable : viewRunnable)
+                    {
+                        runnable.run();
+                    }
+
+                    viewRunnable.clear();
                 }
             }
         });

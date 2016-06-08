@@ -62,7 +62,7 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
         });
 
         if (presenter.getWorkoutSession().isPresent() &&
-                ((WorkoutSession) presenter.getWorkoutSession().get()).getExercises().size() > 0)
+                ((WorkoutSession) presenter.getWorkoutSession().get()).getExerciseSessions().size() > 0)
         {
             recyclerView.setAdapter(new ExerciseCardRecyclerAdapter(((WorkoutSession) presenter.getWorkoutSession().get()), this));
             recyclerView.setVisibility(View.VISIBLE);

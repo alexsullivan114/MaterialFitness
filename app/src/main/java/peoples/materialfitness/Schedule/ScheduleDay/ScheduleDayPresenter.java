@@ -3,7 +3,6 @@ package peoples.materialfitness.Schedule.ScheduleDay;
 import java.util.Date;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
-import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
@@ -54,7 +53,7 @@ public class ScheduleDayPresenter extends BaseActivityPresenter<ScheduleDayInter
 
                     activityInterface.showFab();
                     activityInterface.setWorkoutSession(workoutSession);
-                    if (workoutSession.getExercises().size() > 0)
+                    if (workoutSession.getExerciseSessions().size() > 0)
                     {
                         activityInterface.displayWorkoutSession(workoutSession);
                     }

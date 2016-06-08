@@ -30,7 +30,7 @@ public class WorkoutSession
 {
     private long id = -1;
 
-    private List<ExerciseSession> exercises = new ArrayList<>();
+    private List<ExerciseSession> exerciseSessions = new ArrayList<>();
     // millis since epoch
     private long workoutSessionDate = 0;
 
@@ -46,17 +46,17 @@ public class WorkoutSession
 
     public void addExerciseSession(ExerciseSession session)
     {
-        exercises.add(session);
+        exerciseSessions.add(session);
     }
 
     public void addAllExerciseSessions(Collection<ExerciseSession> sessions)
     {
-        exercises.addAll(sessions);
+        exerciseSessions.addAll(sessions);
     }
 
     public boolean containsExercise(Exercise exercise)
     {
-        for (ExerciseSession session: exercises)
+        for (ExerciseSession session: exerciseSessions)
         {
             if (session.getExercise().getTitle().equalsIgnoreCase(exercise.getTitle()))
             {
@@ -89,13 +89,13 @@ public class WorkoutSession
      */
     public void setExerciseSession(ExerciseSession exerciseSession)
     {
-        for (int i = 0; i < exercises.size(); i++)
+        for (int i = 0; i < exerciseSessions.size(); i++)
         {
-            ExerciseSession existingSession = exercises.get(i);
+            ExerciseSession existingSession = exerciseSessions.get(i);
 
             if (existingSession.getExercise().getTitle().equalsIgnoreCase(exerciseSession.getExercise().getTitle()))
             {
-                exercises.set(i, exerciseSession);
+                exerciseSessions.set(i, exerciseSession);
                 return;
             }
         }
@@ -104,14 +104,14 @@ public class WorkoutSession
         addExerciseSession(exerciseSession);
     }
 
-    public List<ExerciseSession> getExercises()
+    public List<ExerciseSession> getExerciseSessions()
     {
-        return exercises;
+        return exerciseSessions;
     }
 
-    public void setExercises(List<ExerciseSession> exercises)
+    public void setExerciseSessions(List<ExerciseSession> exerciseSessions)
     {
-        this.exercises = exercises;
+        this.exerciseSessions = exerciseSessions;
     }
 
     public long getWorkoutSessionDate()
@@ -142,7 +142,7 @@ public class WorkoutSession
     {
         SimpleArrayMap<MuscleGroup, ArrayList<ExerciseSession>> map = new SimpleArrayMap<>();
 
-        for (ExerciseSession session: exercises)
+        for (ExerciseSession session: exerciseSessions)
         {
             Exercise exercise = session.getExercise();
             ArrayList<ExerciseSession> muscleGroupExercises = map.get(exercise.getMuscleGroup());
@@ -176,7 +176,7 @@ public class WorkoutSession
 
         workoutSession.setId(contentValues.getAsLong(WorkoutSessionContract._ID));
         workoutSession.setWorkoutSessionDate(contentValues.getAsLong(WorkoutSessionContract.COLUMN_NAME_DATE));
-        workoutSession.setExercises(exercises);
+        workoutSession.setExerciseSessions(exercises);
 
         return workoutSession;
     }
@@ -189,14 +189,14 @@ public class WorkoutSession
 
     public boolean hasSets()
     {
-        if (getExercises() == null || getExercises().isEmpty())
+        if (getExerciseSessions() == null || getExerciseSessions().isEmpty())
         {
             return false;
         }
 
         boolean hasSet = false;
 
-        for (ExerciseSession exerciseSession : getExercises())
+        for (ExerciseSession exerciseSession : getExerciseSessions())
         {
             if (exerciseSession.getSets() != null && !exerciseSession.getSets().isEmpty())
             {
@@ -206,5 +206,17 @@ public class WorkoutSession
         }
 
         return hasSet;
+    }
+
+    public List<Exercise> getExerciseList()
+    {
+        List<Exercise> exercises = new ArrayList<>();
+
+        for (ExerciseSession exerciseSession : exerciseSessions)
+        {
+            exercises.add(exerciseSession.getExercise());
+        }
+
+        return exercises;
     }
 }

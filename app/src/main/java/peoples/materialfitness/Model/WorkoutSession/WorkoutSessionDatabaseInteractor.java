@@ -111,7 +111,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
                 .flatMap(workoutSession -> {
                     // Now save all of our exercise sessions.
                     ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor();
-                    for (ExerciseSession session : entity.getExercises())
+                    for (ExerciseSession session : entity.getExerciseSessions())
                     {
                         session.setWorkoutSessionId(entity.getId());
                         interactor.cascadeSave(session).subscribe();
@@ -126,7 +126,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
     {
         // First delete ourselves
         return delete(entity)
-                .flatMap(result -> Observable.from(entity.getExercises()))
+                .flatMap(result -> Observable.from(entity.getExerciseSessions()))
                 .flatMap(exerciseSession -> {
                     // Now delete all of our exercise sessions.
                     ExerciseSessionDatabaseInteractor interactor = new ExerciseSessionDatabaseInteractor();

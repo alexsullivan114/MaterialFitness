@@ -53,7 +53,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     @Override
     public void onBindViewHolder(ExerciseCardViewHolder holder, int position)
     {
-        ExerciseSession exerciseSession = workoutSession.getExercises().get(position);
+        ExerciseSession exerciseSession = workoutSession.getExerciseSessions().get(position);
 
         holder.titleView.setText(exerciseSession.getExercise().getTitle());
         // Reset our height in case this view holder uses to be expanded.
@@ -95,7 +95,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     @Override
     public int getItemCount()
     {
-        return workoutSession.getExercises().size();
+        return workoutSession.getExerciseSessions().size();
     }
 
     public void updateExerciseCard(ExerciseSession exerciseSession)
@@ -105,7 +105,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
             workoutSession.addExerciseSession(exerciseSession);
         }
 
-        notifyItemInserted(workoutSession.getExercises().size() - 1);
+        notifyItemInserted(workoutSession.getExerciseSessions().size() - 1);
     }
 
     /**
@@ -151,7 +151,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
      */
     private void animateSpilloverSetsToggle(ExerciseCardViewHolder viewHolder, boolean shouldExpand)
     {
-        ExerciseSession exerciseSession = workoutSession.getExercises().get(viewHolder.getAdapterPosition());
+        ExerciseSession exerciseSession = workoutSession.getExerciseSessions().get(viewHolder.getAdapterPosition());
         int spilloverSetsNum = exerciseSession.getSets().size() - NUM_DISPLAY_SETS;
         // Note: We know we have at least NUM_DISPLAY_SETS children here, which is why this is safe.
         // TODO: However, we're not really sure that the items in the recyclerview are this height.
@@ -218,7 +218,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
     private void onCardClicked(ExerciseCardViewHolder viewHolder)
     {
-        ExerciseSession exerciseSession = workoutSession.getExercises().get(viewHolder.getAdapterPosition());
+        ExerciseSession exerciseSession = workoutSession.getExerciseSessions().get(viewHolder.getAdapterPosition());
         callback.onExerciseClicked(exerciseSession);
     }
 

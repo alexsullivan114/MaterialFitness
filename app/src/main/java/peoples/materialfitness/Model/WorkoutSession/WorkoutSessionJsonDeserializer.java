@@ -24,7 +24,7 @@ public class WorkoutSessionJsonDeserializer implements JsonDeserializer<WorkoutS
         List<ExerciseSession> exerciseSessions = new ExerciseSessionJsonDeserializer().deserialize(exerciseSessionsJson);
 
         WorkoutSession workoutSession = new WorkoutSession(date);
-        workoutSession.setExercises(exerciseSessions);
+        workoutSession.setExerciseSessions(exerciseSessions);
         return workoutSession;
     }
 

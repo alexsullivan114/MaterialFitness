@@ -26,7 +26,6 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseIntera
 import peoples.materialfitness.Util.DateUtils;
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Func1;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -93,7 +92,7 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
                     return new WorkoutSessionDatabaseInteractor().fetchWithClause(WHERE, ARGS);
                 })
                 .flatMap(workoutSession -> {
-                    if (workoutSession.getExercises().size() == 0)
+                    if (workoutSession.getExerciseSessions().size() == 0)
                     {
                         return new WorkoutSessionDatabaseInteractor().delete(workoutSession);
                     }
@@ -192,7 +191,7 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
                     return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
                 })
                 .flatMap(Observable::from)
-                .map(WorkoutSession::getExercises)
+                .map(WorkoutSession::getExerciseSessions)
                 .flatMap(Observable::from)
                 .filter(exerciseSession -> exerciseSession.getSets() != null && exerciseSession.getSets().size() > 0)
                 .filter(exerciseSession1 -> exerciseSession1.getExercise().equals(exercise))

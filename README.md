@@ -4,7 +4,7 @@ TODO:
     - Done
 - Make exercise title dialog not look like shit
     - Done
-- Make exercise dialog not re-create already know exercises
+- Make exercise dialog not re-create already know exerciseSessions
     - Done
 - Add a mapper object between WorkoutSession and Exercise - Contains exercise, num of sets, weight at each rep etc
     - Done
@@ -14,7 +14,7 @@ TODO:
     - Done
 - Add frame popup to edit current exercise stuff.
     - Not sure if I'm going to do this anymore
-- Add drop down for exercises that have too many sets
+- Add drop down for exerciseSessions that have too many sets
     - Done :)
 - Add animation when clicking into an exercise
 - Add chart stuff for exercise page

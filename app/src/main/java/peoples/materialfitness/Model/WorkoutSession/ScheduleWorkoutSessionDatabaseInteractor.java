@@ -6,26 +6,35 @@ import rx.Observable;
 
 /**
  * Created by Alex Sullivan on 5/15/2016.
- *
- * This database interactor does not extend our base database interactor because the only
- * valid fetch is to get the workout session for a given schedule day. None of the other DB
- * operations apply.
  */
-public class ScheduleWorkoutSessionDatabaseInteractor
+public class ScheduleWorkoutSessionDatabaseInteractor extends WorkoutSessionDatabaseInteractor
 {
+    @Override
+    public Observable<WorkoutSession> fetchWithArguments(String whereClause, String[] args, String groupBy, String[] columns, String having, String orderBy, String limit)
+    {
+        return FitnessDatabaseUtils.getCursorObservable(WorkoutSessionContract.TABLE_NAME,
+                                                        whereClause, args, groupBy, columns, having, orderBy, limit, context)
+                .flatMap(this::getWorkoutSessionFromCursor);
+    }
+
+    @Override
+    public Observable<WorkoutSession> fetchWithClause(String whereClause, String[] arguments)
+    {
+        return fetchWithArguments(whereClause, arguments, null, null, null, null, null);
+    }
+
     public Observable<WorkoutSession> fetchWorkoutSessionForScheduleDay(ScheduleDay scheduleDay)
     {
         long workoutSessionId = scheduleDay.getWorkoutSessionId();
 
         String WHERE_CLAUSE = WorkoutSessionContract._ID + " = ?";
         String[] ARGS = new String[]{String.valueOf(workoutSessionId)};
-        WorkoutSessionDatabaseInteractor interactor = new WorkoutSessionDatabaseInteractor();
-        return interactor.fetchWithClause(WHERE_CLAUSE, ARGS)
+        return fetchWithClause(WHERE_CLAUSE, ARGS)
                 .toList()
                 .flatMap(workoutSessions -> {
                     if (workoutSessions.size() == 0)
                     {
-                        return interactor.save(createScheduleWorkoutSession(scheduleDay));
+                        return save(createScheduleWorkoutSession(scheduleDay));
                     }
                     else
                     {

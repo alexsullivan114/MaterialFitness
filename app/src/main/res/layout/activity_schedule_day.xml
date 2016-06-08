@@ -30,9 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="@dimen/card_horizontal_margin"
-        android:layout_marginRight="@dimen/card_horizontal_margin"
-        android:visibility="gone"/>
+        android:alpha="0"/>
 
     <TextView
         android:id="@+id/recycler_empty_view"
@@ -42,7 +40,7 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.DarkerGray.20"
-        tools:text="No exercises scheduled for Wednesday."/>
+        tools:text="No exerciseSessions scheduled for Wednesday."/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
