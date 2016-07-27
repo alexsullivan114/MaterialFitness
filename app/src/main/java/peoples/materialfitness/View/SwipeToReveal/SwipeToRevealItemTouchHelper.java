@@ -1,9 +1,11 @@
-package peoples.materialfitness.Util.AnimationHelpers;
+package peoples.materialfitness.View.SwipeToReveal;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 import peoples.materialfitness.Util.ScreenUtils;
@@ -40,23 +42,27 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
     private boolean isSwiping = false;
     // Our callback to notify of important events
     private final ItemInteractionCallback itemInteractionCallback;
-    // A DIRECT (top level) child of the recyclerview. We use this child to tell its parent
+    // A DIRECT (top level) child of the scrollview. We use this child to tell its parent
     // to stop receiving touch inputs.
-    private final View recyclerviewDirectChild;
+    private final View scrollableViewDirectChild;
     // The left view we want to "reveal". This view is sticky, so if the user swipes past it the
     // animation will come to rest on the right edge of this view.
     private final View leftStickyView;
     // Same as the above except the right view. The animation will end on the left edge of this view.
     private final View rightStickyView;
+    // The interpolator used when the sticky view will be shown
+    public final Interpolator stickyInterpolator = new OvershootInterpolator(1.0f);
+    // The interpolator used when the sticky view will be hidden
+    public final Interpolator hideStickyInterpolator = new FastOutLinearInInterpolator();
 
 
     public SwipeToRevealItemTouchHelper(@NonNull ItemInteractionCallback itemInteractionCallback,
-                                        @NonNull View recyclerviewDirectChild,
+                                        @Nullable View scrollableViewDirectChild,
                                         @NonNull View leftStickyView,
                                         @NonNull View rightStickyView)
     {
         this.itemInteractionCallback = itemInteractionCallback;
-        this.recyclerviewDirectChild = recyclerviewDirectChild;
+        this.scrollableViewDirectChild = scrollableViewDirectChild;
         this.leftStickyView = leftStickyView;
         this.rightStickyView = rightStickyView;
     }
@@ -94,12 +100,12 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
                 {
                     isSwiping = true;
 
-                    recyclerviewDirectChild.getParent().requestDisallowInterceptTouchEvent(true);
+                    if (scrollableViewDirectChild != null)
+                    {
+                        scrollableViewDirectChild.getParent().requestDisallowInterceptTouchEvent(true);
+                    }
 
-                    view.animate()
-                            .x(originalXPosition + (event.getRawX() - originalTouchX))
-                            .setDuration(0)
-                            .start();
+                    itemInteractionCallback.itemMoved(view, originalXPosition + (event.getRawX() - originalTouchX));
                 }
 
                 break;
@@ -107,15 +113,20 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
             case MotionEvent.ACTION_UP:
             {
                 float x = 0;
+                int[] leftStickyViewCoordinates = new int[2];
+                int[] rightStickyViewCoordinates = new int[2];
 
-                if (view.getX() > leftStickyView.getX() + leftStickyView.getWidth())
+                leftStickyView.getLocationOnScreen(leftStickyViewCoordinates);
+                rightStickyView.getLocationOnScreen(rightStickyViewCoordinates);
+
+                if (view.getX() > leftStickyViewCoordinates[0] + leftStickyView.getWidth())
                 {
-                    x = leftStickyView.getX() + leftStickyView.getWidth();
+                    x = leftStickyViewCoordinates[0] + leftStickyView.getWidth();
                 }
-                else if (view.getX() + view.getWidth() < rightStickyView.getX())
+                else if (view.getX() + view.getWidth() < rightStickyViewCoordinates[0])
                 {
                     int screenWidth = ScreenUtils.getScreenWidth();
-                    x = -1 * (screenWidth - rightStickyView.getX());
+                    x = -1 * (screenWidth - rightStickyViewCoordinates[0]);
                 }
 
                 if (x != 0)
@@ -123,13 +134,12 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
                     itemInteractionCallback.itemRevealed(view);
                 }
 
-                view.animate()
-                        .x(x)
-                        .setDuration(x != 0 ? 600 : 200)
-                        .setInterpolator(x != 0 ? new OvershootInterpolator(1.0f) : new FastOutLinearInInterpolator())
-                        .start();
+                itemInteractionCallback.itemReleased(view, x, x != 0);
 
-                recyclerviewDirectChild.getParent().requestDisallowInterceptTouchEvent(false);
+                if (scrollableViewDirectChild != null)
+                {
+                    scrollableViewDirectChild.getParent().requestDisallowInterceptTouchEvent(false);
+                }
             }
             default:
                 return false;
@@ -139,7 +149,9 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
 
     public interface ItemInteractionCallback
     {
-        void itemTouched(View v);
         void itemRevealed(View v);
+        void itemMoved(View v, float newPosition);
+        void itemReleased(View v, float restingPosition, boolean sticking);
+        void itemTouched(View v);
     }
 }

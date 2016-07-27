@@ -2,25 +2,21 @@ package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Optional;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.AnimationHelpers.SwipeToRevealItemTouchHelper;
+import peoples.materialfitness.View.SwipeToReveal.SwipeToRevealLayout;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
@@ -80,10 +76,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
             holder.prImageView.setVisibility(View.GONE);
         }
 
-        if (holder.contentView.getX() != 0)
-        {
-            holder.contentView.setX(0);
-        }
+        holder.swipeToRevealLayout.returnToDefaultPositioning(false);
     }
 
     @Override
@@ -114,7 +107,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     }
 
     protected final class RepViewHolder extends RecyclerView.ViewHolder
-            implements SwipeToRevealItemTouchHelper.ItemInteractionCallback
+            implements SwipeToRevealLayout.SwipeLayoutCallback
     {
         @Bind(R.id.position)
         TextView positionTextView;
@@ -124,40 +117,16 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         TextView weightTextView;
         @Bind(R.id.pr_image)
         ImageView prImageView;
-        @Bind(R.id.contentView)
-        LinearLayout contentView;
-        @Bind(R.id.trashButton)
-        ImageButton trashButton;
-        @Bind(R.id.editButton)
-        ImageButton editButton;
+        @Bind(R.id.swipeLayout)
+        SwipeToRevealLayout swipeToRevealLayout;
 
         public RepViewHolder(View itemView)
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            if (allowTouchEvents)
-            {
-                setSwipeHelper();
-            }
-        }
-
-        @OnClick(R.id.trashButton)
-        protected void trashButtonClicked()
-        {
-            callback.deleteButtonClicked(getAdapterPosition());
-        }
-
-        @OnClick(R.id.editButton)
-        protected void editButtonClicked()
-        {
-            callback.editButtonClicked(getAdapterPosition());
-        }
-
-        @Override
-        public void itemTouched(View v)
-        {
-            viewholderTouched();
+            swipeToRevealLayout.setSwipeable(allowTouchEvents);
+            swipeToRevealLayout.setCallback(this);
         }
 
         @Override
@@ -166,23 +135,27 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
             revealedViewHolder = Optional.of(this);
         }
 
-        private void setSwipeHelper()
+        @Override
+        public void contentTouched()
         {
-            SwipeToRevealItemTouchHelper helper =
-                    new SwipeToRevealItemTouchHelper(this,
-                                                     itemView,
-                                                     trashButton,
-                                                     editButton);
-            contentView.setOnTouchListener(helper);
+            viewholderTouched();
+        }
+
+        @Override
+        public void leftButtonClicked(View v)
+        {
+            callback.deleteButtonClicked(getAdapterPosition());
+        }
+
+        @Override
+        public void rightButtonClicked(View v)
+        {
+            callback.editButtonClicked(getAdapterPosition());
         }
 
         protected void hideOptions()
         {
-            contentView.animate()
-                    .x(0)
-                    .setDuration(200)
-                    .setInterpolator(new FastOutLinearInInterpolator())
-                    .start();
+            swipeToRevealLayout.returnToDefaultPositioning(true);
         }
     }
 }
