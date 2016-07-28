@@ -166,6 +166,7 @@ public class SwipeToRevealLayout extends FrameLayout implements SwipeToRevealIte
 
         if (!swipeable)
         {
+            returnToDefaultPositioning(false);
             contentView.setOnTouchListener(null);
         }
         else
