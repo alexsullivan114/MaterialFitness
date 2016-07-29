@@ -4,16 +4,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.AnimationHelpers.SwipeToRevealItemTouchHelper;
 
 /**
  * Created by Alex Sullivan on 6/6/2016.
@@ -21,10 +24,12 @@ import peoples.materialfitness.R;
 public class ScheduleDayRecyclerAdapter extends RecyclerView.Adapter<ScheduleDayRecyclerAdapter.ScheduleDayViewHolder>
 {
     private List<Exercise> exercises;
+    private final ScheduleDayAdapterCallback callback;
 
-    public ScheduleDayRecyclerAdapter(List<Exercise> exercises)
+    public ScheduleDayRecyclerAdapter(List<Exercise> exercises, ScheduleDayAdapterCallback callback)
     {
         this.exercises= exercises;
+        this.callback = callback;
     }
 
     @Override
@@ -54,15 +59,53 @@ public class ScheduleDayRecyclerAdapter extends RecyclerView.Adapter<ScheduleDay
         notifyItemInserted(exercises.size());
     }
 
-    protected static class ScheduleDayViewHolder extends RecyclerView.ViewHolder
+    public void removeExercise(int position)
+    {
+        exercises.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    protected class ScheduleDayViewHolder extends RecyclerView.ViewHolder implements SwipeToRevealItemTouchHelper.ItemInteractionCallback
     {
         @Bind(R.id.textView)
         TextView textView;
+        @Bind(R.id.trashButton)
+        ImageView imageView;
 
         public ScheduleDayViewHolder(View itemView)
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            SwipeToRevealItemTouchHelper helper =
+                    new SwipeToRevealItemTouchHelper(this,
+                                                     itemView,
+                                                     imageView,
+                                                     null);
+            textView.setOnTouchListener(helper);
         }
+
+        @OnClick(R.id.trashButton)
+        public void trashClicked()
+        {
+            callback.itemDeleted(getAdapterPosition());
+        }
+
+        @Override
+        public void itemTouched(View v)
+        {
+
+        }
+
+        @Override
+        public void itemRevealed(View v)
+        {
+
+        }
+    }
+
+    public interface ScheduleDayAdapterCallback
+    {
+        void itemDeleted(int position);
     }
 }

@@ -41,7 +41,8 @@ import peoples.materialfitness.View.BaseActivity;
  */
 public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         implements ScheduleDayInterface,
-                   AddExerciseDialog.OnExerciseLoggedCallback
+                   AddExerciseDialog.OnExerciseLoggedCallback,
+                   ScheduleDayRecyclerAdapter.ScheduleDayAdapterCallback
 {
     private static final String SCHEDULE_DAY_EXTRA = "scheduleDayExtra";
     private static final String TRANSITION_NAME_EXTRA = "transitionNameExtra";
@@ -130,9 +131,19 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     }
 
     @Override
+    public void removeExercise(int position)
+    {
+        ((ScheduleDayRecyclerAdapter)recyclerView.getAdapter()).removeExercise(position);
+        if (recyclerView.getAdapter().getItemCount() == 0)
+        {
+            showEmptyScreen();
+        }
+    }
+
+    @Override
     public void setWorkoutSession(WorkoutSession workoutSession)
     {
-        ScheduleDayRecyclerAdapter adapter = new ScheduleDayRecyclerAdapter(workoutSession.getExerciseList());
+        ScheduleDayRecyclerAdapter adapter = new ScheduleDayRecyclerAdapter(workoutSession.getExerciseList(), this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -140,6 +151,12 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     protected void addExerciseClicked()
     {
         presenter.addExerciseClicked();
+    }
+
+    @Override
+    public void itemDeleted(int position)
+    {
+        presenter.itemDeleted(position);
     }
 
     @Override

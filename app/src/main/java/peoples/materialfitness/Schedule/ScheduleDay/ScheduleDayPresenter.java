@@ -7,11 +7,13 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.Model.WorkoutSession.ScheduleWorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -52,15 +54,7 @@ public class ScheduleDayPresenter extends BaseActivityPresenter<ScheduleDayInter
                     this.workoutSession = workoutSession;
 
                     activityInterface.showFab();
-                    activityInterface.setWorkoutSession(workoutSession);
-                    if (workoutSession.getExerciseSessions().size() > 0)
-                    {
-                        activityInterface.displayWorkoutSession(workoutSession);
-                    }
-                    else
-                    {
-                        activityInterface.showEmptyScreen();
-                    }
+                    activityInterface.displayWorkoutSession(workoutSession);
                 });
     }
 
@@ -94,5 +88,19 @@ public class ScheduleDayPresenter extends BaseActivityPresenter<ScheduleDayInter
 
                     });
         }
+    }
+
+    public void itemDeleted(int position)
+    {
+        ExerciseSession exerciseSession = workoutSession.getExerciseSessions().get(position);
+        workoutSession.getExerciseSessions().remove(position);
+
+        new ExerciseSessionDatabaseInteractor()
+                .delete(exerciseSession)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    activityInterface.removeExercise(position);
+                });
     }
 }

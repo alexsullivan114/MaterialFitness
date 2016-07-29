@@ -1,6 +1,7 @@
 package peoples.materialfitness.Util.AnimationHelpers;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,7 +54,7 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
     public SwipeToRevealItemTouchHelper(@NonNull ItemInteractionCallback itemInteractionCallback,
                                         @NonNull View recyclerviewDirectChild,
                                         @NonNull View leftStickyView,
-                                        @NonNull View rightStickyView)
+                                        @Nullable View rightStickyView)
     {
         this.itemInteractionCallback = itemInteractionCallback;
         this.recyclerviewDirectChild = recyclerviewDirectChild;
@@ -112,7 +113,7 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
                 {
                     x = leftStickyView.getX() + leftStickyView.getWidth();
                 }
-                else if (view.getX() + view.getWidth() < rightStickyView.getX())
+                else if (rightStickyView != null && view.getX() + view.getWidth() < rightStickyView.getX())
                 {
                     int screenWidth = ScreenUtils.getScreenWidth();
                     x = -1 * (screenWidth - rightStickyView.getX());

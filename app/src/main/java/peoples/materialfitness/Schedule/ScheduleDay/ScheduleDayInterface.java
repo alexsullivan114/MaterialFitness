@@ -11,9 +11,8 @@ import peoples.materialfitness.View.BaseFragmentInterface;
 public interface ScheduleDayInterface extends BaseActivityInterface
 {
     void displayWorkoutSession(WorkoutSession workoutSession);
-    void showEmptyScreen();
     void showAddExerciseDialog();
     void updateExerciseCard(ExerciseSession exerciseSession);
     void showFab();
-    void setWorkoutSession(WorkoutSession workoutSession);
+    void removeExercise(int position);
 }
