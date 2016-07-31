@@ -8,7 +8,7 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
-import peoples.materialfitness.Model.WeightUnitConverter;
+import peoples.materialfitness.Model.WeightUnits.WeightUnitConverter;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

@@ -12,10 +12,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightUnits.WeightUnitEvent;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseFragment;
@@ -69,7 +73,19 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
             recyclerEmptyView.setVisibility(View.GONE);
         }
 
+        // Subscring here so we only respond to the event when the view is around. I think
+        // ideally this should be in the presenter, but I don't want the presenter to know about
+        // these sort of lifecycle events...
+        EventBus.getDefault().register(this);
+
         return v;
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -106,6 +122,15 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     {
         Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(WorkoutSessionFragment.this.getActivity()).toBundle();
         startActivityForResult(startingIntent, workoutDetailsRequestCode, bundle);
+    }
+
+    @Subscribe
+    public void onUnitsChanged(WeightUnitEvent unitEvent)
+    {
+        if (recyclerView.getAdapter() != null)
+        {
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     /**

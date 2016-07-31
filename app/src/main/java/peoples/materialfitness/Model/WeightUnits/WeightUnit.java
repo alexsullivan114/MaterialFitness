@@ -1,4 +1,4 @@
-package peoples.materialfitness.Model;
+package peoples.materialfitness.Model.WeightUnits;
 
 import android.content.res.Resources;
 

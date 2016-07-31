@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import peoples.materialfitness.Core.MaterialFitnessApplication;
-import peoples.materialfitness.Model.WeightUnit;
+import peoples.materialfitness.Model.WeightUnits.WeightUnit;
 
 
 /**

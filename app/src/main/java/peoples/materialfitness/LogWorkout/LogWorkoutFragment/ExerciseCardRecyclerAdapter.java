@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.Model.WeightUnit;
+import peoples.materialfitness.Model.WeightUnits.WeightUnit;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.CustomAnimations.HeightAnimator;

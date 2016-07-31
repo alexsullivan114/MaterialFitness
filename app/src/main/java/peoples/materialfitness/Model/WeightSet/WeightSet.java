@@ -5,7 +5,7 @@ import android.content.ContentValues;
 
 import org.parceler.Parcel;
 
-import peoples.materialfitness.Model.WeightUnitConverter;
+import peoples.materialfitness.Model.WeightUnits.WeightUnitConverter;
 
 /**
  * Created by Alex Sullivan on 2/15/16.

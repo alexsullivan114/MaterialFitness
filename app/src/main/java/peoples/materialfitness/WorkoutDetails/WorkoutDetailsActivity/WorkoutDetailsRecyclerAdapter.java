@@ -15,7 +15,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.Model.WeightUnit;
+import peoples.materialfitness.Model.WeightUnits.WeightUnit;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.PreferenceManager;
 import peoples.materialfitness.View.SwipeToReveal.SwipeToRevealLayout;

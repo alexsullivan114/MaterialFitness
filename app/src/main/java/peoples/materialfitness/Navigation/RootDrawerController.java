@@ -17,7 +17,10 @@ import android.widget.CompoundButton;
 
 import com.google.common.base.Optional;
 
-import peoples.materialfitness.Model.WeightUnit;
+import org.greenrobot.eventbus.EventBus;
+
+import peoples.materialfitness.Model.WeightUnits.WeightUnit;
+import peoples.materialfitness.Model.WeightUnits.WeightUnitEvent;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.PreferenceManager;
 import peoples.materialfitness.View.BaseActivity;
@@ -175,6 +178,8 @@ public class RootDrawerController implements
         }
 
         PreferenceManager.getInstance().setUnits(newUnit);
+        // Post an event to update any interested views!
+        EventBus.getDefault().post(new WeightUnitEvent(newUnit));
     }
 
     /**
