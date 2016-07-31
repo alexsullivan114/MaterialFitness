@@ -54,7 +54,7 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
 
     public SwipeToRevealItemTouchHelper(@NonNull ItemInteractionCallback itemInteractionCallback,
                                         @Nullable View scrollableViewDirectChild,
-                                        @NonNull View leftStickyView,
+                                        @Nullable View leftStickyView,
                                         @Nullable View rightStickyView)
     {
         this.itemInteractionCallback = itemInteractionCallback;
@@ -109,18 +109,21 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
             case MotionEvent.ACTION_UP:
             {
                 float x = 0;
-                int[] leftStickyViewCoordinates = new int[2];
-                int[] rightStickyViewCoordinates = new int[2];
 
-                leftStickyView.getLocationOnScreen(leftStickyViewCoordinates);
-                rightStickyView.getLocationOnScreen(rightStickyViewCoordinates);
-
-                if (view.getX() > leftStickyViewCoordinates[0] + leftStickyView.getWidth())
+                if (leftStickyView != null)
                 {
-                    x = leftStickyViewCoordinates[0] + leftStickyView.getWidth();
+                    int[] leftStickyViewCoordinates = new int[2];
+                    leftStickyView.getLocationOnScreen(leftStickyViewCoordinates);
+                    if (view.getX() > leftStickyViewCoordinates[0] + leftStickyView.getWidth())
+                    {
+                        x = leftStickyViewCoordinates[0] + leftStickyView.getWidth();
+                    }
                 }
-                else if (view.getX() + view.getWidth() < rightStickyViewCoordinates[0])
+
+                if (rightStickyView != null)
                 {
+                    int[] rightStickyViewCoordinates = new int[2];
+                    rightStickyView.getLocationOnScreen(rightStickyViewCoordinates);
                     int screenWidth = ScreenUtils.getScreenWidth();
                     x = -1 * (screenWidth - rightStickyViewCoordinates[0]);
                 }

@@ -6,7 +6,7 @@
     android:id="@+id/swipeRevealLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:leftButtonDrawable="@drawable/ic_add_white_24dp">
+    app:leftButtonDrawable="@drawable/ic_delete_white_24dp">
 
     <TextView
         android:id="@+id/textView"

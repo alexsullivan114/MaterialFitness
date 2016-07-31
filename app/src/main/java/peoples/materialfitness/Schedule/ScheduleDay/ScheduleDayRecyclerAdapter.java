@@ -45,6 +45,7 @@ public class ScheduleDayRecyclerAdapter extends RecyclerView.Adapter<ScheduleDay
     {
         Exercise exercise = exercises.get(position);
         holder.textView.setText(exercise.getTitle());
+        holder.layout.returnToDefaultPositioning(false);
     }
 
     @Override
@@ -76,6 +77,8 @@ public class ScheduleDayRecyclerAdapter extends RecyclerView.Adapter<ScheduleDay
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            layout.setCallback(this);
         }
 
         @Override
@@ -93,7 +96,7 @@ public class ScheduleDayRecyclerAdapter extends RecyclerView.Adapter<ScheduleDay
         @Override
         public void rightButtonClicked(View v)
         {
-
+            // no-op
         }
 
         @Override

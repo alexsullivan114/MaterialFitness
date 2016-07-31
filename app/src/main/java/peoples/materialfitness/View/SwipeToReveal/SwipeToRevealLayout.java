@@ -42,10 +42,10 @@ public class SwipeToRevealLayout extends FrameLayout implements SwipeToRevealIte
     @Bind(R.id.rightButtonLayout)
     FrameLayout rightButtonLayout;
 
-    private @DrawableRes int leftDrawableResource;
-    private @DrawableRes int rightDrawableResource;
-    private @ColorRes int leftSideBackgroundColor;
-    private @ColorRes int rightSideBackgroundColor;
+    private @DrawableRes int leftDrawableResource = 0;
+    private @DrawableRes int rightDrawableResource = 0;
+    private @ColorRes int leftSideBackgroundColor = 0;
+    private @ColorRes int rightSideBackgroundColor = 0;
 
     private SwipeLayoutCallback callback;
     private SwipeToRevealItemTouchHelper touchHelper;
@@ -206,7 +206,10 @@ public class SwipeToRevealLayout extends FrameLayout implements SwipeToRevealIte
      */
     private void assignTouchHelper()
     {
-        touchHelper = new SwipeToRevealItemTouchHelper(this, contentView, leftButton, rightButton);
+        View leftView = leftDrawableResource != 0 ? leftButton : null;
+        View rightView = rightDrawableResource != 0 ? rightButton : null;
+
+        touchHelper = new SwipeToRevealItemTouchHelper(this, contentView, leftView, rightView);
         contentView.setOnTouchListener(touchHelper);
     }
 
