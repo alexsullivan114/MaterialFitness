@@ -33,7 +33,7 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 app:layout_anchor="@id/main_fragment"
                 app:layout_anchorGravity="bottom|right|end"
-                app:srcCompat="@drawable/ic_add_24dp"/>
+                app:srcCompat="@drawable/ic_add_white_24dp"/>
 
         </android.support.design.widget.CoordinatorLayout>
 

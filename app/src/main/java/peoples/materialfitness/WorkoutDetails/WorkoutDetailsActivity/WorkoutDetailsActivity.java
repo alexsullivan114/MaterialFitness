@@ -281,6 +281,10 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
 
     private void setTransitions()
     {
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            recyclerView.setTransitionGroup(true);
+        }
         setEnterTransition();
         setExitTransition();
     }
