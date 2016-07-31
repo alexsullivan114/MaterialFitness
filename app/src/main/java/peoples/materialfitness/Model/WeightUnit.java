@@ -13,7 +13,7 @@ public enum WeightUnit
     IMPERIAL(MaterialFitnessApplication.getApplication().getResources().getString(R.string.lbs)),
     METRIC(MaterialFitnessApplication.getApplication().getResources().getString(R.string.kgs));
 
-    public final String descriptor;
+    private final String descriptor;
 
     WeightUnit(String descriptor)
     {
@@ -32,5 +32,10 @@ public enum WeightUnit
         {
             return METRIC;
         }
+    }
+
+    public String getUnitString()
+    {
+        return descriptor;
     }
 }

@@ -15,7 +15,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightUnit;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.PreferenceManager;
 import peoples.materialfitness.View.SwipeToReveal.SwipeToRevealLayout;
 
 /**
@@ -58,11 +60,12 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     public void onBindViewHolder(RepViewHolder holder, int position)
     {
         WeightSet set = exerciseSession.getSets().get(position);
+        WeightUnit userWeightUnit = PreferenceManager.getInstance().getUnits();
 
         // TODO: Weight unit stuff.
         String formattedString = holder.positionTextView.getContext()
                 .getResources()
-                .getString(R.string.weight_units, set.getUserUnitsWeight(), "lbs");
+                .getString(R.string.weight_units, set.getUserUnitsWeight(), userWeightUnit.getUnitString());
         holder.weightTextView.setText(formattedString);
         holder.positionTextView.setText(String.valueOf(position + 1));
         holder.numRepsTextView.setText(String.valueOf(set.getNumReps()));

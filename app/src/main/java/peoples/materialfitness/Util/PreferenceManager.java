@@ -40,12 +40,12 @@ public class PreferenceManager
 
     public void setUnits(WeightUnit weightUnit)
     {
-        prefs.edit().putString(WEIGHT_UNIT_KEY, weightUnit.descriptor).apply();
+        prefs.edit().putString(WEIGHT_UNIT_KEY, weightUnit.getUnitString()).apply();
     }
 
     public WeightUnit getUnits()
     {
-        String weightUnitsDescriptor = prefs.getString(WEIGHT_UNIT_KEY, WeightUnit.IMPERIAL.descriptor);
+        String weightUnitsDescriptor = prefs.getString(WEIGHT_UNIT_KEY, WeightUnit.IMPERIAL.getUnitString());
         return WeightUnit.fromDesciptor(weightUnitsDescriptor);
     }
 
