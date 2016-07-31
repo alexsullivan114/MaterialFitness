@@ -9,8 +9,8 @@ import peoples.materialfitness.Util.PreferenceManager;
  */
 public class WeightUnitConverter
 {
-    private static final double LB_PER_KG = 2.4; // TODO: Get real values for these.
-    private static final double KG_PER_LB = 0.54;
+    private static final double LB_PER_KG = 2.20462;
+    private static final double KG_PER_LB = 0.453592;
 
     public static double getDisplayWeight(double kgWeight)
     {
@@ -44,5 +44,11 @@ public class WeightUnitConverter
         {
             return weightValue;
         }
+    }
+
+    public static double getMetricWeightFromUserInputWeight(double weightValue)
+    {
+        WeightUnit userWeightUnit = PreferenceManager.getInstance().getUnits();
+        return getMetricWeight(weightValue, userWeightUnit);
     }
 }

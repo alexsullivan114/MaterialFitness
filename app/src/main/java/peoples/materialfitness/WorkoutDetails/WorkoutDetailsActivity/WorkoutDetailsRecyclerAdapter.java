@@ -62,7 +62,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         // TODO: Weight unit stuff.
         String formattedString = holder.positionTextView.getContext()
                 .getResources()
-                .getString(R.string.weight_units, set.getWeight(), "lbs");
+                .getString(R.string.weight_units, set.getUserUnitsWeight(), "lbs");
         holder.weightTextView.setText(formattedString);
         holder.positionTextView.setText(String.valueOf(position + 1));
         holder.numRepsTextView.setText(String.valueOf(set.getNumReps()));

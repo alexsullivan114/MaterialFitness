@@ -112,9 +112,9 @@ public class ExerciseGraphPresenter extends BasePresenter
 
                     for (WeightSet weightSet : exerciseSession.getSets())
                     {
-                        if (weightSet.getWeight() > maxWeight)
+                        if (weightSet.getUserUnitsWeight() > maxWeight)
                         {
-                            maxWeight = weightSet.getWeight();
+                            maxWeight = weightSet.getUserUnitsWeight();
                         }
                     }
                     // and finally construct our entry.

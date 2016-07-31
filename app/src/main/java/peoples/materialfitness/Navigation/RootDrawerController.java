@@ -159,7 +159,9 @@ public class RootDrawerController implements
 
     private void setupSettings()
     {
-        ((SwitchCompat)navigationView.getMenu().getItem(WEIGHT_SWITCH_INDEX).getActionView()).setOnCheckedChangeListener(this);
+        SwitchCompat switchCompat = ((SwitchCompat)navigationView.getMenu().getItem(WEIGHT_SWITCH_INDEX).getActionView());
+        switchCompat.setOnCheckedChangeListener(this);
+        switchCompat.setChecked(PreferenceManager.getInstance().getUnits() == WeightUnit.METRIC);
     }
 
     @Override

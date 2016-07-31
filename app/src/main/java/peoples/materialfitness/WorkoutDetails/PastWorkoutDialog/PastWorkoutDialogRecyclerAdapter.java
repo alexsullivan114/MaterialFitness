@@ -40,7 +40,7 @@ public class PastWorkoutDialogRecyclerAdapter extends RecyclerView.Adapter<PastW
         // TODO: Weight unit stuff.
         String formattedString = holder.weight.getContext()
                 .getResources()
-                .getString(R.string.weight_units, set.getWeight(), "lbs");
+                .getString(R.string.weight_units, set.getUserUnitsWeight(), "lbs");
 
         holder.weight.setText(formattedString);
         holder.numReps.setText(String.valueOf(set.getNumReps()));

@@ -12,6 +12,8 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.Locale;
+
 import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
@@ -92,7 +94,7 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
         EditText weightEditText = (EditText) dialog.findViewById(R.id.weight);
 
         repEditText.append(String.valueOf(reps));
-        weightEditText.append(String.valueOf(weight));
+        weightEditText.append(String.format(Locale.getDefault(), "%.1f", weight));
 
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -116,7 +118,7 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
             EditText reps = (EditText) customView.findViewById(R.id.reps);
             EditText weight = (EditText) customView.findViewById(R.id.weight);
             int repsInt = Integer.parseInt(reps.getText().toString());
-            int weightInt = Integer.parseInt(weight.getText().toString());
+            double weightInt = Double.parseDouble(weight.getText().toString());
             presenter.addSet(repsInt, weightInt);
         }
     }

@@ -1,23 +1,16 @@
 package peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.common.base.Optional;
 
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
-import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
+import peoples.materialfitness.Model.WeightUnitConverter;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -47,7 +40,7 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
     {
         Optional<WeightSet> weightSetOptional = getDefaultWeightSet();
         int reps = weightSetOptional.isPresent() ? weightSetOptional.get().getNumReps() : 0;
-        double weight = weightSetOptional.isPresent() ? weightSetOptional.get().getWeight() : 0;
+        double weight = weightSetOptional.isPresent() ? weightSetOptional.get().getUserUnitsWeight() : 0;
 
         activityInterface.hideSetOptions();
         activityInterface.showAddSetDialog(reps, weight);
@@ -65,9 +58,9 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
         }
     }
 
-    void addSet(int reps, int weight)
+    void addSet(int reps, double weight)
     {
-        WeightSet set = new WeightSet(weight, reps);
+        WeightSet set = new WeightSet(WeightUnitConverter.getMetricWeightFromUserInputWeight(weight), reps);
         set.setExerciseSessionId(exerciseSession.getId());
         new WeightSetDatabaseInteractor().save(set)
                 .subscribeOn(Schedulers.io())

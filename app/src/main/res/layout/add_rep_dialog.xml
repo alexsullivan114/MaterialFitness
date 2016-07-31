@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:hint="@string/weight_hint"/>
 
     </android.support.design.widget.TextInputLayout>

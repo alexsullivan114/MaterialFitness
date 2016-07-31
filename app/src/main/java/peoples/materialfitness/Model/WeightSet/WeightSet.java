@@ -23,7 +23,7 @@ public class WeightSet
     {
     }
 
-    public WeightSet(int weight, int numReps)
+    public WeightSet(double weight, int numReps)
     {
         this.weight = weight;
         this.numReps = numReps;
@@ -68,9 +68,18 @@ public class WeightSet
         return weight;
     }
 
+    /**
+     * Returns the weight in the units the user has selected.
+     * @return The weight in KG or LBS
+     */
     public double getUserUnitsWeight()
     {
         return WeightUnitConverter.getDisplayWeight(weight);
+    }
+
+    public void setUserInputWeight(double userInputWeight)
+    {
+        this.weight = WeightUnitConverter.getMetricWeightFromUserInputWeight(userInputWeight);
     }
 
     public void setWeight(double weight)
