@@ -19,9 +19,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightUnits.WeightUnit;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.CustomAnimations.HeightAnimator;
+import peoples.materialfitness.Util.PreferenceManager;
 
 /**
  * Created by Alex Sullivan on 1/24/16.
@@ -122,9 +124,10 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         TextView weightTextView = (TextView)setContainer.findViewById(R.id.weight);
         ImageView imageView = (ImageView)setContainer.findViewById(R.id.pr_image);
 
+
+        WeightUnit weightUnit = PreferenceManager.getInstance().getUnits();
         String repsString = String.valueOf(weightSet.getNumReps());
-        // TODO: Use our weight units. Should be attached to the rep.
-        String weightString = holder.mCardView.getContext().getResources().getString(R.string.weight_units, weightSet.getWeight(), "lbs");
+        String weightString = holder.mCardView.getContext().getResources().getString(R.string.weight_units, weightSet.getUserUnitsWeight(), weightUnit.getUnitString());
 
         repsTextView.setText(repsString);
         weightTextView.setText(weightString);

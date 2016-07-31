@@ -16,7 +16,7 @@ import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
-import peoples.materialfitness.Util.AnimationHelpers.SwipeToRevealItemTouchHelper;
+import peoples.materialfitness.View.SwipeToReveal.SwipeToRevealLayout;
 
 /**
  * Created by Alex Sullivan on 6/6/2016.
@@ -65,34 +65,33 @@ public class ScheduleDayRecyclerAdapter extends RecyclerView.Adapter<ScheduleDay
         notifyItemRemoved(position);
     }
 
-    protected class ScheduleDayViewHolder extends RecyclerView.ViewHolder implements SwipeToRevealItemTouchHelper.ItemInteractionCallback
+    protected class ScheduleDayViewHolder extends RecyclerView.ViewHolder implements SwipeToRevealLayout.SwipeLayoutCallback
     {
+        @Bind(R.id.swipeRevealLayout)
+        SwipeToRevealLayout layout;
         @Bind(R.id.textView)
         TextView textView;
-        @Bind(R.id.trashButton)
-        ImageView imageView;
 
         public ScheduleDayViewHolder(View itemView)
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            SwipeToRevealItemTouchHelper helper =
-                    new SwipeToRevealItemTouchHelper(this,
-                                                     itemView,
-                                                     imageView,
-                                                     null);
-            textView.setOnTouchListener(helper);
         }
 
-        @OnClick(R.id.trashButton)
-        public void trashClicked()
+        @Override
+        public void contentTouched()
+        {
+
+        }
+
+        @Override
+        public void leftButtonClicked(View v)
         {
             callback.itemDeleted(getAdapterPosition());
         }
 
         @Override
-        public void itemTouched(View v)
+        public void rightButtonClicked(View v)
         {
 
         }

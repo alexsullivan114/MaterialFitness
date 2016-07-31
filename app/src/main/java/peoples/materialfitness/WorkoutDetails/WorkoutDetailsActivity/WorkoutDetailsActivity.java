@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.parceler.Parcels;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -158,7 +159,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     }
 
     @Override
-    public void showEditWeightSetDialog(int weight, int reps)
+    public void showEditWeightSetDialog(double weight, int reps)
     {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title(R.string.edit_set)
@@ -182,7 +183,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         EditText weightEditText = (EditText) dialog.findViewById(R.id.weight);
 
         repEditText.append(String.valueOf(reps));
-        weightEditText.append(String.valueOf(weight));
+        weightEditText.append(String.format(Locale.getDefault(), "%.1f", weight));
 
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -280,6 +281,10 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
 
     private void setTransitions()
     {
+        if (VersionUtils.isLollipopOrGreater())
+        {
+            recyclerView.setTransitionGroup(true);
+        }
         setEnterTransition();
         setExitTransition();
     }

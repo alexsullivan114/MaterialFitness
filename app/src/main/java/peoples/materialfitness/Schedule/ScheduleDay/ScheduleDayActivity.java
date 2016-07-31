@@ -104,6 +104,10 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         {
             setupTransition();
         }
+        else
+        {
+            removeTransitionExtras();
+        }
 
         restoreInstanceState(savedInstanceState);
     }
@@ -125,9 +129,8 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     private String getEmptyString()
     {
         String scheduleDayString = getResources().getString(scheduleDay.getDisplayName());
-        String formattedString = getResources().getString(R.string.schedule_empty, scheduleDayString);
 
-        return formattedString;
+        return getResources().getString(R.string.schedule_empty, scheduleDayString);
     }
 
     @Override
@@ -138,13 +141,6 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         {
             showEmptyScreen();
         }
-    }
-
-    @Override
-    public void setWorkoutSession(WorkoutSession workoutSession)
-    {
-        ScheduleDayRecyclerAdapter adapter = new ScheduleDayRecyclerAdapter(workoutSession.getExerciseList(), this);
-        recyclerView.setAdapter(adapter);
     }
 
     @OnClick(R.id.fab)
@@ -165,13 +161,14 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         Log.d(TAG, "Called display workout session...");
         executeViewCodeAfterTransition(() -> {
             Log.d(TAG, "Fading recycler view in...");
+            ScheduleDayRecyclerAdapter adapter = new ScheduleDayRecyclerAdapter(workoutSession.getExerciseList(), this);
+            recyclerView.setAdapter(adapter);
             AnimationUtils.fadeVisibilityChange(recyclerView, View.VISIBLE);
             AnimationUtils.fadeVisibilityChange(recyclerEmptyView, View.GONE);
         });
     }
 
-    @Override
-    public void showEmptyScreen()
+    private void showEmptyScreen()
     {
         executeViewCodeAfterTransition(() -> {
             recyclerView.setVisibility(View.GONE);
@@ -217,6 +214,11 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         {
             viewRunnable.add(runnable);
         }
+    }
+
+    private void removeTransitionExtras()
+    {
+        toolbarMask.setVisibility(View.GONE);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

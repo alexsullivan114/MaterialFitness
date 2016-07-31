@@ -8,7 +8,7 @@ import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDeta
  */
 public interface ActiveWorkoutDetailsActivityInterface extends WorkoutDetailsActivityInterface
 {
-    void showAddSetDialog(int reps, int weight);
+    void showAddSetDialog(int reps, double weight);
     void addSet(WeightSet set);
     void showBottomFab();
     void hideBottomFab();

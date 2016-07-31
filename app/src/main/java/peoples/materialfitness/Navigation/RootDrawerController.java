@@ -8,14 +8,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.google.common.base.Optional;
 
+import org.greenrobot.eventbus.EventBus;
+
+import peoples.materialfitness.Model.WeightUnits.WeightUnit;
+import peoples.materialfitness.Model.WeightUnits.WeightUnitEvent;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.PreferenceManager;
 import peoples.materialfitness.View.BaseActivity;
 import peoples.materialfitness.View.BaseFragment;
 
@@ -29,13 +36,16 @@ import peoples.materialfitness.View.BaseFragment;
 public class RootDrawerController implements
         NavigationView.OnNavigationItemSelectedListener,
         DrawerLayout.DrawerListener,
-        RootFabOnClick
+        RootFabOnClick,
+        CompoundButton.OnCheckedChangeListener
 {
     private static final String TAG = RootDrawerController.class.getSimpleName();
+    private static final int WEIGHT_SWITCH_INDEX = 3;
 
     private final ActionBarDrawerToggle mDrawerToggle;
     private final BaseActivity mContainingActivity;
     private final DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     private NavigationItem navItemToShow = null;
     public NavigationItem currentNavItem;
@@ -47,7 +57,7 @@ public class RootDrawerController implements
     {
         mDrawerToggle = new ActionBarDrawerToggle(drawerActivity, layout, toolbar, 0, 0);
         mContainingActivity = drawerActivity;
-        NavigationView navigationView = (NavigationView)layout.findViewById(R.id.nav_view);
+        navigationView = (NavigationView)layout.findViewById(R.id.nav_view);
         drawerLayout = layout;
 
         layout.setDrawerListener(this);
@@ -56,6 +66,7 @@ public class RootDrawerController implements
         currentNavItem = initialNavItem.isPresent() ? initialNavItem.get() : NavigationItem.NAV_ITEM_LOG_WORKOUT;
 
         setInitialFragmentSelected();
+        setupSettings();
     }
 
     @Override
@@ -147,6 +158,28 @@ public class RootDrawerController implements
 
             currentNavItem = navItem;
         }
+    }
+
+    private void setupSettings()
+    {
+        SwitchCompat switchCompat = ((SwitchCompat)navigationView.getMenu().getItem(WEIGHT_SWITCH_INDEX).getActionView());
+        switchCompat.setOnCheckedChangeListener(this);
+        switchCompat.setChecked(PreferenceManager.getInstance().getUnits() == WeightUnit.METRIC);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+    {
+        WeightUnit newUnit = WeightUnit.METRIC;
+
+        if (!isChecked)
+        {
+            newUnit = WeightUnit.IMPERIAL;
+        }
+
+        PreferenceManager.getInstance().setUnits(newUnit);
+        // Post an event to update any interested views!
+        EventBus.getDefault().post(new WeightUnitEvent(newUnit));
     }
 
     /**

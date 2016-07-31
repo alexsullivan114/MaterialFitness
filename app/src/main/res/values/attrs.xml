@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- attrs related to the SwipeToRevealLayout -->
+    <attr name="leftButtonDrawable" format="reference" />
+    <attr name="rightButtonDrawable" format="reference" />
+    <attr name="leftBackgroundColor" format="reference" />
+    <attr name="rightBackgroundColor" format="reference" />
+    <attr name="swipeable" format="boolean" />
+
+    <declare-styleable name="SwipeToRevealLayout">
+        <attr name="leftButtonDrawable" />
+        <attr name="rightButtonDrawable" />
+        <attr name="leftBackgroundColor" />
+        <attr name="rightBackgroundColor" />
+        <attr name="swipeable" />
+    </declare-styleable>
+</resources>

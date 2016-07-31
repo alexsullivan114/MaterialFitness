@@ -97,7 +97,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
     void editSetButtonClicked(int position)
     {
         WeightSet weightSet = exerciseSession.getSets().get(position);
-        activityInterface.showEditWeightSetDialog(weightSet.getWeight(), weightSet.getNumReps());
+        activityInterface.showEditWeightSetDialog(weightSet.getUserUnitsWeight(), weightSet.getNumReps());
         editingSet = Optional.of(weightSet);
     }
 
@@ -113,7 +113,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
         if (editingSet.isPresent())
         {
             WeightSet weightSet = editingSet.get();
-            weightSet.setWeight(weight);
+            weightSet.setUserInputWeight(weight);
             weightSet.setNumReps(reps);
 
             editingSet = Optional.absent();

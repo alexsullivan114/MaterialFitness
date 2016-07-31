@@ -108,17 +108,17 @@ public class ExerciseGraphPresenter extends BasePresenter
                 if (exerciseSession.getExercise().equals(exercise))
                 {
                     // Now find the max weight from this exercise session.
-                    int maxWeight = 0;
+                    double maxWeight = 0;
 
                     for (WeightSet weightSet : exerciseSession.getSets())
                     {
-                        if (weightSet.getWeight() > maxWeight)
+                        if (weightSet.getUserUnitsWeight() > maxWeight)
                         {
-                            maxWeight = weightSet.getWeight();
+                            maxWeight = weightSet.getUserUnitsWeight();
                         }
                     }
                     // and finally construct our entry.
-                    returnList.add(new Entry(maxWeight, i, workoutSession));
+                    returnList.add(new Entry((float)maxWeight, i, workoutSession));
                 }
             }
         }
