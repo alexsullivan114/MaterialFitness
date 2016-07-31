@@ -47,7 +47,7 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
     {
         Optional<WeightSet> weightSetOptional = getDefaultWeightSet();
         int reps = weightSetOptional.isPresent() ? weightSetOptional.get().getNumReps() : 0;
-        int weight = weightSetOptional.isPresent() ? weightSetOptional.get().getWeight() : 0;
+        double weight = weightSetOptional.isPresent() ? weightSetOptional.get().getWeight() : 0;
 
         activityInterface.hideSetOptions();
         activityInterface.showAddSetDialog(reps, weight);

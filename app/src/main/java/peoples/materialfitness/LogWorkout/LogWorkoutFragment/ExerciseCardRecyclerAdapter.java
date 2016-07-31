@@ -123,7 +123,6 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         ImageView imageView = (ImageView)setContainer.findViewById(R.id.pr_image);
 
         String repsString = String.valueOf(weightSet.getNumReps());
-        // TODO: Use our weight units. Should be attached to the rep.
         String weightString = holder.mCardView.getContext().getResources().getString(R.string.weight_units, weightSet.getWeight(), "lbs");
 
         repsTextView.setText(repsString);

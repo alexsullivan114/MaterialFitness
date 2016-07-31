@@ -78,7 +78,7 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
     }
 
     @Override
-    public void showAddSetDialog(int reps, int weight)
+    public void showAddSetDialog(int reps, double weight)
     {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title(R.string.add_set)

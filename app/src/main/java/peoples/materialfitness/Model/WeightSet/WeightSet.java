@@ -5,6 +5,8 @@ import android.content.ContentValues;
 
 import org.parceler.Parcel;
 
+import peoples.materialfitness.Model.WeightUnitConverter;
+
 /**
  * Created by Alex Sullivan on 2/15/16.
  */
@@ -12,7 +14,7 @@ import org.parceler.Parcel;
 public class WeightSet
 {
     long id = -1;
-    int weight;
+    double weight;
     int numReps;
     boolean isPr = false;
     long exerciseSessionId;
@@ -57,12 +59,21 @@ public class WeightSet
         return this.id;
     }
 
-    public int getWeight()
+    /**
+     * Weights should ALWAYS be saved in metric, so it's assumed this weight is in KG.
+     * @return Weight in KG of this rep
+     */
+    public double getWeight()
     {
         return weight;
     }
 
-    public void setWeight(int weight)
+    public double getUserUnitsWeight()
+    {
+        return WeightUnitConverter.getDisplayWeight(weight);
+    }
+
+    public void setWeight(double weight)
     {
         this.weight = weight;
     }
@@ -97,7 +108,7 @@ public class WeightSet
         weightSet.setExerciseSessionId(contentValues.getAsLong(WeightSetContract.COLUMN_NAME_EXERCISE_SESSION_ID));
         weightSet.setId(contentValues.getAsLong(WeightSetContract._ID));
         weightSet.setNumReps(contentValues.getAsInteger(WeightSetContract.COLUMN_NAME_REPS));
-        weightSet.setWeight(contentValues.getAsInteger(WeightSetContract.COLUMN_NAME_WEIGHT));
+        weightSet.setWeight(contentValues.getAsDouble(WeightSetContract.COLUMN_NAME_WEIGHT));
         weightSet.setIsPr(contentValues.getAsInteger(WeightSetContract.COLUMN_IS_PR) != 0);
 
         return weightSet;
@@ -136,11 +147,11 @@ public class WeightSet
     @Override
     public int hashCode()
     {
-        int result = (int) (id ^ (id >>> 32));
+        double result = (int) (id ^ (id >>> 32));
         result = 31 * result + weight;
         result = 31 * result + numReps;
         result = 31 * result + (int) (exerciseSessionId ^ (exerciseSessionId >>> 32));
-        return result;
+        return (int)result;
     }
 
     @Override

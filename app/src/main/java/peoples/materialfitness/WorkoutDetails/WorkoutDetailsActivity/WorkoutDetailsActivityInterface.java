@@ -18,5 +18,5 @@ public interface WorkoutDetailsActivityInterface extends BaseActivityInterface
     void refreshSetAtPosition(int position);
     void removeSetAtPosition(int position);
     void hideSetOptions();
-    void showEditWeightSetDialog(int weight, int reps);
+    void showEditWeightSetDialog(double weight, int reps);
 }

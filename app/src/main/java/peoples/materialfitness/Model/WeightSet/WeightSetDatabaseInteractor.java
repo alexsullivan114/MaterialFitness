@@ -152,7 +152,12 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
                 .fetchWithClause(WHERE, ARGS)
                 .map(ExerciseSession::getSets)
                 .flatMap(Observable::from)
-                .toSortedList((weightSet, weightSet2) -> weightSet.getWeight() - weightSet2.getWeight())
+                .toSortedList((WeightSet weightSet, WeightSet weightSet2) -> {
+                    Double weight1 = weightSet.getWeight();
+                    Double weight2 = weightSet2.getWeight();
+
+                    return weight1.compareTo(weight2);
+                })
                 .map(weightSets -> {
                     WeightSet pr = weightSets.get(weightSets.size() - 1);
                     pr.setIsPr(true);
