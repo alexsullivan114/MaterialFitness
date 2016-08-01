@@ -35,6 +35,8 @@ import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;
 import peoples.materialfitness.Util.CustomAnimations.StatusBarColorTransition;
 import peoples.materialfitness.Util.VersionUtils;
 import peoples.materialfitness.View.BaseActivity;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan
@@ -104,10 +106,6 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         {
             setupTransition();
         }
-        else
-        {
-            removeTransitionExtras();
-        }
 
         restoreInstanceState(savedInstanceState);
     }
@@ -123,6 +121,11 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
             {
                 getWindow().setStatusBarColor(getResources().getColor(scheduleDay.getPressedColorRes()));
             }
+
+            presenter.getWorkoutSession()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::immediateDisplayWorkoutSession);
         }
     }
 
@@ -139,7 +142,7 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         ((ScheduleDayRecyclerAdapter)recyclerView.getAdapter()).removeExercise(position);
         if (recyclerView.getAdapter().getItemCount() == 0)
         {
-            showEmptyScreen();
+            immediateShowEmptyScreen();
         }
     }
 
@@ -160,21 +163,39 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     {
         Log.d(TAG, "Called display workout session...");
         executeViewCodeAfterTransition(() -> {
-            Log.d(TAG, "Fading recycler view in...");
+
             ScheduleDayRecyclerAdapter adapter = new ScheduleDayRecyclerAdapter(workoutSession.getExerciseList(), this);
             recyclerView.setAdapter(adapter);
-            AnimationUtils.fadeVisibilityChange(recyclerView, View.VISIBLE);
-            AnimationUtils.fadeVisibilityChange(recyclerEmptyView, View.GONE);
+
+            if (workoutSession.getExerciseSessions().size() > 0)
+            {
+                Log.d(TAG, "Fading recycler view in...");
+                immediateDisplayWorkoutSession(workoutSession);
+            }
+            else if (recyclerEmptyView.getVisibility() != View.VISIBLE)
+            {
+                immediateShowEmptyScreen();
+            }
         });
+    }
+
+    private void immediateDisplayWorkoutSession(WorkoutSession workoutSession)
+    {
+        AnimationUtils.fadeVisibilityChange(recyclerView, View.VISIBLE);
+        AnimationUtils.fadeVisibilityChange(recyclerEmptyView, View.GONE);
     }
 
     private void showEmptyScreen()
     {
-        executeViewCodeAfterTransition(() -> {
-            recyclerView.setVisibility(View.GONE);
-            recyclerEmptyView.setVisibility(View.VISIBLE);
-            recyclerEmptyView.setText(getEmptyString());
-        });
+        executeViewCodeAfterTransition(this::immediateShowEmptyScreen);
+    }
+
+    private void immediateShowEmptyScreen()
+    {
+        recyclerView.setVisibility(View.GONE);
+        recyclerEmptyView.setVisibility(View.VISIBLE);
+        recyclerEmptyView.setAlpha(1.0f);
+        recyclerEmptyView.setText(getEmptyString());
     }
 
     @Override
@@ -195,6 +216,7 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
     {
         recyclerEmptyView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setAlpha(1.0f);
         ((ScheduleDayRecyclerAdapter) recyclerView.getAdapter()).addExercise(exerciseSession.getExercise());
     }
 
@@ -216,11 +238,6 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         }
     }
 
-    private void removeTransitionExtras()
-    {
-        toolbarMask.setVisibility(View.GONE);
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupTransition()
     {
@@ -240,8 +257,13 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
 
         toolbar.setBackgroundColor(backgroundColor);
         toolbar.setAlpha(0.0f);
+        toolbarMask.setVisibility(View.VISIBLE);
         toolbarMask.setTransitionName(transitionName);
         toolbarMask.setBackgroundColor(backgroundColor);
+
+        fab.setVisibility(View.INVISIBLE);
+
+        recyclerView.setAlpha(0);
 
         Transition sharedElementTransition = getWindow().getEnterTransition();
         Transition statusBarColorTransition = new StatusBarColorTransition(statusBarColor, darkScheduleColor, getWindow());

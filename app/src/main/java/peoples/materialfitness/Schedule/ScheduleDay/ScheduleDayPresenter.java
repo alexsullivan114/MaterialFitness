@@ -12,6 +12,7 @@ import peoples.materialfitness.Model.ScheduleDay;
 import peoples.materialfitness.Model.WorkoutSession.ScheduleWorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -46,8 +47,7 @@ public class ScheduleDayPresenter extends BaseActivityPresenter<ScheduleDayInter
 
     private void fetchScheduleDayWorkoutSession()
     {
-        new ScheduleWorkoutSessionDatabaseInteractor()
-                .fetchWorkoutSessionForScheduleDay(scheduleDay)
+        fetchWorkoutSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(workoutSession -> {
@@ -56,6 +56,24 @@ public class ScheduleDayPresenter extends BaseActivityPresenter<ScheduleDayInter
                     activityInterface.showFab();
                     activityInterface.displayWorkoutSession(workoutSession);
                 });
+    }
+
+    private Observable<WorkoutSession> fetchWorkoutSession()
+    {
+        if (workoutSession != null)
+        {
+            return Observable.just(workoutSession);
+        }
+        else
+        {
+            return new ScheduleWorkoutSessionDatabaseInteractor()
+                    .fetchWorkoutSessionForScheduleDay(scheduleDay);
+        }
+    }
+
+    public Observable<WorkoutSession> getWorkoutSession()
+    {
+        return fetchWorkoutSession();
     }
 
     public void addExerciseClicked()
