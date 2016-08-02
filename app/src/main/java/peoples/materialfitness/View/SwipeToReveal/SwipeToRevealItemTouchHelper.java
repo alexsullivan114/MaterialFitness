@@ -125,7 +125,11 @@ public class SwipeToRevealItemTouchHelper implements View.OnTouchListener
                     int[] rightStickyViewCoordinates = new int[2];
                     rightStickyView.getLocationOnScreen(rightStickyViewCoordinates);
                     int screenWidth = ScreenUtils.getScreenWidth();
-                    x = -1 * (screenWidth - rightStickyViewCoordinates[0]);
+
+                    if ((view.getX() + view.getWidth()) < rightStickyViewCoordinates[0])
+                    {
+                        x = -1 * (screenWidth - rightStickyViewCoordinates[0]);
+                    }
                 }
 
                 if (x != 0)
