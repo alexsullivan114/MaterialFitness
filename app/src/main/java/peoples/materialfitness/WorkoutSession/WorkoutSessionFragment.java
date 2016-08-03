@@ -3,6 +3,8 @@ package peoples.materialfitness.WorkoutSession;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +39,9 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     @Bind(R.id.recyclerView)
     protected RecyclerView recyclerView;
     @Bind(R.id.root_view)
-    protected FrameLayout rootView;
+    protected CoordinatorLayout rootView;
+    @Bind(R.id.fab)
+    protected FloatingActionButton fab;
 
     @Nullable
     @Override

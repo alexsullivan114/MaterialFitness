@@ -18,7 +18,6 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.FitnotesImport.FitnotesImporterActivity;
 import peoples.materialfitness.Navigation.NavigationItem;
 import peoples.materialfitness.Navigation.RootDrawerController;
-import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.Constants;
 import peoples.materialfitness.Util.PreferenceManager;
@@ -30,14 +29,12 @@ import peoples.materialfitness.View.BaseActivity;
  * This class represents the starting activity of the app. It contains the navigation Drawer.
  *
  */
-public class RootActivity extends BaseActivity implements RootFabDisplay
+public class RootActivity extends BaseActivity
 {
     private static final String NAV_ITEM_KEY = "currentNavItemKey";
 
     @Bind(R.id.drawer)
     DrawerLayout drawer;
-    @Bind(R.id.root_fab)
-    FloatingActionButton fab;
 
     private RootDrawerController mDrawerController;
 
@@ -98,45 +95,9 @@ public class RootActivity extends BaseActivity implements RootFabDisplay
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.root_fab)
-    public void onFabClicked()
-    {
-        mDrawerController.onFabClicked(fab);
-    }
-
-    @Override
-    public void hideFab()
-    {
-        if (fab.isShown() || fab.getVisibility() == View.VISIBLE)
-        {
-            fab.post(() -> {
-                fab.hide();
-                fab.setVisibility(View.GONE);
-            });
-        }
-    }
-
     @Override
     protected boolean showBackInToolbar()
     {
         return false;
-    }
-
-    @Override
-    public void showFab()
-    {
-        if (!fab.isShown() || fab.getVisibility() != View.VISIBLE )
-        {
-            fab.post(() -> {
-                fab.show();
-                fab.setVisibility(View.VISIBLE);
-            });
-        }
-    }
-
-    @Override
-    public FloatingActionButton getFab()
-    {
-        return fab;
     }
 }

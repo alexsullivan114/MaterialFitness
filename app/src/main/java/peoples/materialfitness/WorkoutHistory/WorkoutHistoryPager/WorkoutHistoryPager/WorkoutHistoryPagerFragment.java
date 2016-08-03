@@ -24,7 +24,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
-import peoples.materialfitness.Navigation.RootFabDisplay;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.AnimationUtils;
 import peoples.materialfitness.View.BaseActivity;
@@ -210,12 +209,6 @@ public class WorkoutHistoryPagerFragment extends BaseFragment<WorkoutHistoryPage
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
     {
 
-    }
-
-    @Override
-    public void hideFab()
-    {
-        ((RootFabDisplay) getActivity()).hideFab();
     }
 
     @Override

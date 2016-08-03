@@ -36,7 +36,6 @@ import peoples.materialfitness.View.BaseFragment;
 public class RootDrawerController implements
         NavigationView.OnNavigationItemSelectedListener,
         DrawerLayout.DrawerListener,
-        RootFabOnClick,
         CompoundButton.OnCheckedChangeListener
 {
     private static final String TAG = RootDrawerController.class.getSimpleName();
@@ -180,25 +179,5 @@ public class RootDrawerController implements
         PreferenceManager.getInstance().setUnits(newUnit);
         // Post an event to update any interested views!
         EventBus.getDefault().post(new WeightUnitEvent(newUnit));
-    }
-
-    /**
-     * Method to notify whatever fragment is currently being displayed that the fab has been clicked.
-     * @param fab Fab that's been clicked
-     */
-    @Override
-    public void onFabClicked(FloatingActionButton fab)
-    {
-        BaseFragment currentFragment = currentNavItem.getFragmentForNavItem();
-
-        if (currentFragment instanceof RootFabOnClick)
-        {
-            ((RootFabOnClick)currentFragment).onFabClicked(fab);
-        }
-        else
-        {
-            throw new RuntimeException("Fab clicked but currently displayed fragment " +
-                    currentFragment.getClass().getSimpleName() + " Doesn't implement RootFabOnClick!");
-        }
     }
 }

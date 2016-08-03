@@ -103,14 +103,6 @@ public class WorkoutHistoryPagerFragmentPresenter extends BaseFragmentPresenter<
         fragmentInterface.openDatePickerDialog();
     }
 
-    @Override
-    public void onContextAvailable(Context context)
-    {
-        super.onContextAvailable(context);
-
-        fragmentInterface.hideFab();
-    }
-
     @Subscribe
     public void onWorkoutSelected(WorkoutHistoryCalendarDialogFragment.WorkoutCalendarSessionSelected workoutSessionHolder)
     {
