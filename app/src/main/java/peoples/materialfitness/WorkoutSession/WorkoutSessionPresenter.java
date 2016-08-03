@@ -41,6 +41,12 @@ public abstract class WorkoutSessionPresenter<T extends WorkoutSessionFragmentIn
                     .subscribeOn(Schedulers.io())
                     .subscribe(savedExercise -> {
                         // Make sure our local exercise copy has the right ID.
+                        // TODO This isn't good. This is an ASYNC save operation and it might
+                        // not be finished by the time the user tries to dig into this exercise
+                        // session. Need to find a way to make the user aware of something
+                        // saving. Otherwise I guess we'd need to pass the exercise session object
+                        // back and forth. Also, there's a really large number of rxjava calls
+                        // that aren't being collected here.
                         exercise.setId(savedExercise.getId());
                         new WorkoutSessionDatabaseInteractor()
                                 .cascadeSave(workoutSession.get())

@@ -105,20 +105,6 @@ public class LogWorkoutFragment extends WorkoutSessionFragment<LogWorkoutFragmen
     }
 
     @Override
-    protected void onPositiveScroll()
-    {
-        super.onPositiveScroll();
-//        fab.show();
-    }
-
-    @Override
-    protected void onNegativeScroll()
-    {
-        super.onNegativeScroll();
-//        fab.hide();
-    }
-
-    @Override
     public void onSpilloverAnimationEnd()
     {
         if (!recyclerView.canScrollVertically(-1))
