@@ -26,8 +26,10 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;
@@ -200,6 +202,15 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     public void editButtonClicked(int position)
     {
         presenter.editSetButtonClicked(position);
+    }
+
+    @Override
+    public void setWeightSetAsPr(WeightSet weightSet)
+    {
+        if (recyclerView.getAdapter() != null)
+        {
+            ((WorkoutDetailsRecyclerAdapter)recyclerView.getAdapter()).setWeightSetAsPr(weightSet);
+        }
     }
 
     @SuppressLint("NewApi")

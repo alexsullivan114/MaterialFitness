@@ -12,6 +12,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;
 
@@ -69,5 +70,11 @@ public class PastWorkoutDialogActivity extends BaseActivity<PastWorkoutDialogPre
     {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new PastWorkoutDialogRecyclerAdapter(exerciseSession));
+    }
+
+    @Override
+    public void setWeightSetAsPr(WeightSet weightSet)
+    {
+        ((PastWorkoutDialogRecyclerAdapter)recyclerView.getAdapter()).setWeightSetAsPr(weightSet);
     }
 }

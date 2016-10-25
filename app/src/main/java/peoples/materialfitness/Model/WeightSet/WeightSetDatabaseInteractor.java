@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import peoples.materialfitness.Core.MaterialFitnessApplication;
+import peoples.materialfitness.Model.Cache.DatabasePrCache;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
@@ -22,13 +23,13 @@ import rx.Observable;
  */
 public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightSet>
 {
-    private final Context mContext;
-    private final FitnessDatabaseHelper mHelper;
+    private final Context context;
+    private final FitnessDatabaseHelper helper;
 
     public WeightSetDatabaseInteractor()
     {
-        mContext = MaterialFitnessApplication.getApplication();
-        mHelper = FitnessDatabaseHelper.getInstance(mContext);;
+        context = MaterialFitnessApplication.getApplication();
+        helper = FitnessDatabaseHelper.getInstance(context);
     }
 
     @Override
@@ -42,45 +43,35 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
      * @param weightSet The (already ID'd) weightset to update
      * @return The newly saved weightset
      */
-    public Observable<Boolean> edit(final WeightSet weightSet, final Exercise exercise)
+    public Observable<WeightSet> edit(final WeightSet weightSet,
+                                      final Exercise exercise)
     {
-        // Reset our PR flag - we'll need to recalculate it anyways.
-        weightSet.setIsPr(false);
-
-        return performWeightSetSave(weightSet)
-                .flatMap(savedWeightset -> recalculatePrs(exercise));
+        return saveWithPrUpdates(weightSet, exercise);
     }
 
     @Override
     public Observable<WeightSet> save(WeightSet entity)
     {
-        final String WHERE = ExerciseSessionContract._ID + " = ?";
-        final String[] ARGS = new String[]{String.valueOf(entity.getExerciseSessionId())};
+        return Observable.defer(() -> {
+            Log.i(TAG, "Saving weight set...");
+            ContentValues contentValues = entity.getContentValues();
 
-        return new ExerciseSessionDatabaseInteractor()
-                .fetchWithClause(WHERE, ARGS)
-                .map(ExerciseSession::getExercise)
-                .flatMap(this::getPrForExercise)
-                .toList()
-                .flatMap(weightSets -> {
-                    if (weightSets.isEmpty())
-                    {
-                        entity.setIsPr(true);
-                        return performWeightSetSave(entity);
-                    }
-                    else
-                    {
-                        WeightSet pr = weightSets.get(0);
-                        if (entity.getWeight() > pr.getWeight())
-                        {
-                            entity.setIsPr(true);
-                            pr.setIsPr(false);
-                        }
+            if (entity.getId() == INVALID_ID)
+            {
+                contentValues.remove(BaseColumns._ID);
+            }
 
-                        return performWeightSetSave(pr)
-                                .flatMap(weightSet -> performWeightSetSave(entity));
-                    }
-                });
+            entity.setId(helper.getDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
+                                                                      null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+            return Observable.just(entity);
+        });
+    }
+
+    public Observable<WeightSet> saveWithPrUpdates(final WeightSet entity,
+                                                   final Exercise exercise)
+    {
+        return save(entity)
+                .doOnNext(weightSet -> DatabasePrCache.getInstance().weightSetAdded(entity, exercise));
     }
 
     @Override
@@ -91,80 +82,23 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
         return fetchWithClause(WHERE, ARGS);
     }
 
-    private Observable<WeightSet> performWeightSetSave(final WeightSet weightSet)
-    {
-        return Observable.create(subscriber -> {
-
-            if (!subscriber.isUnsubscribed())
-            {
-                Log.i(TAG, "Saving weight set...");
-                ContentValues contentValues = weightSet.getContentValues();
-
-                if (weightSet.getId() == INVALID_ID)
-                {
-                    contentValues.remove(BaseColumns._ID);
-                }
-
-                weightSet.setId(mHelper.getDatabase().insertWithOnConflict(WeightSetContract.TABLE_NAME,
-                                                                        null, contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-                subscriber.onNext(weightSet);
-                subscriber.onCompleted();
-            }
-        });
-    }
 
     @Override
     public Observable<Boolean> delete(final WeightSet entity)
     {
-        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
-            if (!subscriber.isUnsubscribed())
-            {
-                String WHERE_CLAUSE = WeightSetContract._ID + " = ?";
-                String[] ARGS = new String[]{String.valueOf(entity.getId())};
-                subscriber.onNext(mHelper.getDatabase().delete(WeightSetContract.TABLE_NAME,
-                                                               WHERE_CLAUSE, ARGS) != 0);
-                subscriber.onCompleted();
-            }
+        return Observable.defer(() -> {
+            String WHERE_CLAUSE = WeightSetContract._ID + " = ?";
+            String[] ARGS = new String[]{String.valueOf(entity.getId())};
+            return Observable.just(helper.getDatabase().delete(WeightSetContract.TABLE_NAME,
+                                                          WHERE_CLAUSE, ARGS) != 0);
         });
     }
 
-    public Observable<Boolean> deleteWithPrCheck(final WeightSet entity, final Exercise exercise)
+    public Observable<Boolean> deleteWithPrUpdates(final WeightSet entity,
+                                                   final Exercise exercise)
     {
         return delete(entity)
-                .flatMap(result -> {
-                    if (entity.getIsPr())
-                    {
-                        return recalculatePrs(exercise);
-                    }
-                    else
-                    {
-                        return Observable.just(result);
-                    }
-                });
-    }
-
-    private Observable<Boolean> recalculatePrs(final Exercise exercise)
-    {
-        final String WHERE = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
-        final String[] ARGS = new String[]{String.valueOf(exercise.getId())};
-
-        return new ExerciseSessionDatabaseInteractor()
-                .fetchWithClause(WHERE, ARGS)
-                .map(ExerciseSession::getSets)
-                .flatMap(Observable::from)
-                .toSortedList((WeightSet weightSet, WeightSet weightSet2) -> {
-                    Double weight1 = weightSet.getWeight();
-                    Double weight2 = weightSet2.getWeight();
-
-                    return weight1.compareTo(weight2);
-                })
-                .map(weightSets -> {
-                    WeightSet pr = weightSets.get(weightSets.size() - 1);
-                    pr.setIsPr(true);
-                    return pr;
-                })
-                .flatMap(prSet -> new WeightSetDatabaseInteractor().save(prSet))
-                .map(savedPr -> savedPr.getId() != INVALID_ID);
+                .doOnNext(weightSet -> DatabasePrCache.getInstance().weightSetModified(entity, exercise));
     }
 
     @Override
@@ -189,23 +123,12 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
                                                     final String limit)
     {
         return FitnessDatabaseUtils.getCursorObservable(WeightSetContract.TABLE_NAME,
-                whereClause, args, groupBy, columns, having, orderBy, limit, mContext)
+                                                        whereClause, args, groupBy, columns, having, orderBy, limit, context)
                 .map(cursor -> {
                     ContentValues contentValues = new ContentValues();
                     DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
 
                     return WeightSet.getWeightSet(contentValues);
                 });
-    }
-
-    public Observable<WeightSet> getPrForExercise(final Exercise exercise)
-    {
-        final String WHERE = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
-        final String[] ARGS = new String[]{String.valueOf(exercise.getId())};
-
-        return new ExerciseSessionDatabaseInteractor().fetchWithClause(WHERE, ARGS)
-                .map(ExerciseSession::getSets)
-                .flatMap(Observable::from)
-                .filter(WeightSet::getIsPr);
     }
 }

@@ -59,7 +59,7 @@ public class WorkoutSessionDatabaseInteractor extends ModelDatabaseInteractor<Wo
     @Override
     public Observable<Boolean> delete(WorkoutSession entity)
     {
-        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+        return Observable.create(subscriber -> {
           if (!subscriber.isUnsubscribed())
           {
               String WHERE_CLAUSE = WorkoutSessionContract._ID + " = ?";

@@ -32,10 +32,10 @@ public class AddExerciseDialog extends MaterialDialog implements
         MaterialDialog.SingleButtonCallback, AdapterView.OnItemClickListener
 {
     private TextInputLayout mExerciseTitleLayout;
-    private Spinner mMuscleChoiceDialogSpinner;
-    private AutoCompleteTextView mExerciseTitleText;
-    private Context mContext;
-    private OnExerciseLoggedCallback mCallback;
+    private Spinner muscleChoiceDialogSpinner;
+    private AutoCompleteTextView exerciseTitleText;
+    private Context context;
+    private OnExerciseLoggedCallback callback;
 
     public AddExerciseDialog(Context context, OnExerciseLoggedCallback callback)
     {
@@ -47,8 +47,8 @@ public class AddExerciseDialog extends MaterialDialog implements
                 .customView(R.layout.create_exercise_dialog, true));
 
         mBuilder.onAny(this);
-        mContext = context;
-        mCallback = callback;
+        this.context = context;
+        this.callback = callback;
 
         assignDialogViews();
         setupEditText();
@@ -62,9 +62,9 @@ public class AddExerciseDialog extends MaterialDialog implements
      */
     private void setupEditText()
     {
-        mExerciseTitleText.postDelayed(() -> {
-            mExerciseTitleText.setFocusableInTouchMode(true);
-            mExerciseTitleText.requestFocus();
+        exerciseTitleText.postDelayed(() -> {
+            exerciseTitleText.setFocusableInTouchMode(true);
+            exerciseTitleText.requestFocus();
         }, 100);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -73,20 +73,20 @@ public class AddExerciseDialog extends MaterialDialog implements
     private void assignDialogViews()
     {
         mExerciseTitleLayout = ButterKnife.findById(this, R.id.exercise_layout);
-        mMuscleChoiceDialogSpinner = ButterKnife.findById(this, R.id.muscle_group);
-        mExerciseTitleText = ButterKnife.findById(this, R.id.exercise_name);
-        mExerciseTitleText.setOnItemClickListener(this);
+        muscleChoiceDialogSpinner = ButterKnife.findById(this, R.id.muscle_group);
+        exerciseTitleText = ButterKnife.findById(this, R.id.exercise_name);
+        exerciseTitleText.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-        Exercise exercise = (Exercise)mExerciseTitleText.getAdapter().getItem(position);
+        Exercise exercise = (Exercise) exerciseTitleText.getAdapter().getItem(position);
 
         int muscleChoicePosition =
-                ((ArrayAdapter<String>)mMuscleChoiceDialogSpinner.getAdapter())
-                        .getPosition(exercise.getMuscleGroup().getTitle(mContext));
-        mMuscleChoiceDialogSpinner.setSelection(muscleChoicePosition);
+                ((ArrayAdapter<String>) muscleChoiceDialogSpinner.getAdapter())
+                        .getPosition(exercise.getMuscleGroup().getTitle(context));
+        muscleChoiceDialogSpinner.setSelection(muscleChoicePosition);
     }
 
     @Override
@@ -99,8 +99,8 @@ public class AddExerciseDialog extends MaterialDialog implements
         else if (dialogAction == DialogAction.POSITIVE)
         {
             onPositiveDialogButtonClicked(
-                    (String) mMuscleChoiceDialogSpinner.getSelectedItem(),
-                    mExerciseTitleText.getText().toString());
+                    (String) muscleChoiceDialogSpinner.getSelectedItem(),
+                    exerciseTitleText.getText().toString());
         }
     }
 
@@ -115,10 +115,10 @@ public class AddExerciseDialog extends MaterialDialog implements
 
     private void setMuscleGroupSpinnerAdapter()
     {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item);
-        MuscleGroup.getMuscleGroupTitles(mContext).subscribe(values -> {
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
+        MuscleGroup.getMuscleGroupTitles(context).subscribe(values -> {
             adapter.addAll(values);
-            mMuscleChoiceDialogSpinner.setAdapter(adapter);
+            muscleChoiceDialogSpinner.setAdapter(adapter);
         });
     }
 
@@ -126,11 +126,11 @@ public class AddExerciseDialog extends MaterialDialog implements
     {
         new ExerciseDatabaseInteractor().fetchAll().toList().subscribe(values -> {
             ExerciseTitleAutoCompleteAdapter adapter =
-                    new ExerciseTitleAutoCompleteAdapter(mContext, values);
-            mExerciseTitleText.setAdapter(adapter);
+                    new ExerciseTitleAutoCompleteAdapter(context, values);
+            exerciseTitleText.setAdapter(adapter);
         });
 
-        mExerciseTitleText.addTextChangedListener(new TextWatcher()
+        exerciseTitleText.addTextChangedListener(new TextWatcher()
         {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after)
@@ -152,19 +152,19 @@ public class AddExerciseDialog extends MaterialDialog implements
         });
     }
 
-    public void onNegativeDialogButtonClicked()
+    private void onNegativeDialogButtonClicked()
     {
         dismiss();
     }
 
-    public void onPositiveDialogButtonClicked(final String muscleGroupText, final String exerciseTitle)
+    private void onPositiveDialogButtonClicked(final String muscleGroupText, final String exerciseTitle)
     {
         if (!exerciseTitle.isEmpty() && !muscleGroupText.isEmpty())
         {
             Exercise exercise = new Exercise();
             exercise.setTitle(exerciseTitle);
-            exercise.setMuscleGroup(MuscleGroup.muscleGroupFromTitle(muscleGroupText, mContext));
-            mCallback.onExerciseLogged(exercise);
+            exercise.setMuscleGroup(MuscleGroup.muscleGroupFromTitle(muscleGroupText, context));
+            callback.onExerciseLogged(exercise);
             dismiss();
         }
         else
@@ -176,9 +176,9 @@ public class AddExerciseDialog extends MaterialDialog implements
         }
     }
 
-    public void errorExerciseTitleNull()
+    private void errorExerciseTitleNull()
     {
-        mExerciseTitleLayout.setError(mContext.getResources().getString(R.string.error_empty_exercise));
+        mExerciseTitleLayout.setError(context.getResources().getString(R.string.error_empty_exercise));
     }
 
     public interface OnExerciseLoggedCallback

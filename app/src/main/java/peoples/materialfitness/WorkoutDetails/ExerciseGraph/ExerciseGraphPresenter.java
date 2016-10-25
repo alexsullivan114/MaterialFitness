@@ -24,7 +24,7 @@ public class ExerciseGraphPresenter extends BasePresenter
     private Exercise exercise;
     private ExerciseGraphInterface viewInterface;
 
-    public ExerciseGraphPresenter(ExerciseGraphInterface viewInterface)
+    ExerciseGraphPresenter(ExerciseGraphInterface viewInterface)
     {
         this.viewInterface = viewInterface;
     }
@@ -35,7 +35,7 @@ public class ExerciseGraphPresenter extends BasePresenter
         calculateChartData();
     }
 
-    public void workoutSessionSelected(WorkoutSession workoutSession)
+    void workoutSessionSelected(WorkoutSession workoutSession)
     {
         for (ExerciseSession exerciseSession : workoutSession.getExerciseSessions())
         {

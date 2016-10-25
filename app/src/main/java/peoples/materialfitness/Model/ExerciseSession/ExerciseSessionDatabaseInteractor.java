@@ -85,26 +85,10 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
     {
         // First delete ourselves
         return delete(entity)
-                .flatMap(result -> {
-                    // Check our associated workout session to see if it has any exercise sessions left.
-                    final String WHERE = WorkoutSessionContract._ID + " = ?";
-                    final String[] ARGS = new String[]{String.valueOf(entity.getWorkoutSessionId())};
-                    return new WorkoutSessionDatabaseInteractor().fetchWithClause(WHERE, ARGS);
-                })
-                .flatMap(workoutSession -> {
-                    if (workoutSession.getExerciseSessions().size() == 0)
-                    {
-                        return new WorkoutSessionDatabaseInteractor().delete(workoutSession);
-                    }
-                    else
-                    {
-                        return Observable.just(true);
-                    }
-                })
                 .flatMap(result -> Observable.from(entity.getSets()))
                 .flatMap(weightSet -> {
                     WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
-                    return interactor.deleteWithPrCheck(weightSet, entity.getExercise());
+                    return interactor.deleteWithPrUpdates(weightSet, entity.getExercise());
                 });
     }
 
@@ -152,6 +136,14 @@ public class ExerciseSessionDatabaseInteractor extends ModelDatabaseInteractor<E
                 }
             }
         });
+    }
+
+    public Observable<ExerciseSession> fetchWithExerciseId(long exerciseId)
+    {
+        final String WHERE = ExerciseSessionContract.COLUMN_NAME_EXERCISE_ID + " = ?";
+        final String[] ARGS = new String[]{String.valueOf(exerciseId)};
+
+        return fetchWithClause(WHERE, ARGS);
     }
 
     private Observable<ExerciseSession> getExerciseSessionFromCursor(Cursor cursor)

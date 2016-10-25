@@ -11,6 +11,7 @@ import butterknife.OnClick;
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.LogWorkout.LogWorkoutDialog.AddExerciseDialog;
 import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.View.BaseActivity;

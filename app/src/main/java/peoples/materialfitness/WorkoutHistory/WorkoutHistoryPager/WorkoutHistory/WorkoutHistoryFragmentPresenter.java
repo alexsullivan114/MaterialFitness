@@ -29,7 +29,7 @@ public class WorkoutHistoryFragmentPresenter extends WorkoutSessionPresenter<Wor
 
     public void setWorkoutSession(WorkoutSession workoutSession)
     {
-        this.workoutSession = Optional.of(workoutSession);
+        this.workoutSession = workoutSession;
     }
 
     @Override

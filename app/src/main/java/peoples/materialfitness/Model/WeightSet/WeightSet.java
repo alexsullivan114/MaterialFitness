@@ -16,7 +16,6 @@ public class WeightSet
     long id = -1;
     double weight;
     int numReps;
-    boolean isPr = false;
     long exerciseSessionId;
 
     public WeightSet()
@@ -37,16 +36,6 @@ public class WeightSet
     public void setExerciseSessionId(long exerciseSessionId)
     {
         this.exerciseSessionId = exerciseSessionId;
-    }
-
-    public void setIsPr(boolean isPr)
-    {
-        this.isPr = isPr;
-    }
-
-    public boolean getIsPr()
-    {
-        return isPr;
     }
 
     public void setId(Long id)
@@ -105,7 +94,6 @@ public class WeightSet
         contentValues.put(WeightSetContract.COLUMN_NAME_WEIGHT, weight);
         contentValues.put(WeightSetContract.COLUMN_NAME_REPS, numReps);
         contentValues.put(WeightSetContract.COLUMN_NAME_EXERCISE_SESSION_ID, exerciseSessionId);
-        contentValues.put(WeightSetContract.COLUMN_IS_PR, isPr);
 
         return contentValues;
     }
@@ -118,7 +106,6 @@ public class WeightSet
         weightSet.setId(contentValues.getAsLong(WeightSetContract._ID));
         weightSet.setNumReps(contentValues.getAsInteger(WeightSetContract.COLUMN_NAME_REPS));
         weightSet.setWeight(contentValues.getAsDouble(WeightSetContract.COLUMN_NAME_WEIGHT));
-        weightSet.setIsPr(contentValues.getAsInteger(WeightSetContract.COLUMN_IS_PR) != 0);
 
         return weightSet;
     }
@@ -137,19 +124,9 @@ public class WeightSet
 
         WeightSet weightSet = (WeightSet) o;
 
-        if (id != weightSet.id)
-        {
-            return false;
-        }
-        if (weight != weightSet.weight)
-        {
-            return false;
-        }
-        if (numReps != weightSet.numReps)
-        {
-            return false;
-        }
-        return exerciseSessionId == weightSet.exerciseSessionId;
+        return id == weightSet.id && weight == weightSet.weight &&
+                numReps == weightSet.numReps &&
+                exerciseSessionId == weightSet.exerciseSessionId;
 
     }
 
@@ -170,7 +147,6 @@ public class WeightSet
                 "exerciseSessionId=" + exerciseSessionId +
                 ", weight=" + weight +
                 ", numReps=" + numReps +
-                ", isPr=" + isPr +
                 '}';
     }
 }

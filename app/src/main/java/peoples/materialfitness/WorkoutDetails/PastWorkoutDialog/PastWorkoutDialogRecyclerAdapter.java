@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
@@ -19,6 +22,7 @@ import peoples.materialfitness.R;
 public class PastWorkoutDialogRecyclerAdapter extends RecyclerView.Adapter<PastWorkoutDialogRecyclerAdapter.RepViewHolder>
 {
     private final ExerciseSession exerciseSession;
+    private List<WeightSet> prs = new ArrayList<>();
 
     public PastWorkoutDialogRecyclerAdapter(ExerciseSession exerciseSession)
     {
@@ -38,6 +42,7 @@ public class PastWorkoutDialogRecyclerAdapter extends RecyclerView.Adapter<PastW
         WeightSet set = exerciseSession.getSets().get(position);
 
         // TODO: Weight unit stuff.
+        // TODO TOD: Pretty sure this is wrong.
         String formattedString = holder.weight.getContext()
                 .getResources()
                 .getString(R.string.weight_units, set.getUserUnitsWeight(), "lbs");
@@ -45,13 +50,32 @@ public class PastWorkoutDialogRecyclerAdapter extends RecyclerView.Adapter<PastW
         holder.weight.setText(formattedString);
         holder.numReps.setText(String.valueOf(set.getNumReps()));
 
-        if (set.getIsPr())
+        for (int i = 0; i < exerciseSession.getSets().size(); i++)
         {
-            holder.prImage.setVisibility(View.VISIBLE);
+            WeightSet weightSet = exerciseSession.getSets().get(i);
+
+            if (weightSet.getId().equals(set.getId()))
+            {
+                holder.prImage.setVisibility(View.VISIBLE);
+                break;
+            }
+            else
+            {
+                holder.prImage.setVisibility(View.GONE);
+            }
         }
-        else
+    }
+
+    public void setWeightSetAsPr(WeightSet weightSet)
+    {
+        prs.add(weightSet);
+        for (int i = 0; i < exerciseSession.getSets().size(); i++)
         {
-            holder.prImage.setVisibility(View.GONE);
+            WeightSet set = exerciseSession.getSets().get(i);
+            if (set.getId().equals(weightSet.getId()))
+            {
+                notifyItemChanged(i);
+            }
         }
     }
 

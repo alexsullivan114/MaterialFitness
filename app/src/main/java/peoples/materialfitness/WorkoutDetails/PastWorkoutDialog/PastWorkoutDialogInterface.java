@@ -1,6 +1,7 @@
 package peoples.materialfitness.WorkoutDetails.PastWorkoutDialog;
 
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.View.BaseActivityInterface;
 
 /**
@@ -9,4 +10,5 @@ import peoples.materialfitness.View.BaseActivityInterface;
 public interface PastWorkoutDialogInterface extends BaseActivityInterface
 {
     void setupRecyclerView(ExerciseSession exerciseSession);
+    void setWeightSetAsPr(WeightSet weightSet);
 }

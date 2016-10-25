@@ -10,6 +10,7 @@ import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Model.FitnessDatabaseUtils;
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
+import peoples.materialfitness.Model.WeightSet.WeightSetContract;
 import rx.Observable;
 
 /**
@@ -128,6 +129,13 @@ public class ExerciseDatabaseInteractor extends ModelDatabaseInteractor<Exercise
         return FitnessDatabaseUtils.getCursorObservable(ExerciseContract.TABLE_NAME,
                 whereClause, args, groupBy, columns, having, orderBy, limit, mContext)
                 .map(this::getExerciseFromCursor);
+    }
+
+    public Observable<Exercise> fetchWithId(final long id)
+    {
+        final String WHERE = ExerciseContract._ID + " = ? ";
+        final String[] ARGS = new String[]{String.valueOf(id)};
+        return fetchWithClause(WHERE, ARGS);
     }
 
     private Exercise getExerciseFromCursor(Cursor cursor)

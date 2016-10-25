@@ -3,13 +3,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "peoples.materialfitness"
         minSdkVersion 17
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -62,9 +62,9 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:cardview-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
     // Third party libraries
     // Rx java. For being awesome.
     compile 'io.reactivex:rxjava:1.0.10'
@@ -73,9 +73,7 @@ dependencies {
     // Butterknife for view injection
     compile 'com.jakewharton:butterknife:7.0.1'
     // Material dialogs.
-    compile('com.afollestad.material-dialogs:core:0.8.4.0@aar') {
-        transitive = true
-    }
+    compile('com.afollestad.material-dialogs:core:0.9.0.2')
     // Auto parcel.
     compile 'org.parceler:parceler-api:1.0.4'
     apt "org.parceler:parceler:1.0.4"
@@ -87,7 +85,7 @@ dependencies {
     // guava.
     compile 'com.google.guava:guava:19.0'
     // Charting library.
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.5'
     // Calendar view so we can customize individual days
     compile 'com.prolificinteractive:material-calendarview:1.2.0'
     // Event bus for fragment -> fragment communication.

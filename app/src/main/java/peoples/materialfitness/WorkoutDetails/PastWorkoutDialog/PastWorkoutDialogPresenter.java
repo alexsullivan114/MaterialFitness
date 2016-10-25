@@ -2,9 +2,12 @@ package peoples.materialfitness.WorkoutDetails.PastWorkoutDialog;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.Cache.DatabasePrCache;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.DateUtils;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Alex Sullivan on 5/4/2016.
@@ -39,5 +42,15 @@ public class PastWorkoutDialogPresenter extends BaseActivityPresenter<PastWorkou
     {
         this.exerciseSession = exerciseSession;
         activityInterface.setupRecyclerView(this.exerciseSession);
+        fetchPrs();
+    }
+
+    private void fetchPrs()
+    {
+        DatabasePrCache.getInstance()
+                .getPrForExercise(exerciseSession.getExercise())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(activityInterface::setWeightSetAsPr);
     }
 }

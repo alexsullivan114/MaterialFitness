@@ -65,27 +65,6 @@ public class ExerciseSession
     {
         this.sets.add(set);
         set.setExerciseSessionId(this.getId());
-        updatePrs(set);
-    }
-
-    /**
-     * Updates our PRs after adding a new set. Specifically runs through our sets to see if anything
-     * else was marked as a PR, and umarks it if so. This should probably happen elsewhere. Not much
-     * of a POJO with this sort of logic in it...
-     * @param newSet WeightSet that was just added.
-     */
-    private void updatePrs(WeightSet newSet)
-    {
-        if (newSet.getIsPr())
-        {
-            for (WeightSet weightSet : sets)
-            {
-                if (weightSet.getIsPr() && !weightSet.equals(newSet))
-                {
-                    weightSet.setIsPr(false);
-                }
-            }
-        }
     }
 
     public long getWorkoutSessionId()
@@ -121,21 +100,6 @@ public class ExerciseSession
         }
 
         return returnSet;
-    }
-
-    public int getPrPosition()
-    {
-        for (int i = 0; i < sets.size(); i++)
-        {
-            WeightSet set = sets.get(i);
-
-            if (set.getIsPr())
-            {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
     @Override

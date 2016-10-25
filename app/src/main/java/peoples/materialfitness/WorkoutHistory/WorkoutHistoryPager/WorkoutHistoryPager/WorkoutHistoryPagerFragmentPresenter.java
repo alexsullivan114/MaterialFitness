@@ -1,7 +1,5 @@
 package peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryPager;
 
-import android.content.Context;
-
 import com.google.common.base.Optional;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -11,9 +9,7 @@ import java.util.List;
 
 import peoples.materialfitness.Core.BaseFragmentPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
-import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
-import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.Model.WorkoutSession.CompleteWorkoutHistoryCache;
+import peoples.materialfitness.Model.Cache.CompleteWorkoutHistoryCache;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Util.DateUtils;
 import peoples.materialfitness.WorkoutHistory.WorkoutHistoryPager.WorkoutHistoryCalendarDialog.WorkoutHistoryCalendarDialogFragment;

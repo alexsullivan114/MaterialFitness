@@ -3,6 +3,7 @@ package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 import java.util.List;
 
 import peoples.materialfitness.Model.Exercise.Exercise;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.View.BaseActivityInterface;
 
@@ -19,4 +20,5 @@ public interface WorkoutDetailsActivityInterface extends BaseActivityInterface
     void removeSetAtPosition(int position);
     void hideSetOptions();
     void showEditWeightSetDialog(double weight, int reps);
+    void setWeightSetAsPr(WeightSet weightSet);
 }

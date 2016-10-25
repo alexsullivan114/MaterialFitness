@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import rx.Observable;
+import rx.functions.Func0;
 
 /**
  * Created by Alex Sullivan on 3/5/16.
@@ -22,7 +23,7 @@ public final class FitnessDatabaseUtils
                                                          Context context)
     {
         FitnessDatabaseHelper helper = FitnessDatabaseHelper.getInstance(context);;
-
+        
         return Observable.create((Observable.OnSubscribe<Cursor>) subscriber ->
         {
             if (!subscriber.isUnsubscribed())
@@ -36,6 +37,6 @@ public final class FitnessDatabaseUtils
                 cursor.close();
                 subscriber.onCompleted();
             }
-        });
+        }).onBackpressureBuffer();
     }
 }

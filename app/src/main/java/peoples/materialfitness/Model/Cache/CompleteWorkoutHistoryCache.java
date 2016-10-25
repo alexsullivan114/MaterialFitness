@@ -1,6 +1,9 @@
-package peoples.materialfitness.Model.WorkoutSession;
+package peoples.materialfitness.Model.Cache;
 
 import peoples.materialfitness.Model.ModelDatabaseInteractor;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import rx.Observable;
 
 /**

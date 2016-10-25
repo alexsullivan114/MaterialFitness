@@ -1,6 +1,7 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.v4.view.ViewPager;
@@ -13,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,6 +39,8 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
     private static final int SHOW_SPILLOVER_ANIMATION_DURATION = 600;
 
     private static final int NUM_DISPLAY_SETS = 5;
+
+    private List<WeightSet> prs = new ArrayList<>();
 
     public ExerciseCardRecyclerAdapter(WorkoutSession workoutSession,
                                        ExerciseCardAdapterInterface callback)
@@ -132,12 +138,13 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         repsTextView.setText(repsString);
         weightTextView.setText(weightString);
 
-        if (weightSet.getIsPr())
+        for (WeightSet set : prs)
         {
-            imageView.setVisibility(View.VISIBLE);
+            if (set.getId().equals(weightSet.getId()))
+            {
+                imageView.setVisibility(View.VISIBLE);
+            }
         }
-
-        holder.repContainer.addView(setContainer);
     }
 
     private void onDropdownClicked(ExerciseCardViewHolder viewHolder)
@@ -190,30 +197,12 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         animatorSet.playTogether(heightAnimator, rotationAnimator);
         animatorSet.setDuration(SHOW_SPILLOVER_ANIMATION_DURATION);
         animatorSet.setInterpolator(new FastOutSlowInInterpolator());
-        animatorSet.addListener(new Animator.AnimatorListener()
+        animatorSet.addListener(new AnimatorListenerAdapter()
         {
-            @Override
-            public void onAnimationStart(Animator animation)
-            {
-
-            }
-
             @Override
             public void onAnimationEnd(Animator animation)
             {
                 callback.onSpilloverAnimationEnd();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation)
-            {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation)
-            {
-
             }
         });
         animatorSet.start();
@@ -225,23 +214,26 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         callback.onExerciseClicked(exerciseSession);
     }
 
-    /**
-     * Interface for communication between this adapter and the calling/creating class.
-     */
-    public interface ExerciseCardAdapterInterface
-    {
-        void onExerciseClicked(ExerciseSession session);
-        void onSpilloverAnimationEnd();
-    }
-
     public void setWorkoutSession(WorkoutSession workoutSession)
     {
         this.workoutSession = workoutSession;
         notifyDataSetChanged();
     }
 
+    public void setWeightSetAsPr(WeightSet weightSet)
+    {
+        prs.add(weightSet);
+        for (int i = 0; i < workoutSession.getExerciseSessions().size(); i++)
+        {
+            ExerciseSession exerciseSession = workoutSession.getExerciseSessions().get(i);
+            if (weightSet.getExerciseSessionId() == exerciseSession.getId())
+            {
+                notifyItemChanged(i);
+            }
+        }
+    }
 
-    protected class ExerciseCardViewHolder extends RecyclerView.ViewHolder
+    class ExerciseCardViewHolder extends RecyclerView.ViewHolder
     {
         CardView mCardView;
 
@@ -252,7 +244,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
         boolean isDropdownToggled = false;
 
-        public ExerciseCardViewHolder(CardView cardView)
+        ExerciseCardViewHolder(CardView cardView)
         {
             super(cardView);
             mCardView = cardView;
@@ -260,15 +252,24 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         }
 
         @OnClick(R.id.card_view)
-        public void onCardClicked(View v)
+        void onCardClicked(View v)
         {
             ExerciseCardRecyclerAdapter.this.onCardClicked(this);
         }
 
         @OnClick(R.id.dropdown_layout)
-        public void onDropDownClicked(View v)
+        void onDropDownClicked(View v)
         {
             ExerciseCardRecyclerAdapter.this.onDropdownClicked(this);
         }
+    }
+
+    /**
+     * Interface for communication between this adapter and the calling/creating class.
+     */
+    public interface ExerciseCardAdapterInterface
+    {
+        void onExerciseClicked(ExerciseSession session);
+        void onSpilloverAnimationEnd();
     }
 }

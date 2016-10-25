@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.google.common.base.Optional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
@@ -33,6 +36,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     private final SetInteractionCallback callback;
     private final boolean allowTouchEvents;
     private Optional<RepViewHolder> revealedViewHolder = Optional.absent();
+    private List<WeightSet> prs = new ArrayList<>();
 
     public WorkoutDetailsRecyclerAdapter(final @NonNull ExerciseSession exerciseSession,
                                          final @Nullable SetInteractionCallback callback,
@@ -62,7 +66,6 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         WeightSet set = exerciseSession.getSets().get(position);
         WeightUnit userWeightUnit = PreferenceManager.getInstance().getUnits();
 
-        // TODO: Weight unit stuff.
         String formattedString = holder.positionTextView.getContext()
                 .getResources()
                 .getString(R.string.weight_units, set.getUserUnitsWeight(), userWeightUnit.getUnitString());
@@ -70,13 +73,17 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         holder.positionTextView.setText(String.valueOf(position + 1));
         holder.numRepsTextView.setText(String.valueOf(set.getNumReps()));
 
-        if (set.getIsPr())
+        for (WeightSet weightSet : prs)
         {
-            holder.prImageView.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            holder.prImageView.setVisibility(View.GONE);
+            if (set.getId().equals(weightSet.getId()))
+            {
+                holder.prImageView.setVisibility(View.VISIBLE);
+                break;
+            }
+            else
+            {
+                holder.prImageView.setVisibility(View.GONE);
+            }
         }
 
         holder.swipeToRevealLayout.returnToDefaultPositioning(false);
@@ -88,7 +95,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         return exerciseSession.getSets().size();
     }
 
-    protected void viewholderTouched()
+    private void viewholderTouched()
     {
         hideSetOptions();
     }
@@ -109,7 +116,20 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         void editButtonClicked(int position);
     }
 
-    protected final class RepViewHolder extends RecyclerView.ViewHolder
+    public void setWeightSetAsPr(WeightSet weightSet)
+    {
+        prs.add(weightSet);
+        for (int i = 0; i < exerciseSession.getSets().size(); i++)
+        {
+            WeightSet set = exerciseSession.getSets().get(i);
+            if (set.getId().equals(weightSet.getId()))
+            {
+                notifyItemChanged(i);
+            }
+        }
+    }
+
+    final class RepViewHolder extends RecyclerView.ViewHolder
             implements SwipeToRevealLayout.SwipeLayoutCallback
     {
         @Bind(R.id.position)

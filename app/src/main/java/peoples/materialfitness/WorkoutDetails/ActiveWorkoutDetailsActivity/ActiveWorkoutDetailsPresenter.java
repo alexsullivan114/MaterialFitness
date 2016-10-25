@@ -1,14 +1,17 @@
 package peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.common.base.Optional;
+
+import java.util.Collections;
 
 import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import peoples.materialfitness.Model.WeightUnits.WeightUnitConverter;
+import peoples.materialfitness.Model.Cache.TodaysWorkoutHistoryCache;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -62,21 +65,15 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
     {
         WeightSet set = new WeightSet(WeightUnitConverter.getMetricWeightFromUserInputWeight(weight), reps);
         set.setExerciseSessionId(exerciseSession.getId());
-        new WeightSetDatabaseInteractor().save(set)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(weightSet -> {
-                    exerciseSession.addSet(set);
-                    activityInterface.addSet(set);
-                    activityInterface.contentUpdated(true);
-                    // and finally repopulate our chart data if this set is the max weight for
-                    // this session.
-                    Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
-                    if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(weightSet.getId()))
-                    {
-                        populateChartData();
-                    }
-                });
+        TodaysWorkoutHistoryCache.getInstance().addSets(true, Collections.singletonList(set));
+        exerciseSession.addSet(set);
+        activityInterface.addSet(set);
+        activityInterface.contentUpdated(true);
+        Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
+        if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(set.getId()))
+        {
+            populateChartData();
+        }
     }
 
     /**
@@ -91,7 +88,9 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(exerciseSession1 -> {
                     lastSessionsFirstWeightSet = Optional.of(exerciseSession1.getSets().get(0));
-                });
+                }, (throwable -> {
+                    Log.e(TAG, throwable.toString());
+                }));
     }
 
     void appBarOffsetChanged(int totalAppBarHeight, int newOffset)
@@ -113,14 +112,8 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
 
     void deleteConfirmClicked()
     {
-        new ExerciseSessionDatabaseInteractor()
-                .cascadeDelete(exerciseSession)
-                .subscribeOn(Schedulers.io())
-                .toList() //to list so we get something even if there were no weight sets to delete.
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    activityInterface.contentUpdated(true);
-                    activityInterface.completed();
-                });
+        TodaysWorkoutHistoryCache.getInstance().deleteExerciseSession(true, exerciseSession);
+        activityInterface.contentUpdated(true);
+        activityInterface.completed();
     }
 }

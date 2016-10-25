@@ -21,6 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightUnits.WeightUnitEvent;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
@@ -126,6 +127,15 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     {
         Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(WorkoutSessionFragment.this.getActivity()).toBundle();
         startActivityForResult(startingIntent, workoutDetailsRequestCode, bundle);
+    }
+
+    @Override
+    public void addPr(WeightSet prSet)
+    {
+        if (recyclerView.getAdapter() != null)
+        {
+            ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).setWeightSetAsPr(prSet);
+        }
     }
 
     @Subscribe

@@ -3,6 +3,7 @@ package peoples.materialfitness.WorkoutSession;
 import android.content.Intent;
 
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
+import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.View.BaseFragmentInterface;
 
@@ -14,4 +15,5 @@ public interface WorkoutSessionFragmentInterface extends BaseFragmentInterface
     void updateExerciseCard(ExerciseSession exerciseSession);
     void updateWorkoutList(WorkoutSession workoutSession);
     void startWorkoutDetailsActivity(Intent startingIntent, int requestCode);
+    void addPr(WeightSet prSet);
 }

@@ -1,12 +1,14 @@
 package peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.common.base.Optional;
 
 import org.parceler.Parcels;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
+import peoples.materialfitness.Model.Cache.DatabasePrCache;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
@@ -36,7 +38,21 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
             exerciseSession = Parcels.unwrap(bundle.getParcelable(EXTRA_EXERCISE_SESSION));
             activityInterface.setTitle(exerciseSession.getExercise().getTitle());
             populateChartData();
+            fetchPrData();
         }
+    }
+
+    private void fetchPrData()
+    {
+        DatabasePrCache.getInstance()
+                .getPrForExercise(exerciseSession.getExercise())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(weightSet -> {
+                    activityInterface.setWeightSetAsPr(weightSet);
+                }, (throwable -> {
+                    Log.e(TAG, throwable.toString());
+                }));
     }
 
     protected void populateChartData()
@@ -54,7 +70,9 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(workoutSessions -> {
                     activityInterface.setChartData(workoutSessions, exerciseSession.getExercise());
-                });
+                }, (throwable -> {
+                    Log.e(TAG, throwable.toString());
+                }));
     }
 
     void deleteSetButtonClicked(int position)
@@ -62,33 +80,12 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
         final WeightSet set = exerciseSession.getSets().get(position);
         WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
 
-        interactor.deleteWithPrCheck(set, exerciseSession.getExercise())
+        interactor.deleteWithPrUpdates(set, exerciseSession.getExercise())
                 .subscribeOn(Schedulers.io())
                 .flatMap(result -> interactor.fetchWithParentId(exerciseSession.getId()))
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(weightSets -> {
-                    Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
-
-                    // If we deleted our highest weight set for this exercise session we need to
-                    // refresh our chart.
-                    if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(set.getId()))
-                    {
-                        populateChartData();
-                    }
-
-                    exerciseSession.setSets(weightSets);
-                    // We deleted a PR. Need to check to see if we have a new PR.
-                    if (set.getIsPr())
-                    {
-                        int newPrPosition = exerciseSession.getPrPosition();
-
-                        if (newPrPosition != -1)
-                        {
-                            activityInterface.refreshSetAtPosition(newPrPosition);
-                        }
-                    }
-
                     activityInterface.contentUpdated(true);
                     activityInterface.removeSetAtPosition(position);
                 });
@@ -119,7 +116,6 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
             editingSet = Optional.absent();
 
             final int setPosition = exerciseSession.getSets().indexOf(weightSet);
-            final int oldPrPosition = exerciseSession.getPrPosition();
 
             WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
 
@@ -139,19 +135,6 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
                         if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(weightSet.getId()))
                         {
                             populateChartData();
-                        }
-
-                        if (oldPrPosition != exerciseSession.getPrPosition())
-                        {
-                            if (oldPrPosition != -1)
-                            {
-                                activityInterface.refreshSetAtPosition(oldPrPosition);
-                            }
-
-                            if (exerciseSession.getPrPosition() != -1)
-                            {
-                                activityInterface.refreshSetAtPosition(exerciseSession.getPrPosition());
-                            }
                         }
 
                         activityInterface.refreshSetAtPosition(setPosition);
