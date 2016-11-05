@@ -145,6 +145,8 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
                 imageView.setVisibility(View.VISIBLE);
             }
         }
+
+        holder.repContainer.addView(setContainer);
     }
 
     private void onDropdownClicked(ExerciseCardViewHolder viewHolder)
