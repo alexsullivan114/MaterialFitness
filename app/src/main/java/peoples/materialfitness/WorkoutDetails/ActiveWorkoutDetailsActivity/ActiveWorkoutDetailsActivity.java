@@ -104,7 +104,7 @@ public class ActiveWorkoutDetailsActivity extends WorkoutDetailsActivity<ActiveW
     @Override
     public void addSet(WeightSet set)
     {
-        // Add our item.
+        // Add our item. TODO: Use this.
         int updatedItemPosition = presenter.exerciseSession.getSets().size() - 1;
         recyclerView.getAdapter().notifyDataSetChanged();
     }

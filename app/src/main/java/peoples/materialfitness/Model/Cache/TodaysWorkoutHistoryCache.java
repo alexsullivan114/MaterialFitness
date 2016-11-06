@@ -7,6 +7,7 @@ import java.util.List;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import peoples.materialfitness.Util.DateUtils;
@@ -94,12 +95,14 @@ public class TodaysWorkoutHistoryCache
                 });
     }
 
+    // TODO: No reason to do a huge save on the whole workout session.
     public void addSets(final boolean saveUpdate,
                        final List<WeightSet> newSets)
     {
         getTodaysWorkoutSession()
                 .observeOn(Schedulers.io())
                 .subscribe(workoutSession -> {
+                    final WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
                     for (WeightSet set : newSets)
                     {
                         for (ExerciseSession exerciseSession : workoutSession.getExerciseSessions())
@@ -107,13 +110,13 @@ public class TodaysWorkoutHistoryCache
                             if (exerciseSession.getId() == set.getExerciseSessionId())
                             {
                                 exerciseSession.addSet(set);
+
+                                if (saveUpdate)
+                                {
+                                    interactor.saveWithPrUpdates(set, exerciseSession.getExercise()).subscribe();
+                                }
                             }
                         }
-                    }
-
-                    if (saveUpdate)
-                    {
-                        cascadeSaveWorkoutSession(workoutSession);
                     }
                 }, (throwable -> {
                     Log.e(TAG, throwable.toString());

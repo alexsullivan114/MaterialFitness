@@ -36,7 +36,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
     private final SetInteractionCallback callback;
     private final boolean allowTouchEvents;
     private Optional<RepViewHolder> revealedViewHolder = Optional.absent();
-    private List<WeightSet> prs = new ArrayList<>();
+    private WeightSet pr = null;
 
     public WorkoutDetailsRecyclerAdapter(final @NonNull ExerciseSession exerciseSession,
                                          final @Nullable SetInteractionCallback callback,
@@ -73,17 +73,13 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
         holder.positionTextView.setText(String.valueOf(position + 1));
         holder.numRepsTextView.setText(String.valueOf(set.getNumReps()));
 
-        for (WeightSet weightSet : prs)
+        if (pr != null && set.getId().equals(pr.getId()))
         {
-            if (set.getId().equals(weightSet.getId()))
-            {
-                holder.prImageView.setVisibility(View.VISIBLE);
-                break;
-            }
-            else
-            {
-                holder.prImageView.setVisibility(View.GONE);
-            }
+            holder.prImageView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.prImageView.setVisibility(View.GONE);
         }
 
         holder.swipeToRevealLayout.returnToDefaultPositioning(false);
@@ -118,12 +114,23 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
 
     public void setWeightSetAsPr(WeightSet weightSet)
     {
-        prs.add(weightSet);
+        final int INVALID_INDEX = -1;
+        int oldIndex = INVALID_INDEX ;
+        if (pr != null)
+        {
+            oldIndex = exerciseSession.getSets().indexOf(pr);
+        }
+        pr = weightSet;
         for (int i = 0; i < exerciseSession.getSets().size(); i++)
         {
             WeightSet set = exerciseSession.getSets().get(i);
             if (set.getId().equals(weightSet.getId()))
             {
+                if (oldIndex != INVALID_INDEX )
+                {
+                    notifyItemChanged(oldIndex);
+                }
+                
                 notifyItemChanged(i);
             }
         }
