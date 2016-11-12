@@ -16,11 +16,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightUnits.WeightUnit;
@@ -40,7 +45,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
 
     private static final int NUM_DISPLAY_SETS = 5;
 
-    private List<WeightSet> prs = new ArrayList<>();
+    private Map<Exercise, WeightSet> prs = new HashMap<>();
 
     public ExerciseCardRecyclerAdapter(WorkoutSession workoutSession,
                                        ExerciseCardAdapterInterface callback)
@@ -83,7 +88,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
             }
 
             WeightSet weightSet = exerciseSession.getSets().get(i);
-            addWeightSetViewToHolder(holder, weightSet);
+            addWeightSetViewToHolder(holder, weightSet, exerciseSession.getExercise());
             // Lets only do this once for performance. Lock the linear layout to the current height,
             // since we want to include the extra items but we don't want the layout to grow with them.
             // We will grow the layout via animation if the user selects the dropdown.
@@ -121,7 +126,7 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
      * @param holder Holder to add to.
      * @param weightSet The weight set whos view we're constructing.
      */
-    private void addWeightSetViewToHolder(ExerciseCardViewHolder holder, WeightSet weightSet)
+    private void addWeightSetViewToHolder(ExerciseCardViewHolder holder, WeightSet weightSet, Exercise exercise)
     {
         LayoutInflater inflater = LayoutInflater.from(holder.mCardView.getContext());
         LinearLayout setContainer = (LinearLayout)inflater.inflate(R.layout.workout_card_rep, holder.repContainer, false);
@@ -138,11 +143,15 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         repsTextView.setText(repsString);
         weightTextView.setText(weightString);
 
-        for (WeightSet set : prs)
+        if (prs.containsKey(exercise))
         {
-            if (set.getId().equals(weightSet.getId()))
+            if (weightSet.getId().equals(prs.get(exercise).getId()))
             {
                 imageView.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                imageView.setVisibility(View.GONE);
             }
         }
 
@@ -222,9 +231,9 @@ public class ExerciseCardRecyclerAdapter extends RecyclerView.Adapter<ExerciseCa
         notifyDataSetChanged();
     }
 
-    public void setWeightSetAsPr(WeightSet weightSet)
+    public void setWeightSetAsPr(WeightSet weightSet, Exercise exercise)
     {
-        prs.add(weightSet);
+        prs.put(exercise, weightSet);
         for (int i = 0; i < workoutSession.getExerciseSessions().size(); i++)
         {
             ExerciseSession exerciseSession = workoutSession.getExerciseSessions().get(i);

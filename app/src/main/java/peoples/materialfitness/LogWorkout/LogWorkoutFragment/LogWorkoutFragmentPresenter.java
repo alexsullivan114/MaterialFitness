@@ -91,25 +91,30 @@ class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFrag
         fragmentInterface.showAddWorkoutDialog();
     }
 
-    private void fetchPopulatedWorkoutSession()
+    private void subscribeToPrUpdates()
     {
-        // First fetch todays workout.
-        Observable<WorkoutSession> todaysSession = TodaysWorkoutHistoryCache.getInstance()
-                .getTodaysWorkoutSession();
+        Observable.from(workoutSession.getExerciseList())
+                .subscribeOn(Schedulers.io())
+                .subscribe(exercise -> {
+                    DatabasePrCache.getInstance().getPrForExercise(exercise)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(pr -> {
+                                fragmentInterface.addPr(pr, exercise);
+                            });
+                });
+    }
 
-        todaysSession
+    private void fetchPopulatedWorkoutSession() {
+        // First fetch todays workout.
+        TodaysWorkoutHistoryCache.getInstance()
+                .getTodaysWorkoutSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(workoutSession1 -> {
-                    workoutSession = workoutSession1;
-                    fragmentInterface.updateWorkoutList(workoutSession1);
-                })
-                .observeOn(Schedulers.io())
-                .flatMap(workoutSession1 -> Observable.from(workoutSession1.getExerciseList()))
-                .flatMap(exercise -> DatabasePrCache.getInstance().getPrForExercise(exercise))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(weightSet -> {
-                    fragmentInterface.addPr(weightSet);
-                }, throwable -> Log.e(TAG, throwable.toString()));
+                .subscribe(cachedWorkoutSession -> {
+                    workoutSession = cachedWorkoutSession;
+                    fragmentInterface.updateWorkoutList(cachedWorkoutSession);
+                    subscribeToPrUpdates();
+                });
     }
 }

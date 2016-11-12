@@ -130,7 +130,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
                 {
                     notifyItemChanged(oldIndex);
                 }
-                
+
                 notifyItemChanged(i);
             }
         }

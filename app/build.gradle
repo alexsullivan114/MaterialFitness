@@ -72,7 +72,7 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     // Third party libraries
     // Rx java. For being awesome.
-    compile 'io.reactivex:rxjava:1.0.10'
+    compile 'io.reactivex:rxjava:1.1.6'
     // Rx android. For android specific schedulers.
     compile 'io.reactivex:rxandroid:1.0.1'
     // Butterknife for view injection

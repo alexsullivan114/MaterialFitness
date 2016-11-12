@@ -1,5 +1,7 @@
 package peoples.materialfitness.Model.Cache;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,8 @@ import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Alex Sullivan on 10/20/2016.
@@ -119,21 +123,26 @@ public class DatabasePrCache implements PrCache
                 });
     }
 
-    @Override
-    public Observable<WeightSet> getPrForExercise(Exercise exercise)
+    private BehaviorSubject<WeightSet> getPrSubjectForExercise(Exercise exercise)
     {
         if (!prMap.containsKey(exercise))
         {
             initializeExercise(exercise);
         }
 
-        return prMap.get(exercise).asObservable();
+        return prMap.get(exercise);
+    }
+
+    @Override
+    public Observable<WeightSet> getPrForExercise(Exercise exercise)
+    {
+        return getPrSubjectForExercise(exercise).asObservable();
     }
 
     @Override
     public void weightSetModified(WeightSet editedSet, Exercise exercise)
     {
-        getPrForExercise(exercise)
+        getPrSubjectForExercise(exercise)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(weightSet -> {
@@ -147,15 +156,28 @@ public class DatabasePrCache implements PrCache
     @Override
     public void weightSetAdded(WeightSet weightSet, Exercise exercise)
     {
-        getPrForExercise(exercise)
-                .subscribeOn(Schedulers.io())
+        final BehaviorSubject<WeightSet> subject = getPrSubjectForExercise(exercise);
+        // If this is our first weight set (at least that we've seen) its de-facto the PR.
+        // Push it along.
+        if (!subject.hasValue())
+        {
+            pushToSubscriber(weightSet, exercise);
+        }
+        else
+        {
+            // Make sure to only take the 1st item emitted by the subject. The reason for this is
+            // once we get the PR we care about we're done here - if we keep getting updates then
+            // for every new pr this method will be triggered again (since its subscribed to the same
+            // observable that's being pushed to in subscribe) and we'll get buffer overflow exceptions.
+            subject.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
+                .take(1)
                 .subscribe(pr -> {
-                    if (pr.getWeight() < weightSet.getWeight())
+                    if (pr.getWeight() < weightSet.getWeight() || pr.getId().equals(weightSet.getId()))
                     {
                         pushToSubscriber(weightSet, exercise);
                     }
                 });
-
+        }
     }
 }

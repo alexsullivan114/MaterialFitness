@@ -90,12 +90,11 @@ public class TodaysWorkoutHistoryCache
                     workoutSession.uniqueAddExerciseSession(exerciseSession);
                     if (saveUpdate)
                     {
-                        new ExerciseSessionDatabaseInteractor().cascadeSave(exerciseSession);
+                        new ExerciseSessionDatabaseInteractor().cascadeSave(exerciseSession).subscribe();
                     }
                 });
     }
 
-    // TODO: No reason to do a huge save on the whole workout session.
     public void addSets(final boolean saveUpdate,
                        final List<WeightSet> newSets)
     {

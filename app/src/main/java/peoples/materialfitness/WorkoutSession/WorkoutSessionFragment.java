@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
+import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightUnits.WeightUnitEvent;
@@ -130,11 +131,11 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     }
 
     @Override
-    public void addPr(WeightSet prSet)
+    public void addPr(WeightSet prSet, Exercise exercise)
     {
         if (recyclerView.getAdapter() != null)
         {
-            ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).setWeightSetAsPr(prSet);
+            ((ExerciseCardRecyclerAdapter)recyclerView.getAdapter()).setWeightSetAsPr(prSet, exercise);
         }
     }
 
