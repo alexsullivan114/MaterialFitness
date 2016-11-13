@@ -94,11 +94,11 @@ public class DatabasePrCache implements PrCache
     {
         if (prMap.containsKey(exercise))
         {
-            prMap.get(exercise).onNext(set);
+            prMap.get(exercise).onNext(new WeightSet(set));
         }
         else
         {
-            initializeExercise(set, exercise);
+            initializeExercise(new WeightSet(set), exercise);
         }
     }
 
@@ -146,11 +146,13 @@ public class DatabasePrCache implements PrCache
     @Override
     public void weightSetModified(WeightSet editedSet, Exercise exercise)
     {
-        getPrSubjectForExercise(exercise)
+        getPrForExercise(exercise)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
+                .take(1)
                 .subscribe(weightSet -> {
-                    if (weightSet.getId().equals(editedSet.getId()))
+                    if (weightSet.getId().equals(editedSet.getId())
+                            || weightSet.getWeight() < editedSet.getWeight())
                     {
                         resetPrEntry(exercise);
                     }
@@ -171,13 +173,13 @@ public class DatabasePrCache implements PrCache
         {
             // Make sure to only take the 1st item emitted by the subject. The reason for this is
             // once we get the PR we care about we're done here - if we keep getting updates then
-            // for every new pr this method will be triggered again (since its subscribed to the same
+            // for every new pr this me thod will be triggered again (since its subscribed to the same
             // observable that's being pushed to in subscribe) and we'll get buffer overflow exceptions.
             subject.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .take(1)
                 .subscribe(pr -> {
-                    if (pr.getWeight() < weightSet.getWeight() || pr.getId().equals(weightSet.getId()))
+                    if (pr.getWeight() < weightSet.getWeight())
                     {
                         pushToSubscriber(weightSet, exercise);
                     }

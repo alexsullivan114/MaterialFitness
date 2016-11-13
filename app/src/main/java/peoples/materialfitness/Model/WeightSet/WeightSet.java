@@ -9,6 +9,8 @@ import peoples.materialfitness.Model.WeightUnits.WeightUnitConverter;
 
 /**
  * Created by Alex Sullivan on 2/15/16.
+ *
+ * TODO Fuck this parcelor shit. I barely use it.
  */
 @Parcel(value = Parcel.Serialization.BEAN)
 public class WeightSet
@@ -26,6 +28,14 @@ public class WeightSet
     {
         this.weight = weight;
         this.numReps = numReps;
+    }
+
+    public WeightSet(final WeightSet oldSet)
+    {
+        this.id = oldSet.id;
+        this.numReps = oldSet.numReps;
+        this.weight = oldSet.weight;
+        this.exerciseSessionId = oldSet.exerciseSessionId;
     }
 
     public long getExerciseSessionId()

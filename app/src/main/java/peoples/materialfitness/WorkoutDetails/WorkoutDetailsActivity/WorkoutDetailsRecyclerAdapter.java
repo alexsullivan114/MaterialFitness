@@ -49,7 +49,7 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
 
     public void setExerciseSession(final @NonNull ExerciseSession exerciseSession)
     {
-        this.exerciseSession = exerciseSession;
+        this.exerciseSession = new ExerciseSession(exerciseSession);
     }
 
     @Override
@@ -114,25 +114,34 @@ public class WorkoutDetailsRecyclerAdapter extends RecyclerView.Adapter<WorkoutD
 
     public void setWeightSetAsPr(WeightSet weightSet)
     {
+        // TODO: Dont need this, indexOf returns -1 if its not in the list.
         final int INVALID_INDEX = -1;
         int oldIndex = INVALID_INDEX ;
         if (pr != null)
         {
-            oldIndex = exerciseSession.getSets().indexOf(pr);
+            for (int i = 0; i < exerciseSession.getSets().size(); i++)
+            {
+                final WeightSet set = exerciseSession.getSets().get(i);
+                if (set.getId().equals(pr.getId()))
+                {
+                    oldIndex = i;
+                }
+            }
+
         }
-        pr = weightSet;
+        pr = new WeightSet(weightSet);
         for (int i = 0; i < exerciseSession.getSets().size(); i++)
         {
             WeightSet set = exerciseSession.getSets().get(i);
             if (set.getId().equals(weightSet.getId()))
             {
-                if (oldIndex != INVALID_INDEX )
-                {
-                    notifyItemChanged(oldIndex);
-                }
-
                 notifyItemChanged(i);
             }
+        }
+
+        if (oldIndex != INVALID_INDEX )
+        {
+            notifyItemChanged(oldIndex);
         }
     }
 

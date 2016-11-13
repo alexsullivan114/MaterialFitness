@@ -138,26 +138,46 @@ public class TodaysWorkoutHistoryCache
                 });
     }
 
-    public void deleteSets(final boolean saveUpdate,
-                           final List<WeightSet> sets)
+    public void deleteSet(final boolean saveUpdate,
+                          final WeightSet set)
     {
         getTodaysWorkoutSession()
                 .observeOn(Schedulers.io())
                 .subscribe(workoutSession -> {
-                    for (WeightSet set : sets)
+                    for (ExerciseSession exerciseSession : workoutSession.getExerciseSessions())
                     {
-                        for (ExerciseSession exerciseSession : workoutSession.getExerciseSessions())
+                        if (exerciseSession.getId() == set.getExerciseSessionId())
                         {
-                            if (exerciseSession.getId() == set.getExerciseSessionId())
+                            exerciseSession.getSets().remove(set);
+                            if (saveUpdate)
                             {
-                                exerciseSession.getSets().remove(set);
+                                new WeightSetDatabaseInteractor().deleteWithPrUpdates(set, exerciseSession.getExercise()).subscribe();
                             }
                         }
                     }
+                });
+    }
 
-                    if (saveUpdate)
+    public void editSet(final boolean saveUpdate,
+                         final WeightSet set)
+    {
+        getTodaysWorkoutSession()
+                .observeOn(Schedulers.io())
+                .subscribe(workoutSession -> {
+
+                    for (int i = 0; i < workoutSession.getExerciseSessions().size(); i++)
                     {
-                        cascadeSaveWorkoutSession(workoutSession);
+                        final ExerciseSession session = workoutSession.getExerciseSessions().get(i);
+                        if (session.getId() == set.getExerciseSessionId())
+                        {
+                            final WeightSet updateSet = session.getSets().get(i);
+                            updateSet.setNumReps(set.getNumReps());
+                            updateSet.setWeight(set.getWeight());
+                            if (saveUpdate)
+                            {
+                                new WeightSetDatabaseInteractor().editWIthPrUpdates(set, session.getExercise()).subscribe();
+                            }
+                        }
                     }
                 });
     }

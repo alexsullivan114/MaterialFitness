@@ -41,6 +41,17 @@ public class ExerciseSession
         this.workoutSessionId = workoutSessionId;
     }
 
+    public ExerciseSession(final ExerciseSession oldSession)
+    {
+        this.exercise = new Exercise(oldSession.getExercise());
+        this.workoutSessionId = oldSession.getWorkoutSessionId();
+        this.id = oldSession.getId();
+        for (WeightSet set : oldSession.getSets())
+        {
+            sets.add(new WeightSet(set));
+        }
+    }
+
     public Exercise getExercise()
     {
         return exercise;

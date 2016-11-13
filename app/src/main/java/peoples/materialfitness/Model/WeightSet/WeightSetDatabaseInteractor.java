@@ -74,6 +74,13 @@ public class WeightSetDatabaseInteractor extends ModelDatabaseInteractor<WeightS
                 .doOnNext(weightSet -> DatabasePrCache.getInstance().weightSetAdded(entity, exercise));
     }
 
+    public Observable<WeightSet> editWIthPrUpdates(final WeightSet entity,
+                                                   final Exercise exercise)
+    {
+        return save(entity)
+                .doOnNext(weightSet -> DatabasePrCache.getInstance().weightSetModified(entity, exercise));
+    }
+
     @Override
     public Observable<WeightSet> fetchWithParentId(long parentId)
     {

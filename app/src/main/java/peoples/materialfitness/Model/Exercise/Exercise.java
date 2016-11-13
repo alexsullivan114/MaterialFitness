@@ -19,24 +19,22 @@ public class Exercise
     String title;
     MuscleGroup muscleGroup;
 
-    /**
-     * Empty constructor required for sugar record OEM.
-     */
     public Exercise()
     {
 
-    }
-
-    @Override
-    public String toString()
-    {
-        return title;
     }
 
     public Exercise(String title, MuscleGroup muscleGroup)
     {
         this.title = title;
         this.muscleGroup = muscleGroup;
+    }
+
+    public Exercise(final Exercise oldExercise)
+    {
+        this.id = oldExercise.getId();
+        this.title = oldExercise.getTitle();
+        this.muscleGroup = oldExercise.getMuscleGroup();
     }
 
     public String getTitle()
@@ -115,5 +113,11 @@ public class Exercise
         int result = title.hashCode();
         result = 31 * result + muscleGroup.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return title;
     }
 }

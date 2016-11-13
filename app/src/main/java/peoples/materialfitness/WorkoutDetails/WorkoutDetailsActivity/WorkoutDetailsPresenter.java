@@ -7,8 +7,11 @@ import com.google.common.base.Optional;
 
 import org.parceler.Parcels;
 
+import java.util.Collections;
+
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Model.Cache.DatabasePrCache;
+import peoples.materialfitness.Model.Cache.TodaysWorkoutHistoryCache;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
@@ -78,17 +81,10 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
     void deleteSetButtonClicked(int position)
     {
         final WeightSet set = exerciseSession.getSets().get(position);
-        WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
-
-        interactor.deleteWithPrUpdates(set, exerciseSession.getExercise())
-                .subscribeOn(Schedulers.io())
-                .flatMap(result -> interactor.fetchWithParentId(exerciseSession.getId()))
-                .toList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(weightSets -> {
-                    activityInterface.contentUpdated(true);
-                    activityInterface.removeSetAtPosition(position);
-                });
+        TodaysWorkoutHistoryCache.getInstance().deleteSet(true, set);
+        exerciseSession.getSets().remove(position);
+        activityInterface.contentUpdated(true);
+        activityInterface.removeSetAtPosition(position);
     }
 
     void editSetButtonClicked(int position)
@@ -117,28 +113,21 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
 
             final int setPosition = exerciseSession.getSets().indexOf(weightSet);
 
-            WeightSetDatabaseInteractor interactor = new WeightSetDatabaseInteractor();
+            TodaysWorkoutHistoryCache.getInstance().editSet(true, weightSet);
+            WeightSet oldSet = exerciseSession.getSets().get(setPosition);
+            oldSet = weightSet;
+            activityInterface.contentUpdated(true);
 
-            interactor.edit(weightSet, exerciseSession.getExercise())
-                    .subscribeOn(Schedulers.io())
-                    .flatMap(result -> interactor.fetchWithParentId(exerciseSession.getId()))
-                    .toList()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(sets -> {
-                        exerciseSession.setSets(sets);
-                        activityInterface.contentUpdated(true);
+            Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
 
-                        Optional<WeightSet> maxWeightSet = exerciseSession.getMaxWeightSet();
+            // If we edited our highest weight set for this exercise session we need to
+            // refresh our chart.
+            if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(weightSet.getId()))
+            {
+                populateChartData();
+            }
 
-                        // If we edited our highest weight set for this exercise session we need to
-                        // refresh our chart.
-                        if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(weightSet.getId()))
-                        {
-                            populateChartData();
-                        }
-
-                        activityInterface.refreshSetAtPosition(setPosition);
-                    });
+            activityInterface.refreshSetAtPosition(setPosition);
         }
     }
 
