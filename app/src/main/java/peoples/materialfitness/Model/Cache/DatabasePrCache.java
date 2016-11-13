@@ -2,6 +2,7 @@ package peoples.materialfitness.Model.Cache;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,19 +54,32 @@ public class DatabasePrCache implements PrCache
         new ExerciseDatabaseInteractor()
                 .fetchAll()
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
                 .flatMap(exercise -> new ExerciseSessionDatabaseInteractor().fetchWithExerciseId(exercise.getId()))
-                .flatMap(exerciseSession -> new WeightSetDatabaseInteractor().fetchWithParentId(exerciseSession.getId())
-                        .groupBy(weightSet -> exerciseSession.getExercise()))
-                .subscribe(exerciseWeightSetGroupedObservable -> {
-                    exerciseWeightSetGroupedObservable
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(Schedulers.io())
-                            .toList()
-                            .subscribe(weightSets -> {
-                                WeightSet set = calculatePr(weightSets);
-                                pushToSubscriber(set, exerciseWeightSetGroupedObservable.getKey());
-                            });
+                .groupBy(ExerciseSession::getExercise)
+                .flatMap(Observable::toList)
+                .toMap(exerciseSessions -> exerciseSessions.get(0).getExercise())
+                .map(exerciseListMap -> {
+                    final Map<Exercise, List<WeightSet>> flattenedMap = new HashMap<>();
+
+                    for (Exercise key : exerciseListMap.keySet())
+                    {
+                        final List<WeightSet> value = new ArrayList<WeightSet>();
+                        for (ExerciseSession session : exerciseListMap.get(key))
+                        {
+                            value.addAll(session.getSets());
+                        }
+
+                        flattenedMap.put(key, value);
+                    }
+
+                    return flattenedMap;
+                })
+                .subscribe(exerciseWeightSetMap -> {
+                    for (Exercise key : exerciseWeightSetMap.keySet())
+                    {
+                        WeightSet set = calculatePr(exerciseWeightSetMap.get(key));
+                        pushToSubscriber(set, key);
+                    }
                 });
 
     }

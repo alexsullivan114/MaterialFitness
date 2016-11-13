@@ -24,7 +24,7 @@ public final class FitnessDatabaseUtils
     {
         FitnessDatabaseHelper helper = FitnessDatabaseHelper.getInstance(context);;
         
-        return Observable.create((Observable.OnSubscribe<Cursor>) subscriber ->
+        return Observable.create(subscriber ->
         {
             if (!subscriber.isUnsubscribed())
             {
@@ -37,6 +37,6 @@ public final class FitnessDatabaseUtils
                 cursor.close();
                 subscriber.onCompleted();
             }
-        }).onBackpressureBuffer();
+        });
     }
 }

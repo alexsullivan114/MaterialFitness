@@ -7,6 +7,7 @@ import com.facebook.stetho.Stetho;
 
 import peoples.materialfitness.BuildConfig;
 import peoples.materialfitness.FitnotesImport.FitnotesImporterActivity;
+import peoples.materialfitness.Model.Cache.DatabasePrCache;
 import peoples.materialfitness.Model.FitnessDatabaseHelper;
 import peoples.materialfitness.Util.Constants;
 
@@ -25,6 +26,12 @@ public class MaterialFitnessApplication extends Application
         initApplication();
         initThirdPartySdks();
         initDebugDatabases();
+        initCaches();
+    }
+
+    private void initCaches()
+    {
+        DatabasePrCache.getInstance();
     }
 
     private void initApplication()

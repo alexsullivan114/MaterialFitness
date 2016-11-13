@@ -19,6 +19,9 @@ import rx.schedulers.Schedulers;
  *
  * TODO: I dont think this cache should save values to the database, the database should push
  * updates to this cache.
+ *
+ * TODO: I think this cache needs to be more reactive in nature - it should expose an observable
+ * for a workout session that gets updates pushed to it.
  */
 
 public class TodaysWorkoutHistoryCache
@@ -128,11 +131,9 @@ public class TodaysWorkoutHistoryCache
         getTodaysWorkoutSession()
                 .observeOn(Schedulers.io())
                 .subscribe(workoutSession -> {
-                    final boolean performSave = saveUpdate && workoutSession.getExerciseSessions().remove(exerciseSession);
-
-                    if (performSave)
+                    if (saveUpdate)
                     {
-                        cascadeSaveWorkoutSession(workoutSession);
+                        new ExerciseSessionDatabaseInteractor().delete(exerciseSession).subscribe();
                     }
                 });
     }
