@@ -1,5 +1,6 @@
 package peoples.materialfitness.Model.Cache;
 
+import android.support.v4.util.Pair;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -49,6 +50,14 @@ public class DatabasePrCache implements PrCache
         return INSTANCE;
     }
 
+    private Observable<Pair<Exercise, List<WeightSet>>> buildExerciseSetsPair(final List<ExerciseSession> sessions)
+    {
+        return Observable.from(sessions)
+                .flatMap(exerciseSession -> Observable.from(exerciseSession.getSets()))
+                .toList()
+                .map(weightSets -> new Pair<>(sessions.get(0).getExercise(), weightSets));
+    }
+
     private void buildPrMap()
     {
         new ExerciseDatabaseInteractor()
@@ -57,29 +66,10 @@ public class DatabasePrCache implements PrCache
                 .flatMap(exercise -> new ExerciseSessionDatabaseInteractor().fetchWithExerciseId(exercise.getId()))
                 .groupBy(ExerciseSession::getExercise)
                 .flatMap(Observable::toList)
-                .toMap(exerciseSessions -> exerciseSessions.get(0).getExercise())
-                .map(exerciseListMap -> {
-                    final Map<Exercise, List<WeightSet>> flattenedMap = new HashMap<>();
-
-                    for (Exercise key : exerciseListMap.keySet())
-                    {
-                        final List<WeightSet> value = new ArrayList<WeightSet>();
-                        for (ExerciseSession session : exerciseListMap.get(key))
-                        {
-                            value.addAll(session.getSets());
-                        }
-
-                        flattenedMap.put(key, value);
-                    }
-
-                    return flattenedMap;
-                })
-                .subscribe(exerciseWeightSetMap -> {
-                    for (Exercise key : exerciseWeightSetMap.keySet())
-                    {
-                        WeightSet set = calculatePr(exerciseWeightSetMap.get(key));
-                        pushToSubscriber(set, key);
-                    }
+                .flatMap(this::buildExerciseSetsPair)
+                .subscribe(exerciseListPair -> {
+                    WeightSet set = calculatePr(exerciseListPair.second);
+                    pushToSubscriber(set, exerciseListPair.first);
                 });
 
     }
