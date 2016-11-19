@@ -122,6 +122,10 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
 
             // If we edited our highest weight set for this exercise session we need to
             // refresh our chart.
+
+            // TODO: This doesn't work very well, because there's a race condition between saving off this
+            // set and accessing the set in this call. This should be fixed once we redo the workout history
+            // cache to work more reactively.
             if (maxWeightSet.isPresent() && maxWeightSet.get().getId().equals(weightSet.getId()))
             {
                 populateChartData();
