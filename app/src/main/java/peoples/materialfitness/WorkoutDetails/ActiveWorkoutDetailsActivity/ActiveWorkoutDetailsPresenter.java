@@ -11,7 +11,7 @@ import peoples.materialfitness.Core.PresenterFactory;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WeightUnits.WeightUnitConverter;
-import peoples.materialfitness.Model.Cache.TodaysWorkoutHistoryCache;
+import peoples.materialfitness.Model.Cache.TodaysWorkoutDbCache;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -65,7 +65,7 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
     {
         WeightSet set = new WeightSet(WeightUnitConverter.getMetricWeightFromUserInputWeight(weight), reps);
         set.setExerciseSessionId(exerciseSession.getId());
-        TodaysWorkoutHistoryCache.getInstance().addSets(true, Collections.singletonList(set));
+        TodaysWorkoutDbCache.getInstance().pushWeightSet(set);
         exerciseSession.addSet(set);
         activityInterface.addSet(set);
         activityInterface.contentUpdated(true);
@@ -112,7 +112,7 @@ class ActiveWorkoutDetailsPresenter extends WorkoutDetailsPresenter<ActiveWorkou
 
     void deleteConfirmClicked()
     {
-        TodaysWorkoutHistoryCache.getInstance().deleteExerciseSession(true, exerciseSession);
+        TodaysWorkoutDbCache.getInstance().deleteExerciseSession(exerciseSession);
         activityInterface.contentUpdated(true);
         activityInterface.completed();
     }

@@ -7,16 +7,13 @@ import com.google.common.base.Optional;
 
 import org.parceler.Parcels;
 
-import java.util.Collections;
-
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Model.Cache.DatabasePrCache;
-import peoples.materialfitness.Model.Cache.TodaysWorkoutHistoryCache;
+import peoples.materialfitness.Model.Cache.TodaysWorkoutDbCache;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionContract;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.Model.WeightSet.WeightSetDatabaseInteractor;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionContract;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import rx.android.schedulers.AndroidSchedulers;
@@ -81,7 +78,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
     void deleteSetButtonClicked(int position)
     {
         final WeightSet set = exerciseSession.getSets().get(position);
-        TodaysWorkoutHistoryCache.getInstance().deleteSet(true, set);
+        TodaysWorkoutDbCache.getInstance().deleteWeightSet(set);
         exerciseSession.getSets().remove(position);
         activityInterface.contentUpdated(true);
         activityInterface.removeSetAtPosition(position);
@@ -113,7 +110,7 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
 
             final int setPosition = exerciseSession.getSets().indexOf(weightSet);
 
-            TodaysWorkoutHistoryCache.getInstance().editSet(true, weightSet);
+            TodaysWorkoutDbCache.getInstance().editWeightSet(weightSet);
             WeightSet oldSet = exerciseSession.getSets().get(setPosition);
             oldSet = weightSet;
             activityInterface.contentUpdated(true);

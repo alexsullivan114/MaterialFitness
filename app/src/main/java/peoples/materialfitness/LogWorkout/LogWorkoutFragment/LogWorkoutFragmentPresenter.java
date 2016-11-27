@@ -1,7 +1,6 @@
 package peoples.materialfitness.LogWorkout.LogWorkoutFragment;
 
 import android.content.Intent;
-import android.util.Log;
 
 import org.parceler.Parcels;
 
@@ -10,15 +9,13 @@ import peoples.materialfitness.LogWorkout.LogWorkoutDialog.AddExerciseDialog;
 import peoples.materialfitness.Model.Cache.DatabasePrCache;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
-import peoples.materialfitness.Model.Cache.TodaysWorkoutHistoryCache;
-import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.Model.Cache.TodaysWorkoutDbCache;
 import peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -65,8 +62,8 @@ class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFrag
             final ExerciseSession exerciseSession = new ExerciseSession(exercise, workoutSession.getId());
             workoutSession.addExerciseSession(exerciseSession);
             // Update our UI
-            TodaysWorkoutHistoryCache.getInstance()
-                    .addExerciseSessionToCache(true, exerciseSession);
+            TodaysWorkoutDbCache.getInstance()
+                    .pushExerciseSession(exerciseSession);
             fragmentInterface.updateExerciseCard(exerciseSession);
         }
     }
@@ -107,8 +104,8 @@ class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFrag
 
     private void fetchPopulatedWorkoutSession() {
         // First fetch todays workout.
-        TodaysWorkoutHistoryCache.getInstance()
-                .getTodaysWorkoutSession()
+        TodaysWorkoutDbCache.getInstance()
+                .todaysWorkoutObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cachedWorkoutSession -> {
