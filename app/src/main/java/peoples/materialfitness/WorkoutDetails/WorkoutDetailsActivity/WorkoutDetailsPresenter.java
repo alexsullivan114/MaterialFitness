@@ -91,13 +91,6 @@ public class WorkoutDetailsPresenter<T extends WorkoutDetailsActivityInterface> 
         editingSet = Optional.of(weightSet);
     }
 
-    void handleSavedExerciseSession(ExerciseSession savedExerciseSession)
-    {
-        exerciseSession = savedExerciseSession;
-        activityInterface.setTitle(exerciseSession.getExercise().getTitle());
-        populateChartData();
-    }
-
     void editSet(final int weight, final int reps)
     {
         if (editingSet.isPresent())

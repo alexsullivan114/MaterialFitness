@@ -85,7 +85,6 @@ public abstract class BaseFragment<T extends BaseFragmentPresenter> extends Frag
     {
         super.onActivityCreated(savedInstanceState);
 
-        presenter.onContextAvailable(getActivity());
         Log.d(TAG, "onActivityCreated called");
     }
 

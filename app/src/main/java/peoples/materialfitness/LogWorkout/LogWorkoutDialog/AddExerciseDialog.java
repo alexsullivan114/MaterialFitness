@@ -124,6 +124,7 @@ public class AddExerciseDialog extends MaterialDialog implements
 
     private void setExerciseTitleAdapter()
     {
+        // TODO: This should be happening off the main thread...
         new ExerciseDatabaseInteractor().fetchAll().toList().subscribe(values -> {
             ExerciseTitleAutoCompleteAdapter adapter =
                     new ExerciseTitleAutoCompleteAdapter(context, values);

@@ -10,6 +10,7 @@ import peoples.materialfitness.Model.Cache.DatabasePrCache;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.Cache.TodaysWorkoutDbCache;
+import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity;
 import peoples.materialfitness.WorkoutDetails.WorkoutDetailsActivity.WorkoutDetailsPresenter;
 import peoples.materialfitness.WorkoutSession.WorkoutSessionPresenter;
@@ -60,11 +61,8 @@ class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFrag
         {
             // If not add the exercise.
             final ExerciseSession exerciseSession = new ExerciseSession(exercise, workoutSession.getId());
-            workoutSession.addExerciseSession(exerciseSession);
-            // Update our UI
             TodaysWorkoutDbCache.getInstance()
                     .pushExerciseSession(exerciseSession);
-            fragmentInterface.updateExerciseCard(exerciseSession);
         }
     }
 
@@ -88,7 +86,7 @@ class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFrag
         fragmentInterface.showAddWorkoutDialog();
     }
 
-    private void subscribeToPrUpdates()
+    private void subscribeToPrUpdates(final WorkoutSession workoutSession)
     {
         Observable.from(workoutSession.getExerciseList())
                 .subscribeOn(Schedulers.io())
@@ -111,7 +109,7 @@ class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFrag
                 .subscribe(cachedWorkoutSession -> {
                     workoutSession = cachedWorkoutSession;
                     fragmentInterface.updateWorkoutList(cachedWorkoutSession);
-                    subscribeToPrUpdates();
+                    subscribeToPrUpdates(cachedWorkoutSession);
                 });
     }
 }

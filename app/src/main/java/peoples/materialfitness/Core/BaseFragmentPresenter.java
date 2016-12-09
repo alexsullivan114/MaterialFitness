@@ -25,9 +25,4 @@ public abstract class BaseFragmentPresenter<T extends BaseFragmentInterface> ext
     {
         this.fragmentInterface = fragmentInterface;
     }
-
-    public void onContextAvailable(Context context)
-    {
-        this.context = context;
-    }
 }

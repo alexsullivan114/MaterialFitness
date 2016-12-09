@@ -40,8 +40,6 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
     protected TextView recyclerEmptyView;
     @Bind(R.id.recyclerView)
     protected RecyclerView recyclerView;
-    @Bind(R.id.root_view)
-    protected CoordinatorLayout rootView;
     @Bind(R.id.fab)
     protected FloatingActionButton fab;
 

@@ -8,6 +8,8 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 
 /**
  * Created by Alex Sullivan on 11/21/15.
+ *
+ * TOdo fuck this abstraction
  */
 public abstract class WorkoutSessionPresenter<T extends WorkoutSessionFragmentInterface> extends BaseFragmentPresenter<T>
 {

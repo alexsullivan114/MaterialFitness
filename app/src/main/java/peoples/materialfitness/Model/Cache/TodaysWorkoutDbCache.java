@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
@@ -77,9 +78,13 @@ public class TodaysWorkoutDbCache implements TodaysWorkoutCache
     public void pushExerciseSession(ExerciseSession exerciseSession)
     {
         applyWorkoutSessionModification(workoutSession -> {
-            new ExerciseSessionDatabaseInteractor().save(exerciseSession).subscribe();
-            workoutSession.addExerciseSession(exerciseSession);
-            todaysWorkoutSession.onNext(workoutSession);
+            new ExerciseDatabaseInteractor().uniqueSaveExercise(exerciseSession.getExercise())
+                    .subscribe(exercise -> {
+                        exerciseSession.setExercise(exercise);
+                        new ExerciseSessionDatabaseInteractor().save(exerciseSession).subscribe();
+                        workoutSession.addExerciseSession(exerciseSession);
+                        todaysWorkoutSession.onNext(workoutSession);
+                    });
         });
     }
 

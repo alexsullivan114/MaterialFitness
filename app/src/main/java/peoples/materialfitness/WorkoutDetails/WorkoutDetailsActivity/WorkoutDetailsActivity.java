@@ -56,14 +56,12 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     ExerciseGraph chart;
     @Bind(R.id.recyclerView)
     protected RecyclerView recyclerView;
-    protected
     @Bind(R.id.middleFab)
-    FloatingActionButton middleFab;
+    protected FloatingActionButton middleFab;
     @Bind(R.id.appBar)
     protected AppBarLayout appBarLayout;
-    protected
     @Bind(R.id.bottomFab)
-    FloatingActionButton bottomFab;
+    protected FloatingActionButton bottomFab;
 
     private static final String IS_UPDATED_KEY = "isUpdatedKey";
 
@@ -77,22 +75,6 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         ButterKnife.bind(this);
         setTransitions();
 
-        // TODO: Fix this up
-        if (savedInstanceState != null && savedInstanceState.containsKey(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION))
-        {
-            presenter.handleSavedExerciseSession(Parcels.unwrap(savedInstanceState.getParcelable(WorkoutDetailsPresenter.EXTRA_EXERCISE_SESSION)));
-            if (savedInstanceState.containsKey(IS_UPDATED_KEY))
-            {
-                if (savedInstanceState.getBoolean(IS_UPDATED_KEY))
-                {
-                    setResult(WorkoutSessionPresenter.WORKOUT_DETAILS_CONTENT_UPDATED);
-                }
-            }
-        }
-        else
-        {
-            presenter.setBundle(getIntent().getExtras());
-        }
         chart.setCallback(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.exerciseSession, this, allowSetTouchEvents()));
