@@ -51,6 +51,7 @@ public abstract class WorkoutSessionFragment<T extends WorkoutSessionPresenter> 
         ButterKnife.bind(this, v);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
         {
             @Override

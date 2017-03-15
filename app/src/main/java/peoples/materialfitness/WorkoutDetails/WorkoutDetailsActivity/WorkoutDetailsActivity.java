@@ -75,6 +75,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
         ButterKnife.bind(this);
         setTransitions();
 
+        presenter.setBundle(getIntent().getExtras());
         chart.setCallback(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new WorkoutDetailsRecyclerAdapter(presenter.exerciseSession, this, allowSetTouchEvents()));

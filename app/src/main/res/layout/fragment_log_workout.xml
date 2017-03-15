@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     android:id="@+id/root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_background">
@@ -29,8 +28,6 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_add_white_24dp"
         android:visibility="gone"
-        app:layout_anchor="@id/recyclerView"
-        app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="peoples.materialfitness.View.RecyclerViewUtils.FABScrollBehavior"/>
+        android:layout_gravity="bottom|end" />
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

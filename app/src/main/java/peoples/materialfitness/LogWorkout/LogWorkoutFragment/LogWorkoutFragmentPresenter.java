@@ -90,14 +90,12 @@ class LogWorkoutFragmentPresenter extends WorkoutSessionPresenter<LogWorkoutFrag
     {
         Observable.from(workoutSession.getExerciseList())
                 .subscribeOn(Schedulers.io())
-                .subscribe(exercise -> {
-                    DatabasePrCache.getInstance().getPrForExercise(exercise)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(pr -> {
-                                fragmentInterface.addPr(pr, exercise);
-                            });
-                });
+                .subscribe(exercise -> DatabasePrCache.getInstance().getPrForExercise(exercise)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(pr -> {
+                            fragmentInterface.addPr(pr, exercise);
+                        }));
     }
 
     private void fetchPopulatedWorkoutSession() {
