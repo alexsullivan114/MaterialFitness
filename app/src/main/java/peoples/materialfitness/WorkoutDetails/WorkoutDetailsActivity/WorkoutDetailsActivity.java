@@ -26,11 +26,9 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecyclerAdapter;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
-import peoples.materialfitness.Model.WeightSet.WeightSet$$Parcelable;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;
@@ -91,7 +89,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     }
 
     @Override
-    public void showHistoricalExerciseSessionDialog(ExerciseSession exerciseSession, long exerciseSessionDate)
+    public void exerciseClicked(ExerciseSession exerciseSession, long exerciseSessionDate)
     {
         Intent intent = PastWorkoutDialogActivity.getIntent(exerciseSessionDate, exerciseSession, this);
         startActivity(intent);

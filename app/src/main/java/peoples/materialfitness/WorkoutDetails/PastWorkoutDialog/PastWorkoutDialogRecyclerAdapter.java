@@ -14,7 +14,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightUnits.WeightUnit;
 import peoples.materialfitness.R;
+import peoples.materialfitness.Util.PreferenceManager;
 
 /**
  * Created by Alex Sullivan on 5/4/2016.
@@ -40,19 +42,19 @@ public class PastWorkoutDialogRecyclerAdapter extends RecyclerView.Adapter<PastW
     public void onBindViewHolder(RepViewHolder holder, int position)
     {
         WeightSet set = exerciseSession.getSets().get(position);
-
+        WeightUnit weightUnit = PreferenceManager.getInstance().getUnits();
         // TODO: Weight unit stuff.
         // TODO TOD: Pretty sure this is wrong.
         String formattedString = holder.weight.getContext()
                 .getResources()
-                .getString(R.string.weight_units, set.getUserUnitsWeight(), "lbs");
+                .getString(R.string.weight_units, set.getUserUnitsWeight(), weightUnit.getUnitString());
 
         holder.weight.setText(formattedString);
         holder.numReps.setText(String.valueOf(set.getNumReps()));
 
-        for (int i = 0; i < exerciseSession.getSets().size(); i++)
+        for (int i = 0; i < prs.size(); i++)
         {
-            WeightSet weightSet = exerciseSession.getSets().get(i);
+            WeightSet weightSet = prs.get(i);
 
             if (weightSet.getId().equals(set.getId()))
             {

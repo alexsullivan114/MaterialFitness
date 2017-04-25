@@ -86,7 +86,7 @@ public class ExerciseGraph extends LineChart
     public void showHistoricalExerciseSessionDialog(ExerciseSession exerciseSession,
                                                     long exerciseSessionDate)
     {
-        callback.showHistoricalExerciseSessionDialog(exerciseSession, exerciseSessionDate);
+        callback.exerciseClicked(exerciseSession, exerciseSessionDate);
     }
 
     public void setWorkoutSessions(List<WorkoutSession> workoutSessions)
@@ -109,6 +109,6 @@ public class ExerciseGraph extends LineChart
 
     public interface InteractionCallback
     {
-        void showHistoricalExerciseSessionDialog(ExerciseSession exerciseSession, long exerciseSessionDate);
+        void exerciseClicked(ExerciseSession exerciseSession, long exerciseSessionDate);
     }
 }
