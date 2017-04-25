@@ -16,7 +16,6 @@ import java.util.List;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
-import peoples.materialfitness.R;
 
 /**
  * Created by Alex Sullivan on 4/11/2016.
@@ -54,11 +53,11 @@ public class ExerciseGraph extends LineChart
 
     private void styleChart()
     {
-        int defaultBackgroundColor = getResources().getColor(R.color.default_background);
-        getXAxis().setTextColor(defaultBackgroundColor);
+        int textColor = getResources().getColor(android.R.color.white);
+        getXAxis().setTextColor(textColor);
         getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         getXAxis().setAvoidFirstLastClipping(true);
-        getAxisLeft().setTextColor(defaultBackgroundColor);
+        getAxisLeft().setTextColor(textColor);
         getAxisRight().setEnabled(false);
         setDescription("");
         setDrawGridBackground(false);

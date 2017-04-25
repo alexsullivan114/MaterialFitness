@@ -9,10 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 import peoples.materialfitness.Core.BasePresenter;
+import peoples.materialfitness.Core.MaterialFitnessApplication;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
+import peoples.materialfitness.R;
 import peoples.materialfitness.Util.DateUtils;
 
 /**
@@ -59,6 +61,9 @@ public class ExerciseGraphPresenter extends BasePresenter
         List<String> xValues = getXLabelValuesFromEntries(entries);
         LineDataSet lineDataSet = new LineDataSet(entries, "Weight, yo");
         lineDataSet.setDrawHighlightIndicators(false);
+        lineDataSet.setColor(MaterialFitnessApplication.getApplication().getResources().getColor(R.color.colorAccent));
+        lineDataSet.setLineWidth(2.5f);
+        lineDataSet.setCircleColor(MaterialFitnessApplication.getApplication().getResources().getColor(R.color.colorAccent));
         LineData lineData = new LineData(xValues, Collections.singletonList(lineDataSet));
         viewInterface.setChartData(lineData);
     }
