@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.ViewGroup;
 
 import org.parceler.Parcels;
 
@@ -54,6 +56,10 @@ public class PastWorkoutDialogActivity extends BaseActivity<PastWorkoutDialogPre
         setContentView(R.layout.past_workout_details);
         ButterKnife.bind(this);
 
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int screenWidth = (int) (metrics.widthPixels * 0.90);
+        getWindow().setLayout(screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+        getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
         setPresenterArguments();
 
         setTitle(presenter.getTitle());

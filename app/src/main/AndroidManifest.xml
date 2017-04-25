@@ -21,7 +21,7 @@
         <activity android:name=".WorkoutDetails.ActiveWorkoutDetailsActivity.ActiveWorkoutDetailsActivity"/>
         <activity android:name=".WorkoutDetails.HistoricalWorkoutDetailsActivity.HistoricalWorkoutDetailsActivity"/>
         <activity android:name=".FitnotesImport.FitnotesImporterActivity"/>
-        <activity android:name=".WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity"/>
+        <activity android:name=".WorkoutDetails.PastWorkoutDialog.PastWorkoutDialogActivity" android:theme="@style/Theme.AppCompat.Dialog"/>
         <activity android:name=".Schedule.ScheduleDay.ScheduleDayActivity"/>
 
     </application>
