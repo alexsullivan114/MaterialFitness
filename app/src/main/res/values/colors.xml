@@ -15,19 +15,19 @@
     <color name="default_background">#EEEEEE</color>
     <color name="black">#212121</color>
 
-    <color name="monday_schedule_color">#08415C</color>
-    <color name="tuesday_schedule_color">#0392CE</color>
-    <color name="wednesday_schedule_color">#66B032</color>
-    <color name="thursday_schedule_color">#86CB92</color>
-    <color name="friday_schedule_color">#71B48D</color>
-    <color name="saturday_schedule_color">#508991</color>
-    <color name="sunday_schedule_color">#233252</color>
+    <color name="monday_schedule_color">#FFAB91</color>
+    <color name="tuesday_schedule_color">#FF8964</color>
+    <color name="wednesday_schedule_color">#FF7043</color>
+    <color name="thursday_schedule_color">#FF5722</color>
+    <color name="friday_schedule_color">#FF4F1E</color>
+    <color name="saturday_schedule_color">#FF4619</color>
+    <color name="sunday_schedule_color">#FF3C14</color>
 
-    <color name="monday_schedule_color_pressed">#04212f</color>
-    <color name="tuesday_schedule_color_pressed">#026e9c</color>
-    <color name="wednesday_schedule_color_pressed">#4f8726</color>
-    <color name="thursday_schedule_color_pressed">#62bc71</color>
-    <color name="friday_schedule_color_pressed">#539d72</color>
-    <color name="saturday_schedule_color_pressed">#3e6a70</color>
-    <color name="sunday_schedule_color_pressed">#141c2e</color>
+    <color name="monday_schedule_color_pressed">#FF8964</color>
+    <color name="tuesday_schedule_color_pressed">#FF7043</color>
+    <color name="wednesday_schedule_color_pressed">#FF5722</color>
+    <color name="thursday_schedule_color_pressed">#FF4F1E</color>
+    <color name="friday_schedule_color_pressed">#FF4619</color>
+    <color name="saturday_schedule_color_pressed">#FF3C14</color>
+    <color name="sunday_schedule_color_pressed">#FF2C0C</color>
 </resources>

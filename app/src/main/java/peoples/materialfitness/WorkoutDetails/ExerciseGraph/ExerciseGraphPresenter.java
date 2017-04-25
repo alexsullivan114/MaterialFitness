@@ -62,7 +62,7 @@ public class ExerciseGraphPresenter extends BasePresenter
         LineDataSet lineDataSet = new LineDataSet(entries, "Weight, yo");
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setColor(MaterialFitnessApplication.getApplication().getResources().getColor(R.color.colorAccent));
-        lineDataSet.setLineWidth(2.5f);
+        lineDataSet.setLineWidth(8f);
         lineDataSet.setCircleColor(MaterialFitnessApplication.getApplication().getResources().getColor(R.color.colorAccent));
         LineData lineData = new LineData(xValues, Collections.singletonList(lineDataSet));
         viewInterface.setChartData(lineData);
