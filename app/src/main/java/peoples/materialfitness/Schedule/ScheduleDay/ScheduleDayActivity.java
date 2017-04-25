@@ -14,6 +14,8 @@ import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionSet;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,6 +50,7 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
 {
     private static final String SCHEDULE_DAY_EXTRA = "scheduleDayExtra";
     private static final String TRANSITION_NAME_EXTRA = "transitionNameExtra";
+    private static final int LOG_ALL_ID = 99;
 
     private boolean hasFinishedEnterTransition = false;
     private List<Runnable> viewRunnable = new ArrayList<>();
@@ -108,6 +111,23 @@ public class ScheduleDayActivity extends BaseActivity<ScheduleDayPresenter>
         }
 
         restoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(Menu.NONE, LOG_ALL_ID, Menu.NONE, R.string.toolbar_log_all)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == LOG_ALL_ID)
+        {
+            presenter.logAllClicked();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void restoreInstanceState(Bundle savedInstanceState)

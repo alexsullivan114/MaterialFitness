@@ -4,6 +4,7 @@ import java.util.Date;
 
 import peoples.materialfitness.Core.BaseActivityPresenter;
 import peoples.materialfitness.Core.PresenterFactory;
+import peoples.materialfitness.Model.Cache.TodaysWorkoutDbCache;
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
@@ -14,7 +15,6 @@ import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSessionDatabaseInteractor;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -56,6 +56,19 @@ public class ScheduleDayPresenter extends BaseActivityPresenter<ScheduleDayInter
                     activityInterface.showFab();
                     activityInterface.displayWorkoutSession(workoutSession);
                 });
+    }
+
+    void logAllClicked()
+    {
+        fetchWorkoutSession()
+                .flatMap(session -> Observable.from(session.getExerciseSessions()))
+                .doOnNext(exerciseSession -> {
+                    ExerciseSession copy = new ExerciseSession();
+                    copy.setExercise(exerciseSession.getExercise());
+                    TodaysWorkoutDbCache.getInstance().pushExerciseSession(copy);
+                })
+                .subscribeOn(Schedulers.io())
+                .subscribe();
     }
 
     private Observable<WorkoutSession> fetchWorkoutSession()

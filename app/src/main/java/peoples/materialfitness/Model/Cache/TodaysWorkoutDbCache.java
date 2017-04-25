@@ -1,9 +1,5 @@
 package peoples.materialfitness.Model.Cache;
 
-import android.util.Log;
-
-import java.util.List;
-
 import peoples.materialfitness.Model.Exercise.ExerciseDatabaseInteractor;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSessionDatabaseInteractor;
@@ -78,13 +74,17 @@ public class TodaysWorkoutDbCache implements TodaysWorkoutCache
     public void pushExerciseSession(ExerciseSession exerciseSession)
     {
         applyWorkoutSessionModification(workoutSession -> {
-            new ExerciseDatabaseInteractor().uniqueSaveExercise(exerciseSession.getExercise())
-                    .subscribe(exercise -> {
-                        exerciseSession.setExercise(exercise);
-                        new ExerciseSessionDatabaseInteractor().save(exerciseSession).subscribe();
-                        workoutSession.addExerciseSession(exerciseSession);
-                        todaysWorkoutSession.onNext(workoutSession);
-                    });
+            if (!workoutSession.containsExercise(exerciseSession.getExercise()))
+            {
+                new ExerciseDatabaseInteractor().uniqueSaveExercise(exerciseSession.getExercise())
+                        .subscribe(exercise -> {
+                            exerciseSession.setExercise(exercise);
+                            exerciseSession.setWorkoutSessionId(workoutSession.getId());
+                            new ExerciseSessionDatabaseInteractor().save(exerciseSession).subscribe();
+                            workoutSession.addExerciseSession(exerciseSession);
+                            todaysWorkoutSession.onNext(workoutSession);
+                        });
+            }
         });
     }
 

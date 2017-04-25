@@ -30,6 +30,7 @@ import peoples.materialfitness.LogWorkout.LogWorkoutFragment.ExerciseCardRecycle
 import peoples.materialfitness.Model.Exercise.Exercise;
 import peoples.materialfitness.Model.ExerciseSession.ExerciseSession;
 import peoples.materialfitness.Model.WeightSet.WeightSet;
+import peoples.materialfitness.Model.WeightSet.WeightSet$$Parcelable;
 import peoples.materialfitness.Model.WorkoutSession.WorkoutSession;
 import peoples.materialfitness.R;
 import peoples.materialfitness.Util.AnimationHelpers.TransitionListenerAdapter;

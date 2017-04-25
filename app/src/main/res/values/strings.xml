@@ -71,4 +71,5 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="schedule_empty">No workouts scheduled for %1$s</string>
+    <string name="toolbar_log_all">Log All</string>
 </resources>
