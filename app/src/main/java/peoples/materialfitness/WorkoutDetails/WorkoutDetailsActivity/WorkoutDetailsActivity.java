@@ -93,6 +93,7 @@ public abstract class WorkoutDetailsActivity<T extends WorkoutDetailsPresenter> 
     {
         Intent intent = PastWorkoutDialogActivity.getIntent(exerciseSessionDate, exerciseSession, this);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_top, R.anim.slide_in_top);
     }
 
     @Override
